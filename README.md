@@ -2,7 +2,11 @@
 
 Ein Rechenspiel im Stil der Pokémon-Spiele für die 3. Klasse, abgestimmt auf den Lehrplan 21 (Mathematik, Zyklus 2). Nur für den privaten Gebrauch.
 
-**Starten:** `index.html` im Browser öffnen, am besten auf dem Handy oder Tablet. Mehr Dateien braucht es nicht.
+**Spielen:** https://acortese-wq.github.io/Pokemon_LP21/ (funktioniert auf Handy und Tablet ohne Login)
+
+Oder `index.html` herunterladen und im Browser öffnen. Mehr Dateien braucht es nicht.
+
+**Tipp:** Den Link im Browser öffnen und «Zum Home-Bildschirm hinzufügen» wählen. Dann startet das Spiel wie eine App.
 
 ## Spielidee
 - Das Kind gibt seinen Namen ein und wählt ein erstes Zahlimon: Flammi, Tropfi oder Blatti.
