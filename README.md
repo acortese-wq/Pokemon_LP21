@@ -25,6 +25,23 @@ Ein Rechenspiel im Stil der Pokémon-Spiele für die 3. Klasse, abgestimmt auf d
 
 Die Schwierigkeit passt sich pro Thema in drei Stufen an. Falsch gelöste Aufgaben kommen später noch einmal.
 
+## Bewegte Bilder und Rechenhilfen
+- Die Zahlimon bewegen sich, je nach Typ atmen, schweben oder hüpfen sie.
+- Die Gebiete sind belebt: Wolken, Bienen, Blätter, Luftblasen, Glut.
+- Angriffe fliegen als Feuer, Wasser, Blätter oder Blitze zum Gegner, danach erscheinen Schadenszahlen.
+- Bei einer richtigen Antwort gibt es einen Stempel, und ein Stern fliegt zum Konto.
+- Konfetti gibt es bei Level-Aufstieg, beim Fangen, für Orden und bei einer Entwicklung.
+- Vor wilden Kämpfen raschelt das Gras, vor jedem Arenakampf erscheint ein «VS»-Bild.
+- Bewegte Rechenhilfen (Anschauung wie in der Schule):
+  - leerer Zahlenstrahl mit Sprüngen; das eigene Zahlimon hüpft mit
+  - Punktefeld mit Fünferlinie
+  - gerechtes Verteilen auf Teller
+  - Hunderterplatten, Zehnerstangen und Einerwürfel
+  - Runden am Zahlenstrahl
+  - Uhr mit drehenden Zeigern
+- Die Rechenhilfen erscheinen bei Fehlern und über den Knopf «💡 Tipp».
+- In jedem Gebiet erklärt die Seite «📺 So geht's» ein Beispiel Schritt für Schritt mit Sprachausgabe.
+
 ## Bereich für Eltern
 Den Link findest du unten auf der Karte. Dort gibt es:
 - Statistik pro Thema

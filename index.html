@@ -56,7 +56,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .chip{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:1px 8px;border-radius:99px;color:#fff;background:var(--c)}
 
 /* Titel */
-.title{display:flex;flex-direction:column;align-items:stretch;gap:14px;padding-top:6vh}
+.title{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:stretch;gap:14px;padding-top:6vh}
 .eyebrow{margin:0;text-align:center;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem;color:var(--ink2)}
 .logo{font-family:var(--f-disp);font-weight:400;font-size:clamp(3.2rem,17vw,5rem);line-height:1;text-align:center;color:var(--ink);text-shadow:4px 4px 0 var(--gold)}
 .logo span{color:var(--blue)}
@@ -90,7 +90,8 @@ h1,h2,h3{text-wrap:balance;margin:0}
 
 /* Karte */
 .map{display:flex;flex-direction:column;gap:14px;position:relative;margin-top:8px}
-.map::before{content:"";position:absolute;left:37px;top:30px;bottom:30px;border-left:4px dashed var(--line)}
+.map::before{content:"";position:absolute;left:37px;top:30px;bottom:30px;width:4px;background:repeating-linear-gradient(180deg,var(--line) 0 10px,transparent 10px 20px);animation:march 1.2s linear infinite}
+@keyframes march{to{background-position:0 20px}}
 .node{position:relative;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:12px;text-align:left;background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:10px 12px;box-shadow:0 4px 0 rgba(30,40,66,.18)}
 .node:nth-child(even){margin-left:22px}
 .node .ic{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-emoji);font-size:26px;background:linear-gradient(160deg,var(--g1),var(--g2));border:2px solid var(--ink)}
@@ -102,7 +103,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .node.now{outline:4px solid var(--gold);outline-offset:2px}
 
 /* Region */
-.rg{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin:14px 0;padding:14px 16px;border:2px solid var(--ink);border-radius:16px;background:linear-gradient(100deg,var(--g1) 55%,var(--g2))}
+.rg{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin:14px 0;padding:14px 16px;border:2px solid var(--ink);border-radius:16px;background:linear-gradient(100deg,var(--g1) 55%,var(--g2))}
 .rg-ic{font-family:var(--f-emoji);font-size:44px}
 .rg h2{font-family:var(--f-disp);font-weight:400;font-size:1.6rem}
 .rg p{margin:2px 0}
@@ -118,7 +119,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .mini-dex .unk{font-family:var(--f-disp);color:var(--ink2);border-style:dashed}
 
 /* Kampf */
-.bt{position:relative;isolation:isolate;display:grid;grid-template-rows:1fr 1fr;height:290px;border:3px solid var(--ink);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,var(--g1),var(--g2));transition:height .25s}
+.bt{position:relative;isolation:isolate;height:290px;border:3px solid var(--ink);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,var(--g1),var(--g2));transition:height .25s}
 .bt.compact{height:200px}
 .bt-row{display:flex;justify-content:space-between;gap:8px;padding:10px}
 .foe-row{align-items:flex-start}
@@ -126,7 +127,8 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .mon{position:relative;font-family:var(--f-emoji);font-size:78px;line-height:1;padding:0 6px;transition:font-size .25s}
 .bt.compact .mon{font-size:56px}
 .mon::after{content:"";position:absolute;left:50%;bottom:-.08em;width:1.2em;height:.26em;margin-left:-.6em;border-radius:50%;background:rgba(20,28,48,.18);z-index:-1}
-.mon .e{display:inline-block}
+.mon .e,.mon .b{display:inline-block}
+#btIn{position:relative;z-index:1;display:grid;grid-template-rows:1fr 1fr;height:100%}
 .mon.me .e{transform:scaleX(-1)}
 .plate{flex:0 1 60%;min-width:0;background:var(--card);border:2px solid var(--ink);border-radius:12px;padding:6px 10px;box-shadow:3px 3px 0 rgba(30,40,66,.25)}
 .pn{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
@@ -141,7 +143,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .xp i{display:block;height:100%;background:var(--blue)}
 .own{display:block;font-size:.75rem;color:var(--ink2);margin-top:3px}
 .bt.compact .pk,.bt.compact .xp,.bt.compact .own{display:none}
-.bmsg{min-height:52px;margin:10px 0;padding:10px 14px;background:var(--card);border:2px solid var(--ink);border-radius:12px;font-weight:700}
+.bmsg{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:52px;margin:10px 0;padding:10px 14px;background:var(--card);border:2px solid var(--ink);border-radius:12px;font-weight:700}
 .menu{display:flex;flex-direction:column;gap:12px}
 .menu2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .menu2 .btn{font-size:1.02rem;min-height:50px;padding:8px}
@@ -173,7 +175,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .fb{padding:14px 16px;border-color:var(--red)}
 .fb p{margin:6px 0}
 .fb-h{font-family:var(--f-disp);font-size:1.4rem;color:var(--red-d)}
-.fb .bigans{font-family:var(--f-disp);font-size:1.5rem;color:var(--green-d)}
+.bigans{font-family:var(--f-disp);font-size:1.5rem;color:var(--green-d)}
 .hint{background:#fff6dc;border-radius:10px;padding:8px 10px;font-weight:700;overflow-wrap:anywhere}
 .fb .btn{margin-top:10px}
 .swl{display:flex;flex-direction:column;gap:8px}
@@ -199,7 +201,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 @keyframes throw{from{transform:translate(-190px,150px) scale(.5)}to{transform:none}}
 @keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-20deg)}75%{transform:rotate(20deg)}}
 @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
-.mon.hit{animation:hit .45s ease .25s,flash .45s steps(2) .25s}
+.mon.hit{animation:hit .45s ease .5s,flash .45s steps(2) .5s}
 .mon.me.lunge{animation:lungeM .35s ease}
 .mon.foe.lunge{animation:lungeF .35s ease}
 .mon.appear{animation:appear .5s cubic-bezier(.3,1.5,.6,1)}
@@ -226,7 +228,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .nurse{font-family:var(--f-emoji);font-size:64px}
 
 /* Entwicklung */
-.evo{display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:12vh;text-align:center}
+.evo{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:12vh;text-align:center}
 .evo-t{font-family:var(--f-disp);font-size:1.5rem;margin:0}
 .evo-m{font-family:var(--f-emoji);font-size:120px;line-height:1;animation:evo 2.6s ease-in}
 .evo-m.done{animation:pop .6s ease-out;filter:drop-shadow(0 0 18px var(--gold))}
@@ -260,20 +262,123 @@ h1,h2,h3{text-wrap:balance;margin:0}
 /* Dialog */
 #dlg{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:rgba(20,28,48,.35);padding:16px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));cursor:pointer}
 #dlg .box{position:relative;width:100%;max-width:448px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--card);border:3px solid var(--ink);border-radius:16px;padding:14px 16px 22px;box-shadow:0 6px 0 rgba(30,40,66,.3)}
-#dlg .face{font-family:var(--f-emoji);font-size:50px;line-height:1}
+#dlg .face{font-family:var(--f-emoji);font-size:50px;line-height:1;display:inline-block;transform-origin:50% 100%;animation:breathe 2.4s ease-in-out infinite}
+#dlg .face.talk{animation:talk .28s ease-in-out infinite alternate}
+@keyframes talk{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-5px) rotate(4deg)}}
+#dlg:not([hidden]) .box{animation:boxIn .25s ease-out}
+@keyframes boxIn{from{transform:translateY(30px);opacity:0}}
 #dlg .who{font-family:var(--f-disp);color:var(--blue);font-size:1.1rem}
 #dlg .txt{font-size:1.12rem;font-weight:700;min-height:3em;margin:2px 0 0}
 #dlg .more{position:absolute;right:14px;bottom:6px;color:var(--blue);animation:hop 1s ease-in-out infinite;font-size:.9rem}
 #toast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:60;max-width:min(440px,calc(100% - 32px));background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;text-align:center;box-shadow:0 4px 0 rgba(0,0,0,.2)}
 #toast.in{animation:appear .3s ease-out}
 
-@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* Bewegung: Szenen, Effekte, Anschauung, Feiern */
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:77}
+.enter{animation:enter .3s ease-out}
+@keyframes enter{from{opacity:0;transform:translateY(14px)}}
+.scene{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.rg .scene,.numsky{z-index:-1}
+.numsky{position:fixed}
+.scene span{position:absolute;font-family:var(--f-emoji);font-size:22px;line-height:1;opacity:.85}
+.scene .num{font-family:var(--f-disp);font-size:38px;color:#c6d6e8;opacity:1}
+.scene .bubble{width:11px;height:11px;border-radius:50%;border:2px solid rgba(255,255,255,.9);background:rgba(255,255,255,.25)}
+.scene .ember{width:6px;height:6px;border-radius:50%;background:#ffb347;box-shadow:0 0 8px #ff7a1a}
+.d-drift{animation:drift linear infinite}
+@keyframes drift{from{left:-15%}to{left:105%}}
+.d-fall{animation:fall linear infinite}
+@keyframes fall{0%{top:-10%;transform:translateX(0) rotate(0)}50%{transform:translateX(18px) rotate(140deg)}100%{top:105%;transform:translateX(-6px) rotate(280deg)}}
+.d-rise{animation:rise linear infinite}
+@keyframes rise{0%{top:105%;transform:translateX(0)}50%{transform:translateX(12px)}100%{top:-14%;transform:translateX(-4px)}}
+.d-twinkle{animation:twinkle ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.1;transform:scale(.5)}50%{opacity:1;transform:scale(1.15)}}
+.d-sway{bottom:-3px;transform-origin:50% 100%;animation:sway ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-10deg)}to{transform:rotate(10deg)}}
+.d-buzz{animation:buzz ease-in-out infinite}
+@keyframes buzz{0%,100%{transform:translate(0,0) scaleX(1)}25%{transform:translate(70px,-22px) scaleX(1)}50%{transform:translate(140px,8px) scaleX(-1)}75%{transform:translate(60px,26px) scaleX(-1)}}
+.mon .b{transform-origin:50% 100%;animation:breathe 2.4s ease-in-out infinite}
+.mon.foe .b{animation-delay:-1.1s}
+.mon[data-t=luft] .b,.mon[data-t=geist] .b,.mon[data-t=magie] .b,.mon[data-t=drache] .b{animation:hover 2.2s ease-in-out infinite}
+.mon[data-t=wasser] .b{animation:bob 2s ease-in-out infinite}
+.mon[data-t=elektro] .b,.mon[data-t=normal] .b{animation:hopi 1.8s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.05,.95)}}
+@keyframes hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
+@keyframes hopi{0%,70%,100%{transform:translateY(0) scale(1,1)}78%{transform:translateY(0) scale(1.08,.9)}86%{transform:translateY(-12px) scale(.95,1.06)}}
+.bt.quake{animation:quake .35s}
+@keyframes quake{20%{transform:translate(-5px,2px)}40%{transform:translate(5px,-2px)}60%{transform:translate(-3px,1px)}80%{transform:translate(2px,0)}}
+.bstar{flex:none;font-weight:700;background:#fff6dc;border:2px solid var(--gold);border-radius:99px;padding:2px 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bstar.pop,.hud-s.pop{animation:pop .4s ease-out}
+.float{position:fixed;z-index:76;transform:translate(-50%,-50%);font-family:var(--f-disp);font-size:2rem;pointer-events:none;animation:floatUp 1.1s ease-out forwards;text-shadow:2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff}
+.float.dmg{color:var(--red)}
+.float.heal{color:var(--green)}
+@keyframes floatUp{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}20%{opacity:1;transform:translate(-50%,-60%) scale(1.25)}100%{opacity:0;transform:translate(-50%,-170%) scale(1)}}
+.proj,.fstar{position:fixed;left:0;top:0;z-index:76;font-family:var(--f-emoji);pointer-events:none;transform:translate(-50%,-50%)}
+.proj{font-size:42px}
+.fstar{font-size:26px}
+.stamp{position:fixed;z-index:75;left:50%;top:var(--y);font-family:var(--f-disp);font-size:2.3rem;color:var(--green-d);background:#fff;border:4px solid var(--green);border-radius:16px;padding:2px 18px;transform:translate(-50%,-50%) rotate(-7deg);animation:stamp 1.05s ease-out forwards;pointer-events:none;white-space:nowrap;box-shadow:0 5px 0 rgba(30,40,66,.25)}
+@keyframes stamp{0%{opacity:0;transform:translate(-50%,-50%) rotate(-7deg) scale(2.3)}18%{opacity:1;transform:translate(-50%,-50%) rotate(-7deg) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-7deg) scale(.95)}}
+.shake{animation:hit .4s ease}
+.qbtns{display:flex;gap:6px;align-items:center}
+.tipb{border:2px solid var(--gold);background:#fff6dc;border-radius:10px;font-weight:700;padding:6px 10px;font-size:.9rem;height:40px}
+.aid{display:flex;flex-direction:column;align-items:center;gap:2px;margin:6px 0;color:var(--ink)}
+.aid svg{max-width:100%;height:auto;overflow:visible}
+.aid .cap{font-size:.85rem;font-weight:700;color:var(--ink2)}
+.arc{fill:none;stroke:var(--blue);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .55s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.fi{opacity:0;animation:fadeIn .35s ease-out forwards}
+@keyframes fadeIn{to{opacity:1}}
+.pp{transform-box:fill-box;transform-origin:center;animation:pop2 .35s cubic-bezier(.3,1.6,.6,1) both}
+@keyframes pop2{from{transform:scale(0)}}
+.fly{animation:flyin .45s ease-out both}
+@keyframes flyin{from{transform:translate(var(--dx),var(--dy));opacity:0}}
+.drop{animation:dropIn .7s cubic-bezier(.3,1.6,.6,1) both}
+@keyframes dropIn{from{transform:translateY(-40px);opacity:0}}
+.hand{transform-origin:60px 60px;transform:rotate(var(--a));animation:handspin 1.3s cubic-bezier(.2,.8,.3,1) both}
+@keyframes handspin{from{transform:rotate(calc(var(--a) - 360deg))}}
+.learn{text-align:center}
+.learn .hint{text-align:left}
+.node:not(.locked) .ic{animation:sway2 3.2s ease-in-out infinite}
+@keyframes sway2{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.me-av{position:absolute;left:-12px;top:-16px;z-index:2;font-family:var(--f-emoji);font-size:30px;animation:hopi 1.6s ease-in-out infinite}
+.rg-ic,.nurse{display:inline-block;animation:hover 3s ease-in-out infinite}
+.tm-e span,.dx.c .de{display:inline-block;transform-origin:50% 100%;animation:breathe 2.6s ease-in-out infinite}
+#wipe{position:fixed;inset:0;z-index:80;display:grid;place-items:center;overflow:hidden;background:var(--ink)}
+#wipe.w-grass{animation:wipeIn .3s ease-out}
+#wipe.out{animation:wipeOut .38s ease-in forwards}
+@keyframes wipeIn{from{clip-path:circle(0 at 50% 50%)}to{clip-path:circle(80% at 50% 50%)}}
+@keyframes wipeOut{to{opacity:0;transform:scale(1.25)}}
+.grass{font-family:var(--f-emoji);font-size:70px;animation:rustle .1s linear infinite alternate}
+@keyframes rustle{from{transform:rotate(-7deg) translateX(-3px)}to{transform:rotate(7deg) translateX(3px)}}
+.vs{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
+.vs-l,.vs-r{display:grid;place-items:center;font-family:var(--f-emoji);font-size:88px;text-align:center}
+.vs-l{background:var(--blue);clip-path:polygon(0 0,100% 0,82% 100%,0 100%);animation:inL .45s ease-out both}
+.vs-r{background:var(--gold);clip-path:polygon(18% 0,100% 0,100% 100%,0 100%);animation:inR .45s ease-out both}
+.vs small{display:block;font-family:var(--f-disp);font-size:1.15rem;color:#fff;text-shadow:2px 2px 0 var(--ink)}
+.vs-t{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--f-disp);font-size:4.2rem;color:#fff;text-shadow:4px 4px 0 var(--ink);animation:vsPop .5s .35s cubic-bezier(.3,1.6,.6,1) both}
+@keyframes inL{from{transform:translateX(-100%)}}
+@keyframes inR{from{transform:translateX(100%)}}
+@keyframes vsPop{from{transform:translate(-50%,-50%) scale(3);opacity:0}}
+#cel{position:fixed;inset:0;z-index:78;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(20,28,48,.74);color:#fff;text-align:center;padding:24px;cursor:pointer;overflow:hidden}
+.rays{position:absolute;left:50%;top:42%;width:900px;height:900px;margin:-450px 0 0 -450px;border-radius:50%;background:repeating-conic-gradient(rgba(255,211,90,.3) 0 10deg,transparent 10deg 20deg);-webkit-mask-image:radial-gradient(circle,#000 18%,transparent 62%);mask-image:radial-gradient(circle,#000 18%,transparent 62%);animation:spin 14s linear infinite;pointer-events:none;z-index:-1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cel-ic{position:relative;font-family:var(--f-emoji);font-size:112px;line-height:1.1;animation:celIn .7s cubic-bezier(.3,1.6,.5,1) both}
+.cel-ic span{display:inline-block;animation:hover 2.4s ease-in-out .7s infinite}
+#cel h2{position:relative;font-family:var(--f-disp);font-weight:400;font-size:2.3rem;color:#ffd35a;text-shadow:3px 3px 0 var(--ink);animation:celIn .5s .2s both}
+#cel p{position:relative;font-weight:700;font-size:1.15rem;margin:0;max-width:22em;animation:fadeIn .4s .5s both;opacity:0}
+#cel .more{position:relative;margin-top:14px;color:#ffd35a;font-size:.9rem;animation:hop 1s ease-in-out infinite}
+@keyframes celIn{from{transform:scale(0) rotate(-25deg);opacity:0}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}.arc{stroke-dashoffset:0}.fi,#cel p{opacity:1}.scene{display:none}}
 </style>
 </head>
 <body>
 <main id="app"></main>
 <div id="dlg" hidden><div class="box" role="dialog" aria-live="polite"><div class="face" id="dlgFace"></div><div><div class="who" id="dlgWho"></div><p class="txt" id="dlgTxt"></p></div><span class="more" aria-hidden="true">▼ tippen</span></div></div>
 <div id="toast" role="status" hidden></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="wipe" hidden></div>
+<div id="cel" hidden role="dialog" aria-live="polite"></div>
 <script>
 (function(){
 'use strict';
@@ -288,6 +393,41 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const pad2=n=>String(n).padStart(2,'0');
+
+/* ---------- Bewegung: Partikel, Flugobjekte, Übergänge, Feiern ---------- */
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const EMO="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
+const fxc=$('#fx'),fxx=fxc.getContext('2d');let PS=[],fxOn=false,DPR=1;
+function fxSize(){DPR=Math.min(2,window.devicePixelRatio||1);fxc.width=innerWidth*DPR;fxc.height=innerHeight*DPR}
+fxSize();addEventListener('resize',fxSize);
+function emit(o){if(RM)return;PS.push(Object.assign({x:0,y:0,vx:0,vy:0,g:.25,life:60,age:0,size:10,rot:0,vr:0,ch:null,color:'#fff'},o));if(!fxOn){fxOn=true;requestAnimationFrame(fxLoop)}}
+function fxLoop(){fxx.setTransform(DPR,0,0,DPR,0,0);fxx.clearRect(0,0,innerWidth,innerHeight);PS=PS.filter(p=>p.age<p.life);
+  for(const p of PS){p.age++;p.vy+=p.g;p.vx*=.985;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;fxx.globalAlpha=Math.max(0,1-Math.pow(p.age/p.life,2));fxx.save();fxx.translate(p.x,p.y);fxx.rotate(p.rot);
+    if(p.ch){fxx.font=`${p.size}px ${EMO}`;fxx.textAlign='center';fxx.textBaseline='middle';fxx.fillText(p.ch,0,0)}else{fxx.fillStyle=p.color;fxx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2)}
+    fxx.restore()}
+  fxx.globalAlpha=1;if(PS.length)requestAnimationFrame(fxLoop);else{fxOn=false;fxx.clearRect(0,0,innerWidth,innerHeight)}}
+const CONF=['#2a66cc','#f0ac18','#e0574b','#2e9254','#c9509b','#4d98bd'];
+function confetti(x,y,n){for(let i=0;i<(n||70);i++){const a=-Math.PI/2+(Math.random()-.5)*2.4,v=4+Math.random()*8;emit({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:.2,life:70+R(0,50),size:8+R(0,6),vr:(Math.random()-.5)*.4,color:P(CONF)})}}
+const TFX={feuer:{ch:['🔥','✨'],g:-.12},wasser:{ch:['💧','💦'],g:.3},pflanze:{ch:['🍃','🌿'],g:.06},elektro:{ch:['⚡','✨'],g:0},stein:{ch:['🪨','💥'],g:.4},luft:{ch:['💨','🌀'],g:-.02},geist:{ch:['👻','💜'],g:-.08},magie:{ch:['✨','⭐','💖'],g:-.05},drache:{ch:['🔥','💥'],g:-.05},normal:{ch:['💥','⭐'],g:.1}};
+function burst(t,x,y,n){const d=TFX[t]||TFX.normal;for(let i=0;i<(n||14);i++){const a=Math.random()*Math.PI*2,v=2+Math.random()*5;emit({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:d.g,life:40+R(0,25),size:18+R(0,14),ch:P(d.ch),vr:(Math.random()-.5)*.2})}}
+function sparkle(x,y,n){for(let i=0;i<(n||10);i++){const a=Math.random()*Math.PI*2,v=1+Math.random()*3.5;emit({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1,g:.05,life:40+R(0,20),size:14+R(0,10),ch:P(['✨','⭐'])})}}
+const ctr=el=>{const r=el.getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2}};
+function floatText(t,x,y,cls){const d=document.createElement('div');d.className='float '+(cls||'');d.textContent=t;d.style.left=x+'px';d.style.top=y+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1200)}
+function projectile(ch,a,b,ms,done){if(RM||!Element.prototype.animate){done&&done();return}const d=document.createElement('div');d.className='proj';d.textContent=ch;document.body.appendChild(d);
+  d.animate([{left:a.x+'px',top:a.y+'px',transform:'translate(-50%,-50%) scale(.5)'},{left:(a.x+b.x)/2+'px',top:Math.min(a.y,b.y)-40+'px',transform:'translate(-50%,-50%) scale(1.3) rotate(180deg)'},{left:b.x+'px',top:b.y+'px',transform:'translate(-50%,-50%) scale(1) rotate(360deg)'}],{duration:ms,easing:'ease-in'}).onfinish=()=>{d.remove();done&&done()}}
+function flyStar(a){if(RM||!Element.prototype.animate)return;const to=$('#bstars')||$('.hud-s');if(!to)return;const b=ctr(to),d=document.createElement('div');d.className='fstar';d.textContent='⭐';document.body.appendChild(d);
+  d.animate([{left:a.x+'px',top:a.y+'px',transform:'translate(-50%,-50%) scale(.5)'},{left:(a.x+b.x)/2+'px',top:Math.min(a.y,b.y)-70+'px',transform:'translate(-50%,-50%) scale(1.5)'},{left:b.x+'px',top:b.y+'px',transform:'translate(-50%,-50%) scale(.8)'}],{duration:750,easing:'ease-in-out'}).onfinish=()=>{d.remove();const p=to.closest('.bstar')||to;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}}
+function stamp(t){const bt=$('#bt'),d=document.createElement('div');d.className='stamp';d.textContent=t;d.style.setProperty('--y',(bt?ctr(bt).y:innerHeight*.35)+'px');document.body.appendChild(d);setTimeout(()=>d.remove(),1100)}
+const wipeEl=$('#wipe'),celEl=$('#cel');let celDone=null;
+function wipe(kind,a,b,cb){if(RM){cb();return}
+  wipeEl.className='';wipeEl.innerHTML=kind==='vs'?`<div class="vs"><div class="vs-l"><div>${a.e}<small>${esc(a.n)}</small></div></div><div class="vs-r"><div>${b.e}<small>${esc(b.n)}</small></div></div><div class="vs-t">VS</div></div>`:'<div class="grass">🌿🌿🌿</div>';
+  wipeEl.hidden=false;wipeEl.classList.add(kind==='vs'?'w-vs':'w-grass');sfx(kind==='vs'?'win':'tap');
+  setTimeout(()=>{cb();wipeEl.classList.add('out');setTimeout(()=>{wipeEl.hidden=true;wipeEl.className='';wipeEl.innerHTML=''},400)},kind==='vs'?1500:800)}
+function celebrate(o,done){const nmx=t=>String(t||'').replace(/\{N\}/g,S?S.name:'');
+  celEl.innerHTML=`<div class="rays"></div><div class="cel-ic"><span>${o.icon}</span></div><h2>${esc(nmx(o.title))}</h2>${o.sub?`<p>${esc(nmx(o.sub))}</p>`:''}<span class="more">▼ tippen</span>`;
+  celEl.hidden=false;celDone=done;sfx('win');say(`${nmx(o.title)} ${nmx(o.sub)}`);
+  const x=innerWidth/2,y=innerHeight*.4;confetti(x,y,90);setTimeout(()=>confetti(x*.4,y,40),350);setTimeout(()=>confetti(x*1.6,y,40),650)}
+celEl.addEventListener('click',()=>{if(celEl.hidden)return;celEl.hidden=true;const d=celDone;celDone=null;d&&d()});
 
 /* ---------- Daten: Typen, Zahlimon, Gebiete ---------- */
 const TYPES={normal:{n:'Normal',c:'#8a7f69'},feuer:{n:'Feuer',c:'#e0582a'},wasser:{n:'Wasser',c:'#2a74cf'},pflanze:{n:'Pflanze',c:'#35934a'},elektro:{n:'Elektro',c:'#c99a00'},stein:{n:'Stein',c:'#86693f'},luft:{n:'Luft',c:'#4d98bd'},geist:{n:'Geist',c:'#6a4fa3'},magie:{n:'Magie',c:'#c9509b'},drache:{n:'Drache',c:'#473bb0'}};
@@ -334,31 +474,31 @@ const SP={
 
 const PROF={who:'Professorin Rechenstein',face:'👩‍🔬'};
 const RG=[
-  {n:'Plus-Wiese',topic:'add',learn:'Plus rechnen bis 1000',icon:'🌼',c1:'#dcf2bd',c2:'#86c96a',lv:[2,5],wild:['plussi','pusti','pilzli','blatti'],
+  {n:'Plus-Wiese',topic:'add',learn:'Plus rechnen bis 1000',icon:'🌼',deco:[['☁️',3,'drift'],['🌼',6,'sway'],['🐝',1,'buzz']],c1:'#dcf2bd',c2:'#86c96a',lv:[2,5],wild:['plussi','pusti','pilzli','blatti'],
    leader:{n:'Pia Plus',e:'👩‍🌾',badge:'Blüten-Orden',be:'🌸',team:[['pusti',6],['plussi',7]],
      hi:'Hallo {N}! Ich bin Pia, die Arenaleiterin der Plus-Wiese. Hier wird addiert, bis die Blumen blühen. Bist du bereit?',
      lose:'Wow, du rechnest super Plus-Aufgaben! Du hast dir den Blüten-Orden verdient.'}},
-  {n:'Minus-Höhle',topic:'sub',learn:'Minus rechnen und ergänzen',icon:'💎',c1:'#d8d2ea',c2:'#8373b0',lv:[5,8],wild:['minuso','kieselo','gespensti'],
+  {n:'Minus-Höhle',topic:'sub',learn:'Minus rechnen und ergänzen',icon:'💎',deco:[['✨',7,'twinkle'],['💧',3,'fall']],c1:'#d8d2ea',c2:'#8373b0',lv:[5,8],wild:['minuso','kieselo','gespensti'],
    leader:{n:'Max Minus',e:'🧔',badge:'Kristall-Orden',be:'💎',team:[['kieselo',9],['gespensti',10]],
      hi:'Willkommen in meiner Höhle, {N}! Ich bin Max. Hier unten wird abgezogen und ergänzt. Mal sehen, ob du den Weg findest!',
      lose:'Unglaublich! Du rechnest Minus wie ein Profi. Nimm den Kristall-Orden.'}},
-  {n:'Zahlen-Berg',topic:'zahl',learn:'Hunderter, Zehner, Einer, Nachbarzahlen und Runden',icon:'⛰️',c1:'#ece4d4',c2:'#a88f6a',lv:[8,11],wild:['ziegi','funki','kieselo'],rare:'einhorni',
+  {n:'Zahlen-Berg',topic:'zahl',learn:'Hunderter, Zehner, Einer, Nachbarzahlen und Runden',icon:'⛰️',deco:[['☁️',3,'drift'],['❄️',5,'fall']],c1:'#ece4d4',c2:'#a88f6a',lv:[8,11],wild:['ziegi','funki','kieselo'],rare:'einhorni',
    leader:{n:'Hugo Hunderter',e:'🧗',badge:'Fels-Orden',be:'🪨',team:[['ziegi',12],['funki',12],['felsor',13]],
      hi:'Hoch hinaus, {N}! Ich bin Hugo. Auf dem Zahlen-Berg zählen Hunderter, Zehner und Einer. Kennst du dich aus?',
      lose:'Gipfel erreicht! Du kennst den Zahlenraum bis 1000. Hier ist der Fels-Orden.'}},
-  {n:'Mal-Wald',topic:'mal',learn:'Das Einmaleins',icon:'🌲',c1:'#cfe8cf',c2:'#4a9160',lv:[11,14],wild:['eulo','fuchsli','baerli','blatti'],
+  {n:'Mal-Wald',topic:'mal',learn:'Das Einmaleins',icon:'🌲',deco:[['🍂',6,'fall'],['🌲',4,'sway']],c1:'#cfe8cf',c2:'#4a9160',lv:[11,14],wild:['eulo','fuchsli','baerli','blatti'],
    leader:{n:'Mira Mal',e:'🧝‍♀️',badge:'Eichel-Orden',be:'🌰',team:[['eulo',15],['fuchsli',15],['baerli',16]],
      hi:'Psst, {N}! Im Mal-Wald flüstern die Bäume das Einmaleins. Ich bin Mira. Kannst du es auch?',
      lose:'Du kennst das Einmaleins richtig gut! Der Eichel-Orden gehört dir.'}},
-  {n:'Geteilt-See',topic:'div',learn:'Geteilt rechnen',icon:'🌊',c1:'#cfe9f7',c2:'#4c9fd6',lv:[14,17],wild:['quaki','oktopi','krabbi','tropfi'],
+  {n:'Geteilt-See',topic:'div',learn:'Geteilt rechnen',icon:'🌊',deco:[['bubble',9,'rise'],['🐟',2,'drift']],c1:'#cfe9f7',c2:'#4c9fd6',lv:[14,17],wild:['quaki','oktopi','krabbi','tropfi'],
    leader:{n:'Tim Teiler',e:'🏊',badge:'Muschel-Orden',be:'🐚',team:[['quaki',18],['krabbi',18],['oktopi',19]],
      hi:'Ahoi {N}! Ich bin Tim. Am Geteilt-See teilen wir alles gerecht auf. Zeig mir, was du kannst!',
      lose:'Gerecht geteilt und gewonnen! Hier ist der Muschel-Orden.'}},
-  {n:'Markt-Stadt',topic:'markt',learn:'Franken, Meter, Minuten und die Uhr',icon:'🏘️',c1:'#f8e7c8',c2:'#e0a45a',lv:[17,20],wild:['miezi','papagi','schnecki','flammi'],
+  {n:'Markt-Stadt',topic:'markt',learn:'Franken, Meter, Minuten und die Uhr',icon:'🏘️',deco:[['🎈',3,'rise'],['☁️',2,'drift']],c1:'#f8e7c8',c2:'#e0a45a',lv:[17,20],wild:['miezi','papagi','schnecki','flammi'],
    leader:{n:'Greta Geld',e:'👩‍💼',badge:'Münz-Orden',be:'🪙',team:[['papagi',21],['schnecki',21],['tigrano',22]],
      hi:'Grüezi {N}! Ich bin Greta. In der Markt-Stadt geht es um Franken, Meter und Minuten. Bereit?',
      lose:'Du rechnest wie ein echter Marktprofi! Der Münz-Orden ist deiner.'}},
-  {n:'Drachen-Gipfel',topic:'mix',learn:'Alles gemischt',icon:'🌋',c1:'#f5dcd8',c2:'#b5584c',lv:[21,25],wild:['wolfi','drakonix','sturmi','felsor'],rare:'einhorni',
+  {n:'Drachen-Gipfel',topic:'mix',learn:'Alles gemischt',icon:'🌋',deco:[['ember',12,'rise'],['☁️',2,'drift']],c1:'#f5dcd8',c2:'#b5584c',lv:[21,25],wild:['wolfi','drakonix','sturmi','felsor'],rare:'einhorni',
    leader:{n:'Meister Kalkulus',e:'🧙‍♂️',badge:'Drachen-Orden',be:'🐉',team:[['wolfi',25],['sturmi',25],['drakonix',26],['felsor',26]],
      hi:'Du hast es bis zum Drachen-Gipfel geschafft, {N}. Ich bin Kalkulus. Hier kommt alles gemischt. Zeig mir alles, was du gelernt hast!',
      lose:'Unglaublich … du hast mich besiegt! Ab heute bist du Zahlimon-Champion.'}}
@@ -426,8 +566,11 @@ function sfx(k){const st=S?S.settings:DEFSET;if(!st.sound||!AC)return;try{if(AC.
 
 /* ---------- Aufgaben (LP21 Mathematik, 3. Klasse) ---------- */
 function parts(b){return [Math.floor(b/100)*100,Math.floor(b%100/10)*10,b%10].filter(Boolean)}
-function hintAdd(a,b){let c=a;const o=[];for(const p of parts(b)){const u=p>=100?100:p>=10?10:1;if(u<100){const d=Math.floor(c/u)%10,f=(10-d)*u;if(d>0&&p>f){o.push(`${c} + ${f} = ${c+f}`);c+=f;o.push(`${c} + ${p-f} = ${c+p-f}`);c+=p-f;continue}}o.push(`${c} + ${p} = ${c+p}`);c+=p}if(b<10&&a>=10&&o.length===1)return `Rechne die Einer: ${a%10} + ${b} = ${a%10+b}  →  ${a+b}`;return o.join('  →  ')}
-function hintSub(a,b){let c=a;const o=[];for(const p of parts(b)){const u=p>=100?100:p>=10?10:1;if(u<100){const d=Math.floor(c/u)%10,f=d*u;if(d>0&&p>f){o.push(`${c} − ${f} = ${c-f}`);c-=f;o.push(`${c} − ${p-f} = ${c-p+f}`);c-=p-f;continue}}o.push(`${c} − ${p} = ${c-p}`);c-=p}if(b<10&&a>=10&&o.length===1&&a%10>=b)return `Rechne die Einer: ${a%10} − ${b} = ${a%10-b}  →  ${a-b}`;return o.join('  →  ')}
+function jumpsAdd(a,b){let c=a;const j=[];for(const p of parts(b)){const u=p>=100?100:p>=10?10:1;if(u<100){const d=Math.floor(c/u)%10,f=(10-d)*u;if(d>0&&p>f){j.push(f,p-f);c+=p;continue}}j.push(p);c+=p}return j}
+function jumpsSub(a,b){let c=a;const j=[];for(const p of parts(b)){const u=p>=100?100:p>=10?10:1;if(u<100){const d=Math.floor(c/u)%10,f=d*u;if(d>0&&p>f){j.push(f,p-f);c-=p;continue}}j.push(p);c-=p}return j}
+function hintAdd(a,b){const j=jumpsAdd(a,b);if(b<10&&a>=10&&j.length===1)return `Rechne die Einer: ${a%10} + ${b} = ${a%10+b}  →  ${a+b}`;let c=a;return j.map(x=>`${c} + ${x} = ${c+=x}`).join('  →  ')}
+function hintSub(a,b){const j=jumpsSub(a,b);if(b<10&&a>=10&&j.length===1&&a%10>=b)return `Rechne die Einer: ${a%10} − ${b} = ${a%10-b}  →  ${a-b}`;let c=a;return j.map(x=>`${c} − ${x} = ${c-=x}`).join('  →  ')}
+const LA=(a,b)=>({t:'line',start:a,jumps:jumpsAdd(a,b)}),LS=(a,b)=>({t:'line',start:a,jumps:jumpsSub(a,b).map(x=>-x)});
 function hintMal(f,b){
   if(f===1)return `1 · ${b} = ${b}`;
   if(f===10)return `10 · ${b} = ${10*b} (eine Null anhängen)`;
@@ -445,9 +588,58 @@ function clockSVG(h,m){const rad=d=>d*Math.PI/180,X=(r,a)=>(60+r*Math.sin(rad(a)
   for(let i=0;i<60;i++){const a=i*6,r1=i%5?50:45;s+=`<line x1="${X(r1,a)}" y1="${Y(r1,a)}" x2="${X(53,a)}" y2="${Y(53,a)}" stroke="currentColor" stroke-width="${i%5?1:2.5}"/>`}
   for(let i=1;i<=12;i++){const a=i*30;s+=`<text x="${X(36,a)}" y="${(60-36*Math.cos(rad(a))+5).toFixed(1)}" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" font-family="sans-serif">${i}</text>`}
   const ha=((h%12)+m/60)*30,ma=m*6;
-  s+=`<line x1="60" y1="60" x2="${X(26,ha)}" y2="${Y(26,ha)}" stroke="#d9443a" stroke-width="6" stroke-linecap="round"/>`;
-  s+=`<line x1="60" y1="60" x2="${X(44,ma)}" y2="${Y(44,ma)}" stroke="#2a66cc" stroke-width="3.5" stroke-linecap="round"/>`;
+  s+=`<g class="hand" style="--a:${ha}deg"><line x1="60" y1="60" x2="60" y2="34" stroke="#d9443a" stroke-width="6" stroke-linecap="round"/></g>`;
+  s+=`<g class="hand" style="--a:${ma}deg;animation-duration:1.7s"><line x1="60" y1="60" x2="60" y2="16" stroke="#2a66cc" stroke-width="3.5" stroke-linecap="round"/></g>`;
   return s+'<circle cx="60" cy="60" r="4" fill="currentColor"/></svg>'}
+
+/* ---------- Anschauung: bewegte Rechenhilfen ---------- */
+function scene(deco){if(!deco||RM)return '';let h='';for(const [ch,n,k] of deco)for(let i=0;i<n;i++){const dur={drift:R(16,30),fall:R(6,11),rise:R(5,10),twinkle:R(2,4),sway:R(2,4),buzz:R(5,8)}[k];
+  const pos=k==='drift'?`top:${R(2,36)}%`:k==='sway'?`left:${Math.round((i+.5)*100/n)-4}%`:k==='twinkle'?`left:${R(4,92)}%;top:${R(4,86)}%`:k==='buzz'?`left:${R(5,35)}%;top:${R(30,50)}%`:`left:${R(3,94)}%`;
+  const sp=ch==='bubble'||ch==='ember';h+=`<span class="d-${k}${sp?' '+ch:''}" style="${pos};animation-duration:${dur}s;animation-delay:-${(Math.random()*dur).toFixed(1)}s">${sp?'':ch}</span>`}
+  return `<div class="scene" aria-hidden="true">${h}</div>`}
+const qlen=(x0,y0,cx,cy,x1,y1)=>{let L=0,px=x0,py=y0;for(let i=1;i<=10;i++){const t=i/10,x=(1-t)*(1-t)*x0+2*(1-t)*t*cx+t*t*x1,y=(1-t)*(1-t)*y0+2*(1-t)*t*cy+t*t*y1;L+=Math.hypot(x-px,y-py);px=x;py=y}return L};
+function lineSVG(start,jumps,reveal,emo){const W=320,y=92,pad=26,T=.7,f=v=>v.toFixed(1);const ws=jumps.map(j=>Math.max(1.6,Math.sqrt(Math.abs(j)))),tot=ws.reduce((a,b)=>a+b,0),sc=(W-2*pad)/tot;
+  let x=jumps[0]<0?W-pad:pad,v=start;const pts=[{x,v}];jumps.forEach((j,i)=>{x+=(j<0?-1:1)*ws[i]*sc;v+=j;pts.push({x,v})});
+  let s=`<svg viewBox="0 0 ${W} 124" width="${W}" role="img" aria-label="Zahlenstrahl"><line x1="8" y1="${y}" x2="${W-8}" y2="${y}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>`;
+  let path=`M${f(pts[0].x)} ${y-14}`;const lens=[];
+  jumps.forEach((j,i)=>{const a=pts[i],b=pts[i+1],m=(a.x+b.x)/2,h=Math.min(46,16+Math.abs(b.x-a.x)*.32),dl=(i*T).toFixed(2);
+    s+=`<path d="M${f(a.x)} ${y} Q${f(m)} ${f(y-2*h)} ${f(b.x)} ${y}" pathLength="1" class="arc" style="animation-delay:${dl}s"/>`;
+    s+=`<text x="${f(m)}" y="${f(y-h-8)}" text-anchor="middle" font-size="15" font-weight="700" fill="#1b4a9c" class="fi" style="animation-delay:${dl}s">${j>0?'+':'−'}${Math.abs(j)}</text>`;
+    path+=` Q${f(m)} ${f(y-14-2*h)} ${f(b.x)} ${y-14}`;lens.push(qlen(a.x,y-14,m,y-14-2*h,b.x,y-14))});
+  pts.forEach((p,i)=>{const last=i===pts.length-1,lab=i===0||reveal?p.v:last?'?':'';
+    s+=`<line x1="${f(p.x)}" y1="${y-6}" x2="${f(p.x)}" y2="${y+6}" stroke="currentColor" stroke-width="2"/>`;
+    if(lab!=='')s+=`<text x="${f(p.x)}" y="${y+26}" text-anchor="middle" font-size="15" font-weight="700" fill="${last&&reveal?'#1f6b3c':'currentColor'}" class="fi" style="animation-delay:${i?((i-1)*T+.5).toFixed(2):0}s">${lab}</text>`});
+  if(emo&&!RM){const tl=lens.reduce((a,b)=>a+b,0);let acc=0;const kp=[0],kt=[0];lens.forEach((l,i)=>{acc+=l;kp.push((acc/tl).toFixed(3));kt.push(((i+1)/lens.length).toFixed(3))});kp[kp.length-1]=1;kt[kt.length-1]=1;
+    s+=`<text font-size="24" text-anchor="middle" dominant-baseline="middle">${emo}<animateMotion dur="${(jumps.length*T).toFixed(2)}s" begin="0s" fill="freeze" calcMode="linear" keyPoints="${kp.join(';')}" keyTimes="${kt.join(';')}" path="${path}"/></text>`}
+  return s+'</svg>'}
+function dotsSVG(r,c){const g=17,W=c*g+8,H=r*g+8+(r>5?6:0);let s=`<svg viewBox="0 0 ${W} ${H}" width="${Math.min(W*1.25,300)}" role="img" aria-label="Punktefeld">`;
+  for(let i=0;i<r;i++)for(let j=0;j<c;j++)s+=`<circle cx="${4+j*g+g/2}" cy="${4+i*g+g/2+(i>=5?6:0)}" r="6.5" fill="${i<5?'#2a66cc':'#e0574b'}" class="pp" style="animation-delay:${(i*.2+j*.03).toFixed(2)}s"/>`;
+  if(r>5)s+=`<line x1="2" y1="${4+5*g+3}" x2="${W-2}" y2="${4+5*g+3}" stroke="currentColor" stroke-dasharray="4 3" stroke-width="1.5"/>`;
+  return s+`</svg><span class="cap">${r} Reihe${r>1?'n':''} mit je ${c} Punkten</span>`}
+function shareSVG(n,d){const q=n/d,cols=Math.min(d,5),rows=Math.ceil(d/5),cw=60,W=cols*cw+10,H=rows*cw+50,per=Math.ceil(Math.sqrt(q)),step=Math.min(.12,3/n);
+  const cx=i=>5+(i%cols)*cw+cw/2,cy=i=>45+Math.floor(i/cols)*cw+cw/2;let s=`<svg viewBox="0 0 ${W} ${H}" width="${Math.min(W*1.1,320)}" role="img" aria-label="Gerecht verteilen">`;
+  for(let i=0;i<d;i++)s+=`<circle cx="${cx(i)}" cy="${cy(i)}" r="26" fill="#fff6dc" stroke="#b87c05" stroke-width="2"/>`;
+  for(let k=0;k<n;k++){const p=k%d,m=Math.floor(k/d),x=cx(p)+((m%per)-(per-1)/2)*9,y=cy(p)+(Math.floor(m/per)-(Math.ceil(q/per)-1)/2)*9;
+    s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.8" fill="#e0574b" class="fly" style="--dx:${(W/2-x).toFixed(1)}px;--dy:${(10-y).toFixed(1)}px;animation-delay:${(k*step).toFixed(2)}s"/>`}
+  return s+`</svg><span class="cap">${n} gerecht auf ${d} verteilt</span>`}
+function blocksSVG(n){const h=Math.floor(n/100),z=Math.floor(n%100/10),e=n%10,u=4.6,Q=u*10,W=300;let s='',x=4,y=4,k=0;const del=()=>`style="animation-delay:${(k++*.12).toFixed(2)}s"`;
+  for(let i=0;i<h;i++){if(x+Q>W){x=4;y+=Q+6}let g='';for(let t=1;t<10;t++)g+=`<line x1="${x+t*u}" y1="${y}" x2="${x+t*u}" y2="${y+Q}" stroke="#fff" stroke-width=".6"/><line x1="${x}" y1="${y+t*u}" x2="${x+Q}" y2="${y+t*u}" stroke="#fff" stroke-width=".6"/>`;
+    s+=`<g class="pp" ${del()}><rect x="${x}" y="${y}" width="${Q}" height="${Q}" fill="#2a66cc" stroke="#1b4a9c"/>${g}</g>`;x+=Q+6}
+  if(h){x=4;y+=Q+8}
+  for(let i=0;i<z;i++){s+=`<rect x="${x.toFixed(1)}" y="${y}" width="${u}" height="${Q}" fill="#2e9254" stroke="#1f6b3c" stroke-width=".8" class="pp" ${del()}/>`;x+=u+4}
+  if(z)x+=8;
+  for(let i=0;i<e;i++){s+=`<rect x="${x.toFixed(1)}" y="${(y+Q-u).toFixed(1)}" width="${u}" height="${u}" fill="#e0574b" stroke="#9e2a22" stroke-width=".6" class="pp" ${del()}/>`;x+=u+3}
+  return `<svg viewBox="0 0 ${W} ${(y+Q+4).toFixed(1)}" width="${W}" role="img" aria-label="Hunderter, Zehner und Einer">${s}</svg><span class="cap">${h} Hunderter · ${z} Zehner · ${e} Einer</span>`}
+function roundSVG(a,reveal){const lo=Math.floor(a/10)*10,hi=lo+10,W=300,x0=24,x1=276,X=v=>(x0+(v-lo)/10*(x1-x0)).toFixed(1),t=a%10>=5?hi:lo;
+  let s=`<svg viewBox="0 0 ${W} 100" width="${W}" role="img" aria-label="Runden"><line x1="${x0}" y1="60" x2="${x1}" y2="60" stroke="currentColor" stroke-width="2.5"/>`;
+  for(let v=lo;v<=hi;v++){const L=v===lo||v===hi?10:v===lo+5?8:5;s+=`<line x1="${X(v)}" y1="${60-L}" x2="${X(v)}" y2="${60+L}" stroke="currentColor" stroke-width="${L>6?2.5:1.5}"/>`}
+  s+=`<text x="${x0}" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor">${lo}</text><text x="${x1}" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor">${hi}</text><text x="${X(lo+5)}" y="88" text-anchor="middle" font-size="11" fill="currentColor">${lo+5}</text>`;
+  s+=`<g class="drop"><text x="${X(a)}" y="36" text-anchor="middle" font-size="15" font-weight="700" fill="#d9443a">${a}</text><path d="M${X(a)-6} 41 L${+X(a)+6} 41 L${X(a)} 50 Z" fill="#d9443a"/></g>`;
+  if(reveal)s+=`<path d="M${X(a)} 68 Q${((+X(a)+ +X(t))/2).toFixed(1)} 84 ${X(t)} 68" pathLength="1" class="arc" style="stroke:#2e9254;animation-delay:.8s"/>`;
+  return s+'</svg>'}
+function aidHTML(a,reveal){if(!a)return '';const m=B&&B.mi!=null?myMon():S&&S.team[0];const emo=m?SP[m.id].e:'🐸';
+  const inner=a.t==='line'?lineSVG(a.start,a.jumps,reveal,emo):a.t==='dots'?dotsSVG(a.r,a.c):a.t==='share'?shareSVG(a.n,a.d):a.t==='blocks'?blocksSVG(a.n):a.t==='round'?roundSVG(a.a,reveal):'';
+  return inner?`<div class="aid">${inner}</div>`:''}
 
 const RE={1:[2,5,10],2:[2,3,4,5,6,10],3:[3,4,6,7,8,9]};
 const GEN={
@@ -455,46 +647,46 @@ const GEN={
     if(s===1){if(Math.random()<.3){a=R(1,8)*10;b=R(1,10-a/10)*10}else{a=R(11,89);b=R(2,9)}}
     else if(s===2){if(Math.random()<.25){a=R(1,8)*100;b=R(1,9-a/100)*100}else{a=R(12,78);b=R(11,99-a)}}
     else{a=R(101,880);const k=Math.random();b=k<.3?R(2,9):k<.6?R(1,9)*10:R(11,99);if(Math.random()<.3)b+=R(1,3)*100;if(a+b>1000)b=R(2,1000-a)}
-    return {text:`${a} + ${b} = ?`,ans:a+b,hint:hintAdd(a,b)}},
+    return {text:`${a} + ${b} = ?`,ans:a+b,hint:hintAdd(a,b),aid:LA(a,b)}},
   sub(s){
     if(s>1&&Math.random()<.3){const c=s===2?100:P([1000,R(3,9)*100]);const a=s===2?R(11,89):R(Math.max(11,c-390),c-11);const e=(10-a%10)%10;
       const h=e?`${a} + ${e} = ${a+e}  →  ${a+e} + ${c-a-e} = ${c}  →  zusammen ${c-a}`:`${a} + ${c-a} = ${c}`;
-      return {text:`${a} + ? = ${c}`,say:`${a} plus wie viel gleich ${c}?`,ans:c-a,hint:h}}
+      return {text:`${a} + ? = ${c}`,say:`${a} plus wie viel gleich ${c}?`,ans:c-a,hint:h,aid:{t:'line',start:a,jumps:e?[e,c-a-e]:[c-a]}}}
     let a,b;
     if(s===1){if(Math.random()<.3){a=R(2,10)*10;b=R(1,a/10-1)*10}else{a=R(11,100);b=R(2,9)}}
     else if(s===2){if(Math.random()<.25){a=R(2,10)*100;b=R(1,a/100-1)*100}else{a=R(30,99);b=R(11,a-5)}}
     else{a=R(150,1000);const k=Math.random();b=k<.3?R(2,9):k<.6?R(1,9)*10:R(11,99);if(Math.random()<.3)b+=R(1,3)*100;if(b>=a)b=R(2,a-50)}
-    return {text:`${a} − ${b} = ?`,ans:a-b,hint:hintSub(a,b)}},
+    return {text:`${a} − ${b} = ?`,ans:a-b,hint:hintSub(a,b),aid:LS(a,b)}},
   mal(s){const b=P(RE[s]);
     if(s===3&&Math.random()<.2){const f=R(2,9),t=R(2,9);return {text:`${f} · ${t*10} = ?`,ans:f*t*10,hint:`${f} · ${t} = ${f*t}  →  ${f} · ${t*10} = ${f*t*10}`}}
     const f=R(1,10);
-    if(s===3&&Math.random()<.3)return {text:`? · ${b} = ${f*b}`,say:`Wie viel mal ${b} gleich ${f*b}?`,ans:f,hint:`${f} · ${b} = ${f*b}`};
-    return {text:`${f} · ${b} = ?`,ans:f*b,hint:hintMal(f,b)}},
+    if(s===3&&Math.random()<.3)return {text:`? · ${b} = ${f*b}`,say:`Wie viel mal ${b} gleich ${f*b}?`,ans:f,hint:`${f} · ${b} = ${f*b}`,aid:{t:'dots',r:f,c:b}};
+    return {text:`${f} · ${b} = ?`,ans:f*b,hint:hintMal(f,b),aid:{t:'dots',r:f,c:b}}},
   div(s){const d=P(RE[s]),q=R(1,10),n=d*q;
-    if(s===3&&Math.random()<.25)return {text:`${S.name} verteilt ${n} Beeren gerecht an ${d} Zahlimon. Wie viele Beeren bekommt jedes?`,ans:q,hint:`${q} · ${d} = ${n}, also ${n} : ${d} = ${q}`};
-    if(s>=2&&Math.random()<.2)return {text:`Wie oft passt ${d} in ${n}?`,ans:q,hint:`${q} · ${d} = ${n}`};
-    return {text:`${n} : ${d} = ?`,ans:q,hint:`Welche Zahl mal ${d} gibt ${n}?  ${q} · ${d} = ${n}`}},
+    if(s===3&&Math.random()<.25)return {text:`${S.name} verteilt ${n} Beeren gerecht an ${d} Zahlimon. Wie viele Beeren bekommt jedes?`,ans:q,hint:`${q} · ${d} = ${n}, also ${n} : ${d} = ${q}`,aid:{t:'share',n,d}};
+    if(s>=2&&Math.random()<.2)return {text:`Wie oft passt ${d} in ${n}?`,ans:q,hint:`${q} · ${d} = ${n}`,aid:{t:'share',n,d}};
+    return {text:`${n} : ${d} = ?`,ans:q,hint:`Welche Zahl mal ${d} gibt ${n}?  ${q} · ${d} = ${n}`,aid:{t:'share',n,d}}},
   zahl(s){const k=s===1?['nach','vor','dopp','halb','cmp2']:s===2?['stw','ziff','zehner','cmp3','folge','dopp']:['runden','runden','folge','nach3','halb3','stw0','hunderter'];
     let a,b;
     switch(P(k)){
-      case 'nach':a=R(9,99);return {text:`Welche Zahl kommt nach ${a}?`,ans:a+1,hint:`${a} + 1 = ${a+1}`};
-      case 'vor':a=R(11,100);return {text:`Welche Zahl kommt vor ${a}?`,ans:a-1,hint:`${a} − 1 = ${a-1}`};
-      case 'nach3':a=P([R(100,998),R(1,9)*100-1,R(10,99)*10-1]);return {text:`Welche Zahl kommt nach ${a}?`,ans:a+1,hint:`${a} + 1 = ${a+1}`};
-      case 'dopp':a=s===1?R(6,50):R(51,250);return {text:`Verdopple ${a}.`,ans:2*a,hint:`${a} + ${a} = ${2*a}`};
-      case 'halb':a=R(3,50)*2;return {text:`Wie viel ist die Hälfte von ${a}?`,ans:a/2,hint:halbHint(a)};
+      case 'nach':a=R(9,99);return {text:`Welche Zahl kommt nach ${a}?`,ans:a+1,hint:`${a} + 1 = ${a+1}`,aid:{t:'line',start:a,jumps:[1]}};
+      case 'vor':a=R(11,100);return {text:`Welche Zahl kommt vor ${a}?`,ans:a-1,hint:`${a} − 1 = ${a-1}`,aid:{t:'line',start:a,jumps:[-1]}};
+      case 'nach3':a=P([R(100,998),R(1,9)*100-1,R(10,99)*10-1]);return {text:`Welche Zahl kommt nach ${a}?`,ans:a+1,hint:`${a} + 1 = ${a+1}`,aid:{t:'line',start:a,jumps:[1]}};
+      case 'dopp':a=s===1?R(6,50):R(51,250);return {text:`Verdopple ${a}.`,ans:2*a,hint:`${a} + ${a} = ${2*a}`,aid:LA(a,a)};
+      case 'halb':a=R(3,50)*2;return {text:`Wie viel ist die Hälfte von ${a}?`,ans:a/2,hint:halbHint(a),aid:a<=40?{t:'share',n:a,d:2}:null};
       case 'halb3':a=R(51,500)*2;return {text:`Wie viel ist die Hälfte von ${a}?`,ans:a/2,hint:halbHint(a)};
       case 'cmp2':a=R(10,99);b=Math.random()<.1?a:R(10,99);return cmpQ(a,b);
       case 'cmp3':a=R(100,999);b=Math.random()<.5?Number(String(a).split('').reverse().join('')):R(100,999);if(b<100)b+=100;if(Math.random()<.1)b=a;return cmpQ(a,b);
-      case 'stw':{const h=R(1,9),z=R(0,9),e=R(0,9),n=h*100+z*10+e;return {text:`${h} H + ${z} Z + ${e} E = ?`,say:`${h} Hunderter, ${z} Zehner und ${e} Einer. Welche Zahl ist das?`,ans:n,hint:`${h} Hunderter = ${h*100}, ${z} Zehner = ${z*10}, ${e} Einer = ${e}  →  ${n}`}}
-      case 'stw0':{const h=R(1,9),x=R(1,9);if(Math.random()<.5)return {text:`${x} E + ${h} H = ?`,say:`${x} Einer und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x,hint:`${h} Hunderter, 0 Zehner, ${x} Einer  →  ${h*100+x}`};
-        return {text:`${x} Z + ${h} H = ?`,say:`${x} Zehner und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x*10,hint:`${h} Hunderter, ${x} Zehner, 0 Einer  →  ${h*100+x*10}`}}
-      case 'ziff':{a=R(100,999);const pos=P([['Hunderter',0],['Zehner',1],['Einer',2]]),str=String(a);return {text:`Welche Ziffer steht bei ${a} an der ${pos[0]}stelle?`,ans:+str[pos[1]],hint:`${a}: ${str[0]} Hunderter, ${str[1]} Zehner, ${str[2]} Einer`}}
+      case 'stw':{const h=R(1,9),z=R(0,9),e=R(0,9),n=h*100+z*10+e;return {text:`${h} H + ${z} Z + ${e} E = ?`,say:`${h} Hunderter, ${z} Zehner und ${e} Einer. Welche Zahl ist das?`,ans:n,hint:`${h} Hunderter = ${h*100}, ${z} Zehner = ${z*10}, ${e} Einer = ${e}  →  ${n}`,aid:{t:'blocks',n}}}
+      case 'stw0':{const h=R(1,9),x=R(1,9);if(Math.random()<.5)return {text:`${x} E + ${h} H = ?`,say:`${x} Einer und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x,hint:`${h} Hunderter, 0 Zehner, ${x} Einer  →  ${h*100+x}`,aid:{t:'blocks',n:h*100+x}};
+        return {text:`${x} Z + ${h} H = ?`,say:`${x} Zehner und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x*10,hint:`${h} Hunderter, ${x} Zehner, 0 Einer  →  ${h*100+x*10}`,aid:{t:'blocks',n:h*100+x*10}}}
+      case 'ziff':{a=R(100,999);const pos=P([['Hunderter',0],['Zehner',1],['Einer',2]]),str=String(a);return {text:`Welche Ziffer steht bei ${a} an der ${pos[0]}stelle?`,ans:+str[pos[1]],hint:`${a}: ${str[0]} Hunderter, ${str[1]} Zehner, ${str[2]} Einer`,aid:{t:'blocks',n:a}}}
       case 'zehner':{a=R(101,989);if(a%10===0)a++;const n=Math.ceil(a/10)*10;return {text:`Welche Zehnerzahl kommt nach ${a}?`,ans:n,hint:`${a} liegt zwischen ${n-10} und ${n}.`}}
       case 'hunderter':{a=R(101,989);if(a%100===0)a++;const n=Math.ceil(a/100)*100;return {text:`Welche Hunderterzahl kommt nach ${a}?`,ans:n,hint:`${a} liegt zwischen ${n-100} und ${n}.`}}
-      case 'runden':{a=R(101,994);if(a%10===0)a+=3;const r=Math.round(a/10)*10;return {text:`Runde ${a} auf Zehner.`,ans:r,hint:`Die Einerziffer ist ${a%10}. ${a%10>=5?'Ab 5 wird aufgerundet':'Unter 5 wird abgerundet'}  →  ${r}`}}
+      case 'runden':{a=R(101,994);if(a%10===0)a+=3;const r=Math.round(a/10)*10;return {text:`Runde ${a} auf Zehner.`,ans:r,hint:`Die Einerziffer ist ${a%10}. ${a%10>=5?'Ab 5 wird aufgerundet':'Unter 5 wird abgerundet'}  →  ${r}`,aid:{t:'round',a}}}
       default:{const st=s===2?P([2,5,10,20]):P([25,50,100,-10,-50]);let x;
         if(st>0)x=R(1,st===100?6:st===50?14:st===25?30:30)*st;else x=st===-10?R(30,99)*10:R(4,20)*50;
-        const seq=[x,x+st,x+2*st];return {text:`${seq.join(', ')}, ?`,say:`Wie geht die Zahlenfolge weiter? ${seq.join(', ')}, und dann?`,ans:x+3*st,hint:`Immer ${st>0?'+':'−'} ${Math.abs(st)}  →  ${x+2*st} ${st>0?'+':'−'} ${Math.abs(st)} = ${x+3*st}`}}
+        const seq=[x,x+st,x+2*st];return {text:`${seq.join(', ')}, ?`,say:`Wie geht die Zahlenfolge weiter? ${seq.join(', ')}, und dann?`,ans:x+3*st,hint:`Immer ${st>0?'+':'−'} ${Math.abs(st)}  →  ${x+2*st} ${st>0?'+':'−'} ${Math.abs(st)} = ${x+3*st}`,aid:{t:'line',start:x,jumps:[st,st,st]}}}
     }},
   markt(s){return MK[P(['geld','laenge','zeit','uhr','text','text'])](s)}
 };
@@ -524,16 +716,16 @@ const MK={
   text(s){return P(TX[s])()}
 };
 const TX={
-  1:[()=>{const a=R(12,48),b=R(11,40);return {text:`${S.name} hat ${a} Sammelkarten und bekommt ${b} dazu. Wie viele Karten sind es jetzt?`,ans:a+b,hint:hintAdd(a,b)}},
-     ()=>{const a=R(30,95),b=R(5,a-10);return {text:`Im Zahlencenter liegen ${a} Beeren. ${S.name} verfüttert ${b} davon. Wie viele Beeren bleiben übrig?`,ans:a-b,hint:hintSub(a,b)}},
-     ()=>{const a=R(20,60),b=R(10,35);return {text:`Im Bus sitzen ${a} Kinder. An der Haltestelle steigen ${b} ein. Wie viele Kinder sitzen jetzt im Bus?`,ans:a+b,hint:hintAdd(a,b)}}],
-  2:[()=>{const a=R(3,9),b=R(3,9);return {text:`Ein Zahlimon frisst jeden Tag ${a} Beeren. Wie viele Beeren frisst es in ${b} Tagen?`,ans:a*b,hint:hintMal(b,a)}},
-     ()=>{const d=R(2,9),q=R(2,10);return {text:`${S.name} verteilt ${d*q} Zahlenbälle gerecht auf ${d} Rucksäcke. Wie viele Bälle kommen in jeden Rucksack?`,ans:q,hint:`${q} · ${d} = ${d*q}`}},
-     ()=>{const a=R(120,450),b=R(110,400);return {text:`Auf der Plus-Wiese wohnen ${a} Zahlimon, im Mal-Wald ${b}. Wie viele sind es zusammen?`,ans:a+b,hint:hintAdd(a,b)}}],
+  1:[()=>{const a=R(12,48),b=R(11,40);return {text:`${S.name} hat ${a} Sammelkarten und bekommt ${b} dazu. Wie viele Karten sind es jetzt?`,ans:a+b,hint:hintAdd(a,b),aid:LA(a,b)}},
+     ()=>{const a=R(30,95),b=R(5,a-10);return {text:`Im Zahlencenter liegen ${a} Beeren. ${S.name} verfüttert ${b} davon. Wie viele Beeren bleiben übrig?`,ans:a-b,hint:hintSub(a,b),aid:LS(a,b)}},
+     ()=>{const a=R(20,60),b=R(10,35);return {text:`Im Bus sitzen ${a} Kinder. An der Haltestelle steigen ${b} ein. Wie viele Kinder sitzen jetzt im Bus?`,ans:a+b,hint:hintAdd(a,b),aid:LA(a,b)}}],
+  2:[()=>{const a=R(3,9),b=R(3,9);return {text:`Ein Zahlimon frisst jeden Tag ${a} Beeren. Wie viele Beeren frisst es in ${b} Tagen?`,ans:a*b,hint:hintMal(b,a),aid:{t:'dots',r:b,c:a}}},
+     ()=>{const d=R(2,9),q=R(2,10);return {text:`${S.name} verteilt ${d*q} Zahlenbälle gerecht auf ${d} Rucksäcke. Wie viele Bälle kommen in jeden Rucksack?`,ans:q,hint:`${q} · ${d} = ${d*q}`,aid:{t:'share',n:d*q,d}}},
+     ()=>{const a=R(120,450),b=R(110,400);return {text:`Auf der Plus-Wiese wohnen ${a} Zahlimon, im Mal-Wald ${b}. Wie viele sind es zusammen?`,ans:a+b,hint:hintAdd(a,b),aid:LA(a,b)}}],
   3:[()=>{const p=R(3,9),k=R(2,5);return {text:`${S.name} hat 50 Fr. und kauft ${k} Bücher zu je ${p} Fr. Wie viele Franken bleiben übrig?`,ans:50-p*k,hint:`${k} · ${p} = ${p*k}  →  50 − ${p*k} = ${50-p*k}`}},
      ()=>{const a=R(4,9),e=R(2,7);return {text:`Eine Arena hat ${a} Reihen mit je 8 Plätzen. ${e} Plätze sind leer. Wie viele Kinder sitzen in der Arena?`,ans:a*8-e,hint:`${a} · 8 = ${a*8}  →  ${a*8} − ${e} = ${a*8-e}`}},
-     ()=>{const w=R(1,4)*100+50;return {text:`${S.name} läuft jeden Tag ${w} m. Wie viele Meter sind es in 2 Tagen?`,ans:2*w,hint:`${w} + ${w} = ${2*w}`}},
-     ()=>{const n=R(3,9)*4;return {text:`${n} Zahlimon machen einen Ausflug. In jedes Boot passen 4. Wie viele Boote brauchen sie?`,ans:n/4,hint:`${n} : 4 = ${n/4}`}}]
+     ()=>{const w=R(1,4)*100+50;return {text:`${S.name} läuft jeden Tag ${w} m. Wie viele Meter sind es in 2 Tagen?`,ans:2*w,hint:`${w} + ${w} = ${2*w}`,aid:LA(w,w)}},
+     ()=>{const n=R(3,9)*4;return {text:`${n} Zahlimon machen einen Ausflug. In jedes Boot passen 4. Wie viele Boote brauchen sie?`,ans:n/4,hint:`${n} : 4 = ${n/4}`,aid:{t:'share',n,d:4}}}]
 };
 function nextQ(topic){const t=topic==='mix'?P(['add','sub','zahl','mal','div','markt']):topic;
   const rq=S.retry[t];if(rq&&rq.length&&Math.random()<.35)return {...rq.shift(),again:true};
@@ -542,7 +734,7 @@ function record(q,ok,given){const st=stat(q.topic),fixed=!!S.settings.fix[q.topi
   if(ok){st.r++;st.run++;st.miss=0;S.days[dk][0]++;
     if(st.run>=5&&st.s<3&&!fixed){st.s++;st.run=0;later(()=>toast('Du wirst immer besser! Die Aufgaben werden etwas schwieriger.'),900)}}
   else{st.f++;st.run=0;st.miss++;S.days[dk][1]++;if(st.miss>=3&&st.s>1&&!fixed){st.s--;st.miss=0}
-    const arr=S.retry[q.topic]=S.retry[q.topic]||[];if(!arr.some(x=>x.text===q.text)){arr.push({text:q.text,say:q.say,ans:q.ans,kind:q.kind,choices:q.choices,hint:q.hint,vis:q.vis,topic:q.topic});if(arr.length>8)arr.shift()}
+    const arr=S.retry[q.topic]=S.retry[q.topic]||[];if(!arr.some(x=>x.text===q.text)){arr.push({text:q.text,say:q.say,ans:q.ans,kind:q.kind,choices:q.choices,hint:q.hint,vis:q.vis,aid:q.aid,topic:q.topic});if(arr.length>8)arr.shift()}
     S.log.unshift({t:q.text,a:q.ans,g:given,topic:q.topic});if(S.log.length>30)S.log.length=30}
   const keys=Object.keys(S.days).sort();while(keys.length>30)delete S.days[keys.shift()];save()}
 
@@ -551,7 +743,9 @@ const ACT={};
 let timers=[];
 const later=(fn,ms)=>{const t=setTimeout(fn,ms);timers.push(t);return t};
 function clearTimers(){timers.forEach(clearTimeout);timers=[]}
-function show(html){app.innerHTML=html;window.scrollTo(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll('.hp i[data-to]').forEach(el=>el.style.width=el.dataset.to+'%')))}
+let SCR='',LAST='';
+function show(html){app.innerHTML=html;if(SCR!==LAST){LAST=SCR;window.scrollTo(0,0);app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}animBars()}
+function animBars(){requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll('.hp i[data-to]').forEach(el=>el.style.width=el.dataset.to+'%')))}
 let tT;function toast(t){toastEl.textContent=t;toastEl.hidden=false;toastEl.classList.remove('in');void toastEl.offsetWidth;toastEl.classList.add('in');clearTimeout(tT);tT=setTimeout(()=>toastEl.hidden=true,2800)}
 const chip=t=>`<span class="chip" style="--c:${TYPES[t].c}">${TYPES[t].n}</span>`;
 const dots=n=>`<span class="dots" aria-label="Stufe ${n} von 3">${[1,2,3].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>`;
@@ -561,24 +755,26 @@ function nav(){return `<nav class="nav"><div class="in">${[['map','🗺️','Kar
 
 app.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;unlockAudio();const f=ACT[b.dataset.act];if(f)f(b.dataset.arg,b)});
 document.addEventListener('keydown',e=>{
+  if(!celEl.hidden&&(e.key==='Enter'||e.key===' ')){e.preventDefault();celEl.click();return}
   if(!dlg.hidden&&(e.key==='Enter'||e.key===' ')){e.preventDefault();dlgTap();return}
   if(!B||B.phase!=='q'||B.q.kind==='choice')return;
   if(/^[0-9]$/.test(e.key))ACT.k(e.key);else if(e.key==='Backspace')ACT.del();else if(e.key==='Enter')ACT.submit()});
 
 /* ---------- Dialog ---------- */
 let DQ=[],Ddone=null,Dtyping=null,Dfull='';
-function talk(lines,done){DQ=lines.slice();Ddone=done;if(!DQ.length){done&&done();return}dlg.hidden=false;nextLine()}
-function nextLine(){if(!DQ.length){dlg.hidden=true;stopSpeech();const d=Ddone;Ddone=null;d&&d();return}
-  const l=DQ.shift(),text=l.text.replace(/\{N\}/g,S?S.name:'');$('#dlgFace').textContent=l.face||'';$('#dlgWho').textContent=l.who||'';$('#dlgWho').hidden=!l.who;
+function talk(lines,done){DQ=lines.slice();Ddone=done;if(!DQ.length){done&&done();return}nextLine()}
+function nextLine(){const face=$('#dlgFace');if(!DQ.length){dlg.hidden=true;stopSpeech();const d=Ddone;Ddone=null;d&&d();return}
+  const l=DQ.shift();if(l.cel){dlg.hidden=true;celebrate(l.cel,nextLine);return}
+  dlg.hidden=false;const text=l.text.replace(/\{N\}/g,S?S.name:'');face.textContent=l.face||'';$('#dlgWho').textContent=l.who||'';$('#dlgWho').hidden=!l.who;
   Dfull=text;const el=$('#dlgTxt');el.textContent='';say(text);
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=text;return}
-  let i=0;clearInterval(Dtyping);Dtyping=setInterval(()=>{i+=2;el.textContent=text.slice(0,i);if(i>=text.length){clearInterval(Dtyping);Dtyping=null}},24)}
-function dlgTap(){unlockAudio();if(Dtyping){clearInterval(Dtyping);Dtyping=null;$('#dlgTxt').textContent=Dfull;return}nextLine()}
+  if(RM){el.textContent=text;return}
+  face.classList.add('talk');let i=0;clearInterval(Dtyping);Dtyping=setInterval(()=>{i+=2;el.textContent=text.slice(0,i);if(i>=text.length){clearInterval(Dtyping);Dtyping=null;setTimeout(()=>face.classList.remove('talk'),600)}},24)}
+function dlgTap(){unlockAudio();if(Dtyping){clearInterval(Dtyping);Dtyping=null;$('#dlgTxt').textContent=Dfull;$('#dlgFace').classList.remove('talk');return}nextLine()}
 dlg.addEventListener('click',dlgTap);
 
 /* ---------- Bildschirme ---------- */
 function titleScreen(){B=null;S=null;const sv=load();
-  show(`<div class="title"><p class="eyebrow">Das Rechen-Abenteuer · 3. Klasse</p><h1 class="logo">Zahli<span>mon</span></h1>
+  show(`<div class="title"><div class="scene numsky" aria-hidden="true">${RM?'':Array.from({length:14},()=>`<span class="d-rise num" style="left:${R(2,90)}%;animation-duration:${R(10,18)}s;animation-delay:-${R(0,17)}s">${P(['1','2','3','4','5','6','7','8','9','+','−','·','='])}</span>`).join('')}</div><p class="eyebrow">Das Rechen-Abenteuer · 3. Klasse</p><h1 class="logo">Zahli<span>mon</span></h1>
   <div class="parade" aria-hidden="true"><span>🦎</span><span>🐧</span><span>🐛</span></div>
   <div class="stack">${sv&&sv.name?`<button class="btn green big" data-act="cont">▶ Weiterspielen: ${esc(sv.name)}</button>`:''}
   <button class="btn ${sv?'ghost':'green big'}" data-act="newgame">Neues Spiel</button></div>
@@ -603,17 +799,17 @@ ACT.takeStarter=id=>{S.team=[mkMon(id,5)];S.seen[id]=S.caught[id]=1;save();
 
 function mapScreen(){B=null;clearTimers();
   show(`${hud()}<h2 class="h2">Karte von Zahlonien</h2><p class="fine">Tippe auf ein Gebiet. Ein neues Gebiet öffnet sich, wenn du einen Orden gewinnst.</p>
-  <div class="map">${RG.map((r,i)=>{const open=i<=S.badges,done=i<S.badges;return `<button class="node ${open?'':'locked'} ${i===S.badges?'now':''}" style="--g1:${r.c1};--g2:${r.c2}" data-act="${open?'region':'locked'}" data-arg="${i}"><span class="ic">${open?r.icon:'🔒'}</span><span class="tx"><b>${r.n}</b><small>${open?r.learn:'Noch verschlossen'}</small></span><span class="st">${done?r.leader.be:''}</span></button>`}).join('')}</div>
+  <div class="map">${RG.map((r,i)=>{const open=i<=S.badges,done=i<S.badges;return `<button class="node ${open?'':'locked'} ${i===S.badges?'now':''}" style="--g1:${r.c1};--g2:${r.c2}" data-act="${open?'region':'locked'}" data-arg="${i}">${i===Math.min(S.badges,RG.length-1)?'<span class="me-av" aria-hidden="true">🧒</span>':''}<span class="ic">${open?r.icon:'🔒'}</span><span class="tx"><b>${r.n}</b><small>${open?r.learn:'Noch verschlossen'}</small></span><span class="st">${done?r.leader.be:''}</span></button>`}).join('')}</div>
   <button class="linkish" data-act="parents">Bereich für Eltern</button>${nav()}`)}
 ACT.map=mapScreen;
 ACT.locked=i=>{const p=RG[i-1];const t=`Gewinne zuerst den Orden bei ${p.leader.n} in der ${p.n}.`;toast(t);say(t)};
 ACT.region=i=>regionScreen(+i);
 
 function regionScreen(i){B=null;clearTimers();const r=RG[i],L=r.leader,alive=firstAlive()>=0,beaten=S.badges>i,m=S.team[Math.max(0,firstAlive())];
-  show(`${hud()}<section class="rg" style="--g1:${r.c1};--g2:${r.c2}"><div class="rg-ic">${r.icon}</div><div><h2>${r.n}</h2><p>Hier übst du: <b>${r.learn}</b></p>${r.topic!=='mix'?`<p>Schwierigkeit ${dots(getStufe(r.topic))}</p>`:''}</div></section>
+  show(`${hud()}<section class="rg" style="--g1:${r.c1};--g2:${r.c2}">${scene(r.deco)}<div class="rg-ic">${r.icon}</div><div><h2>${r.n}</h2><p>Hier übst du: <b>${r.learn}</b></p>${r.topic!=='mix'?`<p>Schwierigkeit ${dots(getStufe(r.topic))}</p>`:''}</div></section>
   <div class="lead card"><span class="le">${SP[m.id].e}</span><div class="li"><div class="pn"><b>${nm(m)}</b><span class="lv">Lv ${m.lvl}</span></div>${bar('r'+m.uid,m.hp,maxHp(m))}<div class="pk">Kraft ${m.hp}/${maxHp(m)}</div></div></div>
   <div class="stack">${alive?`<button class="btn green big" data-act="wild" data-arg="${i}">🌿 Im hohen Gras suchen</button>`:`<p class="warn">Deine Zahlimon sind erschöpft.</p><button class="btn" data-act="center">❤️ Ins Zahlencenter</button>`}
-  <button class="btn gold" data-act="arena" data-arg="${i}" ${alive?'':'disabled'}>🏟️ ${beaten?'Revanche':'Arena'}: ${L.n} ${beaten?L.be:''}</button></div>
+  <button class="btn gold" data-act="arena" data-arg="${i}" ${alive?'':'disabled'}>🏟️ ${beaten?'Revanche':'Arena'}: ${L.n} ${beaten?L.be:''}</button>${r.topic!=='mix'?`<button class="btn ghost" data-act="learn" data-arg="${i}">📺 So geht's: ${TOPICS[r.topic].n}</button>`:''}</div>
   <h3 class="h3">Zahlimon in diesem Gebiet</h3><div class="mini-dex">${r.wild.concat(r.rare?[r.rare]:[]).map(id=>S.caught[id]?`<span title="${SP[id].n}">${SP[id].e}</span>`:S.seen[id]?`<span class="seen" title="${SP[id].n}">${SP[id].e}</span>`:'<span class="unk">?</span>').join('')}</div>${nav()}`)}
 
 /* ---------- Kampf ---------- */
@@ -628,27 +824,25 @@ ACT.wild=i=>{i=+i;const r=RG[i];let id;
   else if(r.rare&&Math.random()<.06)id=r.rare;else id=P(r.wild);
   const f=mkFoe(id,id==='zahlodrak'?30:R(r.lv[0],r.lv[1]),false);S.seen[id]=1;save();
   B={kind:'wild',ri:i,foes:[f],fi:0,mi:firstAlive(),streak:0,phase:'anim',fx:'appear',prev:{},msg:id==='zahlodrak'?'Der Boden bebt … Das legendäre Zahlodrak erscheint!':`Ein wildes ${SP[id].n} erscheint!`};
-  renderBattle();say(B.msg);
-  later(()=>{if(!S.flags.tut){S.flags.tut=1;save();talk(TUT,toMenu)}else toMenu()},1400)};
+  wipe('grass',null,null,()=>{renderBattle();say(B.msg);later(()=>{if(!S.flags.tut){S.flags.tut=1;save();talk(TUT,toMenu)}else toMenu()},1400)})};
 ACT.arena=i=>{i=+i;const L=RG[i].leader;
-  talk([{who:L.n,face:L.e,text:L.hi}],()=>{const foes=L.team.map(([id,l])=>mkFoe(id,l,true));S.seen[foes[0].id]=1;save();
+  talk([{who:L.n,face:L.e,text:L.hi}],()=>{const foes=L.team.map(([id,l])=>mkFoe(id,l,true));S.seen[foes[0].id]=1;save();const me=S.team[firstAlive()];
     B={kind:'leader',ri:i,leader:L,foes,fi:0,mi:firstAlive(),streak:0,phase:'anim',fx:'appear',prev:{},msg:`${L.n} schickt ${nm(foes[0])} in den Kampf!`};
-    renderBattle();say(B.msg);later(toMenu,1500)})};
+    wipe('vs',{e:SP[me.id].e,n:S.name},{e:L.e,n:L.n},()=>{renderBattle();say(B.msg);later(toMenu,1500)})})};
 
 function plate(m,isFoe){const sp=SP[m.id],max=isFoe?m.max:maxHp(m);
   return `<div class="plate"><div class="pn"><span>${sp.n}</span><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar(isFoe?'f'+B.fi:'m'+m.uid,m.hp,max)}
   ${isFoe?(B.kind==='leader'?`<span class="own">${B.leader.e} ${esc(B.leader.n)} · ${B.fi+1}/${B.foes.length}</span>`:''):`<div class="pk">Kraft ${m.hp}/${max}</div><div class="xp"><i style="width:${Math.min(100,Math.round(m.xp/need(m.lvl)*100))}%"></i></div>`}</div>`}
-function renderBattle(){const r=RG[B.ri],f=foe(),m=myMon(),fx=B.fx||'';const compact=['q','wrong','switch'].includes(B.phase);
-  let foeInner=`<span class="e">${SP[f.id].e}</span>`;
-  if(fx==='ball')foeInner='<span class="zball throw"></span>';if(fx==='caught')foeInner='<span class="zball done"></span>';
+const monHTML=(m,side,cls,inner)=>`<div class="mon ${side} ${cls}" data-t="${SP[m.id].t}">${inner||`<span class="b"><span class="e">${SP[m.id].e}</span></span>`}</div>`;
+function battleFrame(){const r=RG[B.ri];SCR='battle';show(`<div class="bt" id="bt" style="--g1:${r.c1};--g2:${r.c2}">${scene(r.deco)}<div id="btIn"></div></div><div class="bmsg"><span id="bmsgT" aria-live="polite"></span><span class="bstar">⭐ <b id="bstars"></b></span></div><div class="bctl" id="bctl"></div>`)}
+function renderBattle(){if(!$('#btIn'))battleFrame();const f=foe(),m=myMon(),fx=B.fx||'';
+  let foeInner='';if(fx==='ball')foeInner='<span class="zball throw"></span>';if(fx==='caught')foeInner='<span class="zball done"></span>';
   const foeCls={hitFoe:'hit',appear:'appear',faintFoe:'faint',escape:'appear',hitMe:'lunge'}[fx]||'';
   const meCls={hitMe:'hit',faintMe:'faint',appearMe:'appear',hitFoe:'lunge'}[fx]||'';
-  show(`<div class="bt ${compact?'compact':''}" style="--g1:${r.c1};--g2:${r.c2}">
-    <div class="bt-row foe-row">${plate(f,true)}<div class="mon foe ${foeCls}">${foeInner}</div></div>
-    <div class="bt-row me-row"><div class="mon me ${meCls}"><span class="e">${SP[m.id].e}</span></div>${plate(m,false)}</div></div>
-    <div class="bmsg" aria-live="polite">${esc(B.msg||'')}</div><div class="bctl">${ctl()}</div>`);
-  B.fx=null}
-function ctl(){const m=myMon();
+  $('#bt').classList.toggle('compact',['q','wrong','switch'].includes(B.phase));
+  $('#btIn').innerHTML=`<div class="bt-row foe-row">${plate(f,true)}${monHTML(f,'foe',foeCls,foeInner)}</div><div class="bt-row me-row">${monHTML(m,'me',meCls)}${plate(m,false)}</div>`;
+  $('#bmsgT').textContent=B.msg||'';$('#bstars').textContent=S.stars;$('#bctl').innerHTML=ctl();animBars();B.fx=null}
+function ctl(){
   switch(B.phase){
     case 'menu':return `<div class="menu"><button class="btn green big" data-act="atk">⚔️ Angreifen</button><div class="menu2">
       <button class="btn ghost" data-act="ball" ${B.kind!=='wild'?'disabled':''}><span class="zball"></span> Fangen (${S.items.ball})</button>
@@ -656,19 +850,19 @@ function ctl(){const m=myMon();
       <button class="btn ghost" data-act="switch" ${S.team.length<2?'disabled':''}>🔄 Wechseln</button>
       <button class="btn ghost" data-act="run" ${B.kind!=='wild'?'disabled':''}>🏃 Flucht</button></div></div>`;
     case 'q':return qCard();
-    case 'wrong':{const q=B.q;return `<div class="fb card"><p class="fb-h">Nicht ganz!</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}<p>${esc(q.text)}</p><p>Deine Antwort: <b>${esc(B.given)}</b><br>Richtig ist: <span class="bigans">${esc(String(q.ans))}</span></p><p class="hint">💡 ${esc(q.hint||'')}</p><button class="btn" data-act="goon">Verstanden</button></div>`}
+    case 'wrong':{const q=B.q;return `<div class="fb card"><p class="fb-h">Nicht ganz!</p><p>${esc(q.text)}</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}${aidHTML(q.aid,true)}<p>Deine Antwort: <b>${esc(B.given)}</b><br>Richtig ist: <span class="bigans">${esc(String(q.ans))}</span></p><p class="hint">💡 ${esc(q.hint||'')}</p><button class="btn" data-act="goon">Verstanden</button></div>`}
     case 'switch':return `<div class="swl">${S.team.map((t,i)=>`<button class="swb" data-act="swapTo" data-arg="${i}" ${t.hp<=0||i===B.mi?'disabled':''}><span class="e">${SP[t.id].e}</span><span class="i"><span class="pn"><b>${nm(t)}</b><span class="lv">Lv ${t.lvl}</span></span>${bar('s'+t.uid,t.hp,maxHp(t))}<span class="pk">${t.hp<=0?'erschöpft':i===B.mi?'kämpft gerade':`Kraft ${t.hp}/${maxHp(t)}`}</span></span></button>`).join('')}
       ${B.forced?'':'<button class="btn ghost" data-act="backMenu">Zurück</button>'}</div>`;
     default:return '<div class="wait"></div>'}}
 function qCard(){const q=B.q,long=q.text.length>22;
   const lab=B.purpose==='catch'?'Richtig rechnen = Zahlenball werfen':'Richtig rechnen = Angriff';
-  return `<div class="qc card"><div class="qhead"><span class="qlab">${lab}${q.again?' · Nochmals üben':''}</span><button class="spk" data-act="speak" aria-label="Aufgabe vorlesen">🔊</button></div>
-  ${q.vis?`<div class="qvis">${q.vis}</div>`:''}<p class="qt ${long?'long':''}">${esc(q.text)}</p>
+  return `<div class="qc card"><div class="qhead"><span class="qlab">${lab}${q.again?' · Nochmals üben':''}</span><span class="qbtns">${q.aid&&!B.tip?'<button class="tipb" data-act="tip">💡 Tipp</button>':''}<button class="spk" data-act="speak" aria-label="Aufgabe vorlesen">🔊</button></span></div>
+  ${q.vis?`<div class="qvis">${q.vis}</div>`:''}${B.tip?aidHTML(q.aid,false):''}<p class="qt ${long?'long':''}">${esc(q.text)}</p>
   ${q.kind==='choice'?`<div class="ch ${q.choices.length===3?'c3':''}">${q.choices.map(c=>`<button class="chb" data-act="choose" data-arg="${esc(c)}">${esc(c)}</button>`).join('')}</div>`
   :`<div class="entry" id="entry" aria-live="polite">${entryHTML()}</div><div class="kp">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-act="k" data-arg="${n}">${n}</button>`).join('')}<button data-act="del" aria-label="Löschen">⌫</button><button data-act="k" data-arg="0">0</button><button class="ok" data-act="submit">OK</button></div>`}</div>`}
 function entryHTML(){return B.input?B.input.split('').map(d=>`<span>${d}</span>`).join(''):'<span class="cur"></span>'}
 function toMenu(){if(!B)return;B.phase='menu';B.msg=`Was soll ${nm(myMon())} tun?`;renderBattle()}
-function newQ(){B.q=nextQ(RG[B.ri].topic);B.input='';B.phase='q';B.msg=B.purpose==='catch'?'Der Zahlenball ist bereit!':`${nm(myMon())} wartet auf deine Antwort …`;renderBattle();say(B.q.say)}
+function newQ(){B.q=nextQ(RG[B.ri].topic);B.input='';B.tip=false;B.phase='q';B.msg=B.purpose==='catch'?'Der Zahlenball ist bereit!':`${nm(myMon())} wartet auf deine Antwort …`;renderBattle();say(B.q.say)}
 ACT.atk=()=>{if(B.phase!=='menu')return;B.purpose='atk';newQ()};
 ACT.ball=()=>{if(B.phase!=='menu')return;if(S.items.ball<=0){toast('Du hast keine Zahlenbälle mehr. Im Laden gibt es neue.');return}B.purpose='catch';newQ()};
 ACT.potion=()=>{if(B.phase!=='menu')return;const m=myMon(),max=maxHp(m);if(S.items.trank<=0){toast('Du hast keinen Trank mehr.');return}if(m.hp>=max){toast(`${nm(m)} hat schon volle Kraft.`);return}
@@ -678,48 +872,57 @@ ACT.backMenu=()=>toMenu();
 ACT.swapTo=i=>{B.mi=+i;B.forced=false;B.phase='anim';B.fx='appearMe';B.msg=`Los, ${nm(myMon())}!`;renderBattle();say(B.msg);later(toMenu,1000)};
 ACT.run=()=>{if(B.phase!=='menu'||B.kind!=='wild')return;endBattle('run')};
 ACT.speak=()=>{if(B&&B.q)say(B.q.say)};
+ACT.tip=()=>{if(!B||B.phase!=='q'||!B.q.aid)return;B.tip=true;$('#bctl').innerHTML=ctl();say('Schau genau hin. So kannst du rechnen.')};
 ACT.k=d=>{if(!B||B.phase!=='q'||B.input.length>=4)return;if(B.input==='0')B.input='';B.input+=d;const el=$('#entry');if(el)el.innerHTML=entryHTML();sfx('tap')};
 ACT.del=()=>{if(!B||B.phase!=='q')return;B.input=B.input.slice(0,-1);const el=$('#entry');if(el)el.innerHTML=entryHTML()};
 ACT.submit=()=>{if(!B||B.phase!=='q')return;if(!B.input){toast('Tippe zuerst deine Antwort ein.');return}answer(B.input)};
 ACT.choose=v=>answer(v);
-function answer(v){if(B.phase!=='q')return;const q=B.q;const ok=q.kind==='choice'?v===q.ans:parseInt(v,10)===q.ans;record(q,ok,v);ok?onCorrect():onWrong(v)}
-function onCorrect(){const m=myMon(),f=foe();B.streak++;S.stars++;m.xp+=3;sfx('ok');
+function answer(v){if(B.phase!=='q')return;const q=B.q;const ok=q.kind==='choice'?v===q.ans:parseInt(v,10)===q.ans;record(q,ok,v);
+  if(ok)return onCorrect();B.phase='anim';sfx('bad');const qc=$('.qc');if(qc){qc.classList.remove('shake');void qc.offsetWidth;qc.classList.add('shake')}later(()=>onWrong(v),480)}
+function onCorrect(){const m=myMon(),f=foe(),qc=$('.qc'),ap=qc?ctr(qc):{x:innerWidth/2,y:innerHeight*.7};B.streak++;S.stars++;m.xp+=3;sfx('ok');sparkle(ap.x,ap.y,12);flyStar(ap);
   const praise=P(['Richtig!','Super!','Toll gemacht!','Genau!','Stark!','Bravo!']);
   if(B.purpose==='catch')return doCatch(praise);
-  const mult=eff(SP[m.id].t,SP[f.id].t),sup=B.streak>=3,d=dmg(m,f,mult*(sup?1.5:1));f.hp=Math.max(0,f.hp-d);
+  const mult=eff(SP[m.id].t,SP[f.id].t),sup=B.streak>=3&&!B.tip,d=dmg(m,f,mult*(sup?1.5:1));f.hp=Math.max(0,f.hp-d);
   B.phase='anim';B.fx='hitFoe';B.msg=(sup?`${praise} ${B.streak} richtig in Folge: Superangriff von ${nm(m)}!`:`${praise} ${nm(m)} greift an!`)+effTxt(mult);
-  renderBattle();say(B.msg);later(()=>sfx('hit'),250);save();
-  later(()=>f.hp<=0?foeFainted():toMenu(),1700)}
-function onWrong(v){B.streak=0;B.given=v;B.phase='wrong';B.msg='Schau dir den Rechenweg an.';sfx('bad');renderBattle();say(`Nicht ganz. Richtig ist ${B.q.ans}. ${B.q.hint||''}`)}
+  renderBattle();stamp(sup?'Superangriff!':praise);say(B.msg);attackFx(true,SP[m.id].t,d,sup);save();
+  later(()=>f.hp<=0?foeFainted():toMenu(),1900)}
+function onWrong(v){if(!B)return;B.streak=0;B.given=v;B.phase='wrong';B.msg='Schau dir den Rechenweg an.';renderBattle();say(`Nicht ganz. Richtig ist ${B.q.ans}. ${B.q.hint||''}`)}
 ACT.goon=()=>{if(B.phase!=='wrong')return;foeAttacks(B.purpose==='catch'?'Der Zahlenball fliegt daneben! ':'')};
+function attackFx(mine,type,d,sup){const a=$(mine?'.mon.me':'.mon.foe'),t=$(mine?'.mon.foe':'.mon.me');if(!a||!t)return;const pa=ctr(a),pt=ctr(t);
+  later(()=>projectile((TFX[type]||TFX.normal).ch[0],pa,pt,380,()=>{burst(type,pt.x,pt.y,sup?26:14);if(sup)confetti(pt.x,pt.y,40);sfx('hit');floatText('−'+d,pt.x,pt.y-40,'dmg');
+    const bt=$('#bt');if(bt){bt.classList.remove('quake');void bt.offsetWidth;bt.classList.add('quake')}}),120)}
 function foeAttacks(pre){const m=myMon(),f=foe(),mult=eff(SP[f.id].t,SP[m.id].t),d=foeDmg(f,m,mult);m.hp=Math.max(0,m.hp-d);save();
-  B.phase='anim';B.fx='hitMe';B.msg=`${pre}${nm(f)} greift an!${effTxt(mult)}`;renderBattle();say(B.msg);later(()=>sfx('hit'),250);
-  later(()=>m.hp<=0?meFainted():toMenu(),1600)}
+  B.phase='anim';B.fx='hitMe';B.msg=`${pre}${nm(f)} greift an!${effTxt(mult)}`;renderBattle();say(B.msg);attackFx(false,SP[f.id].t,d,false);
+  later(()=>m.hp<=0?meFainted():toMenu(),1700)}
 function doCatch(praise){S.items.ball--;const f=foe();let ch=.45+.55*(1-f.hp/f.max);if(SP[f.id].rare)ch*=.6;const ok=Math.random()<ch;
   B.phase='anim';B.fx='ball';B.msg=`${praise} Du wirfst einen Zahlenball …`;renderBattle();say(B.msg);save();
-  later(()=>{if(ok){B.fx='caught';B.msg=`Hurra! ${nm(f)} wurde gefangen!`;sfx('win');const where=addCaught(f);if(where)B.msg+=' Dein Team ist voll, es kommt in die Box.';renderBattle();say(B.msg);later(()=>endBattle('caught'),2000)}
-    else{B.fx='escape';B.msg=`Oh nein! ${nm(f)} ist wieder ausgebrochen. Schwäche es noch etwas mehr!`;renderBattle();say(B.msg);later(toMenu,1900)}},2200)}
+  later(()=>{const fe=()=>{const e=$('.mon.foe');return e?ctr(e):null};
+    if(ok){B.fx='caught';B.msg=`Hurra! ${nm(f)} wurde gefangen!`;sfx('win');B.boxed=addCaught(f);renderBattle();const c=fe();if(c)sparkle(c.x,c.y,22);say(B.msg);later(()=>endBattle('caught'),1600)}
+    else{B.fx='escape';B.msg=`Oh nein! ${nm(f)} ist wieder ausgebrochen. Schwäche es noch etwas mehr!`;renderBattle();const c=fe();if(c)burst('normal',c.x,c.y,8);say(B.msg);later(toMenu,1900)}},2200)}
 function addCaught(f){const m={id:f.id,lvl:f.lvl,xp:0,uid:S.uid++};m.hp=maxHp(m);S.caught[f.id]=S.seen[f.id]=1;if(S.team.length<6){S.team.push(m);save();return false}S.box.push(m);save();return true}
 function foeFainted(){const f=foe(),m=myMon();m.xp+=f.lvl*5;S.stars+=2;save();B.phase='anim';B.fx='faintFoe';B.msg=`${nm(f)} ist besiegt! ${nm(m)} bekommt ${f.lvl*5} Erfahrung.`;sfx('win');renderBattle();say(B.msg);
+  {const fe=$('.mon.foe');if(fe){const c=ctr(fe);later(()=>{sparkle(c.x,c.y,18);floatText('+'+f.lvl*5+' EP',c.x,c.y-30,'heal')},450)}}
   later(()=>{if(B.fi<B.foes.length-1){B.fi++;const n=foe();S.seen[n.id]=1;save();B.fx='appear';B.msg=`${B.leader.n} schickt ${nm(n)} in den Kampf!`;renderBattle();say(B.msg);later(toMenu,1500)}else endBattle('win')},2000)}
 function meFainted(){const m=myMon();B.phase='anim';B.fx='faintMe';B.msg=`${nm(m)} ist erschöpft!`;renderBattle();say(B.msg);
   later(()=>{if(firstAlive()>=0){B.phase='switch';B.forced=true;B.msg='Wähle dein nächstes Zahlimon!';renderBattle();say(B.msg)}
     else{const ri=B.ri;clearTimers();healAll();B=null;save();talk([{who:'Pflegerin Nina',face:'👩‍⚕️',text:'Oh je, deine Zahlimon waren erschöpft. Ich habe sie wieder gesund gepflegt. Versuch es gleich nochmal, {N}!'}],()=>regionScreen(ri))}},1600)}
-function levelUps(m,lines,evos){let up=false;while(m.xp>=need(m.lvl)&&m.lvl<50){m.xp-=need(m.lvl);m.lvl++;if(m.hp>0)m.hp=Math.min(maxHp(m),m.hp+4);up=true;lines.push({face:SP[m.id].e,text:`${nm(m)} erreicht Level ${m.lvl}!`})}
-  const e=SP[m.id].evo;if(up&&e&&m.lvl>=e[1])evos.push({m,to:e[0]})}
+function levelUps(m,lines,evos){const from=m.lvl;while(m.xp>=need(m.lvl)&&m.lvl<50){m.xp-=need(m.lvl);m.lvl++;if(m.hp>0)m.hp=Math.min(maxHp(m),m.hp+4)}
+  if(m.lvl>from)lines.push({cel:{icon:SP[m.id].e,title:`Level ${m.lvl}!`,sub:`${nm(m)} ist stärker geworden.`}});
+  const e=SP[m.id].evo;if(m.lvl>from&&e&&m.lvl>=e[1])evos.push({m,to:e[0]})}
 function endBattle(res){clearTimers();const ri=B.ri,lead=B.kind==='leader',L=RG[ri].leader,lines=[],evos=[];
   if(res==='run')lines.push({face:'🏃',text:'Du bist sicher entkommen.'});
+  if(res==='caught'){const f=B.foes[0];lines.push({cel:{icon:SP[f.id].e,title:'Gefangen!',sub:B.boxed?`${SP[f.id].n} wartet in der Zahlimon-Box auf dich.`:`${SP[f.id].n} ist jetzt in deinem Team.`}})}
   if(lead&&res==='win'){lines.push({who:L.n,face:L.e,text:L.lose});
-    if(S.badges===ri){S.badges=ri+1;S.stars+=20;lines.push({face:L.be,text:`{N} erhält den ${L.badge}! Dazu gibt es 20 Sterne.`});
-      if(ri===RG.length-1){S.champ=true;lines.push(...CHAMP)}else lines.push({...PROF,text:`Toll gemacht, {N}! Ein neues Gebiet ist offen: ${RG[ri+1].n}.`})}
+    if(S.badges===ri){S.badges=ri+1;S.stars+=20;lines.push({cel:{icon:L.be,title:L.badge,sub:'{N} bekommt den Orden und 20 Sterne!'}});
+      if(ri===RG.length-1){S.champ=true;lines.push({cel:{icon:'🏆',title:'Zahlimon-Champion!',sub:'{N} hat alle 7 Orden gewonnen!'}},...CHAMP)}else lines.push({...PROF,text:`Toll gemacht, {N}! Ein neues Gebiet ist offen: ${RG[ri+1].n}.`})}
     else{S.stars+=5;lines.push({face:'⭐',text:'Revanche gewonnen! Du bekommst 5 Sterne.'})}}
   S.team.forEach(m=>levelUps(m,lines,evos));B=null;save();
-  if(lines.length)sfx('lvl');
   talk(lines,()=>runEvos(evos,()=>lead&&res==='win'?mapScreen():regionScreen(ri)))}
-function runEvos(list,done){if(!list.length)return done();const {m,to}=list.shift(),from=m.id;
-  show(`<div class="evo"><p class="evo-t" id="evoT">Nanu? ${SP[from].n} verändert sich …</p><div class="evo-m" id="evoM">${SP[from].e}</div><button class="btn green" id="evoB" data-act="evoNext" hidden>Weiter</button></div>`);
+function runEvos(list,done){if(!list.length)return done();const {m,to}=list.shift(),from=m.id;SCR='evo'+Math.random();
+  show(`<div class="evo"><div class="rays"></div><p class="evo-t" id="evoT">Nanu? ${SP[from].n} verändert sich …</p><div class="evo-m" id="evoM">${SP[from].e}</div><button class="btn green" id="evoB" data-act="evoNext" hidden>Weiter</button></div>`);
   say(`Nanu? ${SP[from].n} verändert sich!`);EVO_NEXT=()=>runEvos(list,done);
-  later(()=>{m.id=to;S.seen[to]=S.caught[to]=1;save();const el=$('#evoM');if(!el)return;el.textContent=SP[to].e;el.classList.add('done');const t=`Glückwunsch! Aus ${SP[from].n} wurde ${SP[to].n}!`;$('#evoT').textContent=t;$('#evoB').hidden=false;sfx('win');say(t)},2700)}
+  later(()=>{m.id=to;S.seen[to]=S.caught[to]=1;save();const el=$('#evoM');if(!el)return;el.textContent=SP[to].e;el.classList.add('done');const c=ctr(el);confetti(c.x,c.y,90);sparkle(c.x,c.y,24);
+    const t=`Glückwunsch! Aus ${SP[from].n} wurde ${SP[to].n}!`;$('#evoT').textContent=t;$('#evoB').hidden=false;sfx('win');say(t)},2700)}
 ACT.evoNext=()=>{clearTimers();const f=EVO_NEXT;EVO_NEXT=null;f&&f()};
 
 /* ---------- Team, Zahlidex, Laden, Zahlencenter ---------- */
@@ -727,7 +930,7 @@ function monRow(m,i,where){const sp=SP[m.id],max=maxHp(m);
   const btns=where==='team'?[i>0?`<button class="mini" data-act="lead" data-arg="${i}">Nach vorne</button>`:'<span class="pill">kämpft zuerst</span>',m.hp<max&&S.items.trank?`<button class="mini" data-act="potionT" data-arg="${i}">🧪 Trank</button>`:'',S.team.length>1?`<button class="mini" data-act="toBox" data-arg="${i}">In die Box</button>`:'']
     :[S.team.length<6?`<button class="mini" data-act="fromBox" data-arg="${i}">Ins Team</button>`:'<span class="fine">Das Team ist voll.</span>'];
   const e=sp.evo?`Entwickelt sich mit Level ${sp.evo[1]}`:'';
-  return `<div class="tm card"><div class="tm-e" style="--c:${TYPES[sp.t].c}">${sp.e}</div><div class="tm-i"><div class="pn"><b>${sp.n}</b><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar('t'+m.uid,m.hp,max)}<div class="pk">Kraft ${m.hp}/${max} · Erfahrung ${m.xp}/${need(m.lvl)}${e?'<br>'+e:''}</div><div class="tm-b">${btns.join('')}</div></div></div>`}
+  return `<div class="tm card"><div class="tm-e" style="--c:${TYPES[sp.t].c}"><span>${sp.e}</span></div><div class="tm-i"><div class="pn"><b>${sp.n}</b><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar('t'+m.uid,m.hp,max)}<div class="pk">Kraft ${m.hp}/${max} · Erfahrung ${m.xp}/${need(m.lvl)}${e?'<br>'+e:''}</div><div class="tm-b">${btns.join('')}</div></div></div>`}
 function teamScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Dein Team</h2><p class="fine">Das oberste Zahlimon kämpft zuerst. Nur wer kämpft, sammelt Erfahrung. Tränke: ${S.items.trank}</p>
   <div class="list">${S.team.map((m,i)=>monRow(m,i,'team')).join('')}</div>${S.box.length?`<h3 class="h3">Zahlimon-Box (${S.box.length})</h3><div class="list">${S.box.map((m,i)=>monRow(m,i,'box')).join('')}</div>`:''}${nav()}`)}
 ACT.team=teamScreen;
@@ -744,7 +947,7 @@ function shopScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Laden</h
 ACT.shop=shopScreen;
 ACT.buy=k=>{const it=SHOP.find(s=>s[0]===k);if(S.stars<it[3])return;S.stars-=it[3];S.items[k]++;save();sfx('ok');toast(`${it[1]} gekauft!`);shopScreen()};
 function centerScreen(){B=null;clearTimers();show(`${hud()}<section class="card pad center"><div class="nurse">👩‍⚕️</div><h2 class="h2">Zahlencenter</h2><p>Pflegerin Nina macht deine Zahlimon wieder gesund. Das kostet nichts.</p><button class="btn green" data-act="heal">❤️ Alle gesund pflegen</button></section>
-  <div class="list">${S.team.map(m=>`<div class="tm card"><div class="tm-e" style="--c:${TYPES[SP[m.id].t].c}">${SP[m.id].e}</div><div class="tm-i"><div class="pn"><b>${nm(m)}</b><span class="lv">Lv ${m.lvl}</span></div>${bar('c'+m.uid,m.hp,maxHp(m))}<div class="pk">Kraft ${m.hp}/${maxHp(m)}</div></div></div>`).join('')}</div>${nav()}`)}
+  <div class="list">${S.team.map(m=>`<div class="tm card"><div class="tm-e" style="--c:${TYPES[SP[m.id].t].c}"><span>${SP[m.id].e}</span></div><div class="tm-i"><div class="pn"><b>${nm(m)}</b><span class="lv">Lv ${m.lvl}</span></div>${bar('c'+m.uid,m.hp,maxHp(m))}<div class="pk">Kraft ${m.hp}/${maxHp(m)}</div></div></div>`).join('')}</div>${nav()}`)}
 ACT.center=centerScreen;
 ACT.heal=()=>{healAll();save();sfx('win');const t='Deine Zahlimon sind wieder fit!';say(t);toast(t);centerScreen()};
 
@@ -782,7 +985,23 @@ ACT.importCode=()=>{const v=$('#importCode').value.trim();try{const o=JSON.parse
 ACT.reset1=()=>parentsScreen(true);
 ACT.reset2=()=>{try{localStorage.removeItem(KEY)}catch(e){}titleScreen()};
 
-window.__zahlimon={GEN,MK,get S(){return S},set S(v){S=v},get B(){return B},fresh};
+/* ---------- Erklärung «So geht's» ---------- */
+let LQ=null;
+function learnScreen(i,again){const r=RG[i],t=r.topic;if(!again||!LQ){let q;for(let k=0;k<40;k++){q=GEN[t](getStufe(t));if(q.aid||q.vis)break}q.topic=t;q.say=q.say||q.text;LQ=q}
+  const q=LQ,dl=q.aid&&q.aid.t==='line'?q.aid.jumps.length*.7+.6:1.6;SCR='learn'+i;B=null;clearTimers();
+  show(`${hud()}<h2 class="h2">So geht's: ${TOPICS[t].n}</h2><div class="card pad learn"><p class="qt ${q.text.length>22?'long':''}">${esc(q.text)}</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}${aidHTML(q.aid,true)}
+  <p class="hint fi" style="animation-delay:${dl.toFixed(1)}s">💡 ${esc(q.hint)}</p><p class="fi" style="animation-delay:${(dl+.4).toFixed(1)}s">Lösung: <span class="bigans">${esc(String(q.ans))}</span></p></div>
+  <div class="row2"><button class="btn ghost" data-act="learnAgain" data-arg="${i}">🔁 Nochmal</button><button class="btn" data-act="learnNew" data-arg="${i}">✨ Neues Beispiel</button></div>
+  <button class="btn ghost" style="margin-top:12px" data-act="region" data-arg="${i}">⬅ Zurück</button>${nav()}`);
+  say(`Schau zu! ${q.say} ${q.hint}`)}
+ACT.learn=i=>learnScreen(+i,false);ACT.learnNew=i=>learnScreen(+i,false);ACT.learnAgain=i=>learnScreen(+i,true);
+
+const wrapS=(f,k)=>function(...a){SCR=typeof k==='function'?k(...a):k;return f.apply(this,a)};
+titleScreen=wrapS(titleScreen,'title');nameScreen=wrapS(nameScreen,'name');starterScreen=wrapS(starterScreen,'starter');mapScreen=wrapS(mapScreen,'map');regionScreen=wrapS(regionScreen,i=>'region'+i);
+teamScreen=wrapS(teamScreen,'team');dexScreen=wrapS(dexScreen,'dex');shopScreen=wrapS(shopScreen,'shop');centerScreen=wrapS(centerScreen,'center');parentsScreen=wrapS(parentsScreen,'parents');
+ACT.title=titleScreen;ACT.map=mapScreen;ACT.team=teamScreen;ACT.dex=dexScreen;ACT.shop=shopScreen;ACT.center=centerScreen;
+
+window.__zahlimon={GEN,MK,aidHTML,get S(){return S},set S(v){S=v},get B(){return B},fresh};
 titleScreen();
 })();
 </script>
