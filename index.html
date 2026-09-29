@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zahlimon Abenteuer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lilita+One&display=swap">
+<style>
+/* Layout: eine Spalte in Handybreite auf kariertem Rechenheft-Papier mit rotem Heftrand; der Kampf ist ein eingerahmtes Spielfeld */
+:root{
+  color-scheme: light;
+  --paper:#fbfaf3; --grid:#dbe6f1; --ink:#1e2842; --ink2:#586380; --rand:#e0574b;
+  --blue:#2a66cc; --blue-d:#1b4a9c; --green:#2e9254; --green-d:#1f6b3c;
+  --gold:#f0ac18; --gold-d:#b87c05; --red:#d9443a; --red-d:#9e2a22;
+  --card:#ffffff; --line:#cfd8e6; --soft:#eef3f9;
+  --f-disp:'Lilita One','Arial Rounded MT Bold','Trebuchet MS',system-ui,sans-serif;
+  --f-body:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-emoji:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font:17px/1.45 var(--f-body);-webkit-tap-highlight-color:transparent}
+#app{max-width:480px;min-height:100%;margin:0 auto;padding-inline:16px;padding-block:14px 104px;position:relative}
+#app::before{content:"";position:absolute;top:0;bottom:0;left:6px;width:2px;background:var(--rand);opacity:.5;pointer-events:none}
+button{font:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
+button:disabled{cursor:default}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+h1,h2,h3{text-wrap:balance;margin:0}
+.h2{font-family:var(--f-disp);font-weight:400;font-size:1.6rem;margin-block:14px 6px}
+.h3{font-family:var(--f-disp);font-weight:400;font-size:1.2rem;margin-block:18px 8px}
+.fine{color:var(--ink2);font-size:.9rem;margin:4px 0 12px}
+.center{text-align:center}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:16px;box-shadow:0 4px 0 rgba(30,40,66,.18)}
+.pad{padding:14px 16px;margin-bottom:14px}
+.warn{color:var(--red-d);font-weight:700;margin:4px 0}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--ink2)}
+
+/* Buttons wie Farbstift-Etiketten */
+.btn{display:flex;align-items:center;justify-content:center;gap:.5em;width:100%;min-height:54px;padding:12px 16px;border:0;border-radius:14px;background:var(--blue);color:#fff;font-family:var(--f-disp);font-size:1.2rem;letter-spacing:.02em;box-shadow:0 4px 0 var(--blue-d);transition:transform .08s,box-shadow .08s}
+.btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--blue-d)}
+.btn.green{background:var(--green);box-shadow:0 4px 0 var(--green-d)}
+.btn.gold{background:var(--gold);color:var(--ink);box-shadow:0 4px 0 var(--gold-d)}
+.btn.red{background:var(--red);box-shadow:0 4px 0 var(--red-d)}
+.btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn.big{min-height:64px;font-size:1.4rem}
+.btn.sm{width:auto;min-height:44px;font-size:1.05rem;padding:8px 14px}
+.btn:disabled{opacity:.45}
+.mini{border:2px solid var(--line);background:var(--card);border-radius:10px;padding:6px 10px;font-size:.85rem;font-weight:700}
+.linkish{display:block;margin:22px auto 0;background:none;border:0;color:var(--ink2);text-decoration:underline;font-size:.95rem;padding:8px}
+
+/* Typen-Etikett */
+.chip{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:1px 8px;border-radius:99px;color:#fff;background:var(--c)}
+
+/* Titel */
+.title{display:flex;flex-direction:column;align-items:stretch;gap:14px;padding-top:6vh}
+.eyebrow{margin:0;text-align:center;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem;color:var(--ink2)}
+.logo{font-family:var(--f-disp);font-weight:400;font-size:clamp(3.2rem,17vw,5rem);line-height:1;text-align:center;color:var(--ink);text-shadow:4px 4px 0 var(--gold)}
+.logo span{color:var(--blue)}
+.parade{display:flex;justify-content:center;gap:18px;font-family:var(--f-emoji);font-size:3.4rem;margin:6px 0 10px}
+.parade span{animation:hop 1.8s ease-in-out infinite}
+.parade span:nth-child(2){animation-delay:.25s}
+.parade span:nth-child(3){animation-delay:.5s}
+@keyframes hop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-12px)}}
+.lbl{font-weight:700;font-size:.95rem}
+.inp{width:100%;font:inherit;font-size:1.3rem;padding:12px 14px;border:2px solid var(--ink);border-radius:12px;background:var(--card);color:var(--ink)}
+.inp.code{font-size:.75rem;font-family:ui-monospace,Menlo,Consolas,monospace;resize:vertical}
+
+/* Starter */
+.starters{display:grid;grid-template-columns:1fr;gap:12px;margin:12px 0 18px}
+.starter{display:grid;grid-template-columns:72px 1fr;grid-template-rows:auto auto auto;column-gap:14px;align-items:center;text-align:left;background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:12px 14px;box-shadow:0 4px 0 rgba(30,40,66,.18)}
+.starter.on{outline:4px solid var(--c);outline-offset:2px}
+.starter .se{grid-row:1/4;font-family:var(--f-emoji);font-size:56px;line-height:1;text-align:center}
+.starter .sn{font-family:var(--f-disp);font-size:1.35rem}
+.starter .chip{justify-self:start}
+.starter .sd{font-size:.9rem;color:var(--ink2)}
+
+/* HUD */
+.hud{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px;background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:8px 14px;box-shadow:0 4px 0 rgba(30,40,66,.18)}
+.hud-n{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.hud-n b{font-family:var(--f-disp);font-weight:400;font-size:1.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hud-l{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.hud-s{font-weight:700;font-variant-numeric:tabular-nums;font-size:1.1rem}
+.hud-b{grid-column:1/-1;display:flex;gap:6px}
+.hud-b span{width:26px;height:26px;border-radius:50%;border:2px dashed var(--line);display:grid;place-items:center;font-family:var(--f-emoji);font-size:15px}
+.hud-b span.got{border:2px solid var(--gold);background:#fff6dc}
+
+/* Karte */
+.map{display:flex;flex-direction:column;gap:14px;position:relative;margin-top:8px}
+.map::before{content:"";position:absolute;left:37px;top:30px;bottom:30px;border-left:4px dashed var(--line)}
+.node{position:relative;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:12px;text-align:left;background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:10px 12px;box-shadow:0 4px 0 rgba(30,40,66,.18)}
+.node:nth-child(even){margin-left:22px}
+.node .ic{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-emoji);font-size:26px;background:linear-gradient(160deg,var(--g1),var(--g2));border:2px solid var(--ink)}
+.node .tx{display:flex;flex-direction:column;min-width:0}
+.node .tx b{font-family:var(--f-disp);font-weight:400;font-size:1.2rem}
+.node .tx small{color:var(--ink2);font-size:.85rem}
+.node .st{font-family:var(--f-emoji);font-size:24px}
+.node.locked{opacity:.55;filter:grayscale(.9)}
+.node.now{outline:4px solid var(--gold);outline-offset:2px}
+
+/* Region */
+.rg{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin:14px 0;padding:14px 16px;border:2px solid var(--ink);border-radius:16px;background:linear-gradient(100deg,var(--g1) 55%,var(--g2))}
+.rg-ic{font-family:var(--f-emoji);font-size:44px}
+.rg h2{font-family:var(--f-disp);font-weight:400;font-size:1.6rem}
+.rg p{margin:2px 0}
+.dots{display:inline-flex;gap:4px;vertical-align:middle;margin-left:4px}
+.dots i{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:var(--card)}
+.dots i.on{background:var(--gold)}
+.lead{display:flex;align-items:center;gap:12px;padding:10px 14px;margin-bottom:14px}
+.lead .le{font-family:var(--f-emoji);font-size:40px}
+.lead .li{flex:1;min-width:0}
+.mini-dex{display:flex;flex-wrap:wrap;gap:10px}
+.mini-dex span{width:52px;height:52px;display:grid;place-items:center;border:2px solid var(--ink);border-radius:12px;background:var(--card);font-family:var(--f-emoji);font-size:28px}
+.mini-dex .seen{filter:grayscale(1);opacity:.6}
+.mini-dex .unk{font-family:var(--f-disp);color:var(--ink2);border-style:dashed}
+
+/* Kampf */
+.bt{position:relative;isolation:isolate;display:grid;grid-template-rows:1fr 1fr;height:290px;border:3px solid var(--ink);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,var(--g1),var(--g2));transition:height .25s}
+.bt.compact{height:200px}
+.bt-row{display:flex;justify-content:space-between;gap:8px;padding:10px}
+.foe-row{align-items:flex-start}
+.me-row{align-items:flex-end}
+.mon{position:relative;font-family:var(--f-emoji);font-size:78px;line-height:1;padding:0 6px;transition:font-size .25s}
+.bt.compact .mon{font-size:56px}
+.mon::after{content:"";position:absolute;left:50%;bottom:-.08em;width:1.2em;height:.26em;margin-left:-.6em;border-radius:50%;background:rgba(20,28,48,.18);z-index:-1}
+.mon .e{display:inline-block}
+.mon.me .e{transform:scaleX(-1)}
+.plate{flex:0 1 60%;min-width:0;background:var(--card);border:2px solid var(--ink);border-radius:12px;padding:6px 10px;box-shadow:3px 3px 0 rgba(30,40,66,.25)}
+.pn{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.pn span:first-child,.pn b{font-family:var(--f-disp);font-weight:400;font-size:1.05rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lv{font-weight:700;font-size:.85rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hp{height:10px;margin-top:5px;background:var(--soft);border:1.5px solid var(--ink);border-radius:6px;overflow:hidden}
+.hp i{display:block;height:100%;background:var(--green);transition:width .6s ease}
+.hp i.mid{background:var(--gold)}
+.hp i.low{background:var(--red)}
+.pk{font-size:.78rem;color:var(--ink2);font-variant-numeric:tabular-nums;margin-top:2px}
+.xp{height:4px;margin-top:3px;background:var(--soft);border-radius:3px;overflow:hidden}
+.xp i{display:block;height:100%;background:var(--blue)}
+.own{display:block;font-size:.75rem;color:var(--ink2);margin-top:3px}
+.bt.compact .pk,.bt.compact .xp,.bt.compact .own{display:none}
+.bmsg{min-height:52px;margin:10px 0;padding:10px 14px;background:var(--card);border:2px solid var(--ink);border-radius:12px;font-weight:700}
+.menu{display:flex;flex-direction:column;gap:12px}
+.menu2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.menu2 .btn{font-size:1.02rem;min-height:50px;padding:8px}
+.wait{height:60px}
+
+/* Aufgabe */
+.qc{padding:12px 14px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.qlab{font-size:.8rem;font-weight:700;color:var(--ink2)}
+.spk{border:2px solid var(--line);background:var(--card);border-radius:10px;font-size:1.2rem;width:44px;height:40px;flex:none}
+.qvis{display:flex;justify-content:center;color:var(--ink);margin-top:4px}
+.qt{margin:8px 0 6px;font-weight:700;font-size:2rem;text-align:center;font-variant-numeric:tabular-nums}
+.qt.long{font-size:1.12rem;text-align:left;font-weight:700}
+.entry{display:flex;justify-content:center;gap:0;margin:6px 0 4px;min-height:52px}
+.entry span{width:42px;height:52px;display:grid;place-items:center;font-family:var(--f-disp);font-size:2rem;border:2px solid var(--blue);margin-left:-2px;background:#f4f8ff;color:var(--blue-d)}
+.entry span:first-child{margin-left:0;border-radius:8px 0 0 8px}
+.entry span:last-child{border-radius:0 8px 8px 0}
+.entry span:only-child{border-radius:8px}
+.entry .cur{animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{background:var(--card)}}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.kp button{height:56px;font-family:var(--f-disp);font-size:1.6rem;border-radius:12px;border:2px solid var(--line);background:var(--card);box-shadow:0 3px 0 var(--line)}
+.kp button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.kp .ok{background:var(--green);color:#fff;border-color:var(--green-d);box-shadow:0 3px 0 var(--green-d)}
+.ch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.ch.c3{grid-template-columns:repeat(3,1fr)}
+.chb{min-height:60px;font-family:var(--f-disp);font-size:1.4rem;border-radius:12px;border:2px solid var(--ink);background:var(--card);box-shadow:0 3px 0 var(--line)}
+.ch.c3 .chb{font-size:2.2rem}
+.fb{padding:14px 16px;border-color:var(--red)}
+.fb p{margin:6px 0}
+.fb-h{font-family:var(--f-disp);font-size:1.4rem;color:var(--red-d)}
+.fb .bigans{font-family:var(--f-disp);font-size:1.5rem;color:var(--green-d)}
+.hint{background:#fff6dc;border-radius:10px;padding:8px 10px;font-weight:700;overflow-wrap:anywhere}
+.fb .btn{margin-top:10px}
+.swl{display:flex;flex-direction:column;gap:8px}
+.swb{display:flex;align-items:center;gap:12px;text-align:left;background:var(--card);border:2px solid var(--ink);border-radius:12px;padding:8px 12px}
+.swb .e{font-family:var(--f-emoji);font-size:34px}
+.swb .i{flex:1;min-width:0}
+
+/* Zahlenball (eigenes Design) */
+.zball{display:inline-block;width:1em;height:1em;border-radius:50%;background:linear-gradient(180deg,var(--blue) 0 46%,var(--ink) 46% 54%,#fff 54%);border:.06em solid var(--ink);position:relative;vertical-align:middle}
+.zball::after{content:"";position:absolute;left:50%;top:50%;width:.32em;height:.32em;margin:-.16em;border-radius:50%;background:var(--gold);border:.05em solid var(--ink)}
+.mon .zball{font-size:.6em}
+.menu2 .zball,.shop-ic .zball{font-size:1.1em}
+.zball.throw{animation:throw .55s ease-out,wob .5s ease-in-out .7s 3}
+.zball.done{animation:pop .5s ease-out}
+
+/* Animationen */
+@keyframes hit{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@keyframes flash{50%{opacity:.25}}
+@keyframes lungeM{50%{transform:translate(22px,-14px)}}
+@keyframes lungeF{50%{transform:translate(-22px,14px)}}
+@keyframes appear{from{transform:scale(.1);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes faint{to{transform:translateY(50px);opacity:0}}
+@keyframes throw{from{transform:translate(-190px,150px) scale(.5)}to{transform:none}}
+@keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-20deg)}75%{transform:rotate(20deg)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+.mon.hit{animation:hit .45s ease .25s,flash .45s steps(2) .25s}
+.mon.me.lunge{animation:lungeM .35s ease}
+.mon.foe.lunge{animation:lungeF .35s ease}
+.mon.appear{animation:appear .5s cubic-bezier(.3,1.5,.6,1)}
+.mon.faint{animation:faint .7s ease-in forwards}
+
+/* Listen: Team, Laden, Dex */
+.list{display:flex;flex-direction:column;gap:12px}
+.tm{display:flex;gap:12px;padding:10px 12px;align-items:flex-start}
+.tm-e{flex:none;width:64px;height:64px;display:grid;place-items:center;font-family:var(--f-emoji);font-size:40px;border-radius:14px;background:var(--soft);border:2px solid var(--c)}
+.tm-i{flex:1;min-width:0}
+.tm-b{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
+.shop{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.shop-ic{font-family:var(--f-emoji);font-size:34px;width:44px;text-align:center}
+.shop-t{flex:1;min-width:0;display:flex;flex-direction:column}
+.shop-t small{color:var(--ink2)}
+.dex{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.dx{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;background:var(--card);border:2px solid var(--ink);border-radius:12px;text-align:center}
+.dx .no{font-size:.7rem;color:var(--ink2);font-variant-numeric:tabular-nums}
+.dx .de{font-family:var(--f-emoji);font-size:34px;line-height:1.2}
+.dx .dn{font-weight:700;font-size:.85rem}
+.dx.s .de{filter:grayscale(1);opacity:.55}
+.dx.u{border-style:dashed;border-color:var(--line)}
+.dx.u .de{font-family:var(--f-disp);color:var(--line)}
+.nurse{font-family:var(--f-emoji);font-size:64px}
+
+/* Entwicklung */
+.evo{display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:12vh;text-align:center}
+.evo-t{font-family:var(--f-disp);font-size:1.5rem;margin:0}
+.evo-m{font-family:var(--f-emoji);font-size:120px;line-height:1;animation:evo 2.6s ease-in}
+.evo-m.done{animation:pop .6s ease-out;filter:drop-shadow(0 0 18px var(--gold))}
+@keyframes evo{0%,100%{filter:none}10%,30%,50%,70%,90%{filter:brightness(4) saturate(0)}20%,40%,60%,80%{filter:none}}
+
+/* Eltern */
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpis div{display:flex;flex-direction:column;background:var(--soft);border-radius:12px;padding:8px 10px}
+.kpis b{font-family:var(--f-disp);font-weight:400;font-size:1.6rem;font-variant-numeric:tabular-nums}
+.kpis span{font-size:.78rem;color:var(--ink2)}
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:.88rem;font-variant-numeric:tabular-nums}
+.tbl th,.tbl td{padding:6px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.tbl th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.tbl select{font:inherit;padding:4px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.log li{display:flex;flex-direction:column;padding:6px 10px;background:var(--soft);border-radius:10px;font-size:.9rem;overflow-wrap:anywhere}
+.log li span:last-child{color:var(--ink2);font-size:.82rem}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.row input[type=checkbox]{width:24px;height:24px}
+.row input[type=range]{width:50%}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pad .btn{margin-top:10px}
+
+/* Navigation unten */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;justify-content:center;background:var(--card);border-top:2px solid var(--ink);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.nav .in{width:100%;max-width:480px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:1px;background:none;border:0;padding:4px 0;font-size:.72rem;font-weight:700;color:var(--ink2)}
+.nav b{font-family:var(--f-emoji);font-size:1.45rem;font-weight:400}
+
+/* Dialog */
+#dlg{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:rgba(20,28,48,.35);padding:16px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));cursor:pointer}
+#dlg .box{position:relative;width:100%;max-width:448px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--card);border:3px solid var(--ink);border-radius:16px;padding:14px 16px 22px;box-shadow:0 6px 0 rgba(30,40,66,.3)}
+#dlg .face{font-family:var(--f-emoji);font-size:50px;line-height:1}
+#dlg .who{font-family:var(--f-disp);color:var(--blue);font-size:1.1rem}
+#dlg .txt{font-size:1.12rem;font-weight:700;min-height:3em;margin:2px 0 0}
+#dlg .more{position:absolute;right:14px;bottom:6px;color:var(--blue);animation:hop 1s ease-in-out infinite;font-size:.9rem}
+#toast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:60;max-width:min(440px,calc(100% - 32px));background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;text-align:center;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+#toast.in{animation:appear .3s ease-out}
+
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<div id="dlg" hidden><div class="box" role="dialog" aria-live="polite"><div class="face" id="dlgFace"></div><div><div class="who" id="dlgWho"></div><p class="txt" id="dlgTxt"></p></div><span class="more" aria-hidden="true">▼ tippen</span></div></div>
+<div id="toast" role="status" hidden></div>
+<script>
+(function(){
+'use strict';
+/* =========================================================
+   Zahlimon Abenteuer – Rechenspiel für die 3. Klasse (LP21)
+   ========================================================= */
+const $=s=>document.querySelector(s);
+const app=$('#app'),dlg=$('#dlg'),toastEl=$('#toast');
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const P=a=>a[Math.floor(Math.random()*a.length)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pad2=n=>String(n).padStart(2,'0');
+
+/* ---------- Daten: Typen, Zahlimon, Gebiete ---------- */
+const TYPES={normal:{n:'Normal',c:'#8a7f69'},feuer:{n:'Feuer',c:'#e0582a'},wasser:{n:'Wasser',c:'#2a74cf'},pflanze:{n:'Pflanze',c:'#35934a'},elektro:{n:'Elektro',c:'#c99a00'},stein:{n:'Stein',c:'#86693f'},luft:{n:'Luft',c:'#4d98bd'},geist:{n:'Geist',c:'#6a4fa3'},magie:{n:'Magie',c:'#c9509b'},drache:{n:'Drache',c:'#473bb0'}};
+const EFF={feuer:{pflanze:2,wasser:.5,stein:.5,feuer:.5},wasser:{feuer:2,stein:2,pflanze:.5,wasser:.5},pflanze:{wasser:2,stein:2,feuer:.5,luft:.5,pflanze:.5},elektro:{wasser:2,luft:2,stein:.5,elektro:.5},stein:{feuer:2,luft:2,pflanze:.5},luft:{pflanze:2,elektro:.5,stein:.5},geist:{geist:2,magie:2,normal:.5},magie:{drache:2,geist:.5},drache:{drache:2,magie:.5},normal:{stein:.5,geist:.5}};
+const eff=(a,d)=>(EFF[a]&&EFF[a][d])||1;
+
+const SP={
+  flammi:{n:'Flammi',e:'🦎',t:'feuer',evo:['glutox',12]},
+  glutox:{n:'Glutox',e:'🐊',t:'feuer',evo:['flammdrak',22]},
+  flammdrak:{n:'Flammdrak',e:'🐲',t:'feuer'},
+  tropfi:{n:'Tropfi',e:'🐧',t:'wasser',evo:['wellpin',12]},
+  wellpin:{n:'Wellpin',e:'🦭',t:'wasser',evo:['ozeanor',22]},
+  ozeanor:{n:'Ozeanor',e:'🐋',t:'wasser'},
+  blatti:{n:'Blatti',e:'🐛',t:'pflanze',evo:['kaeferli',12]},
+  kaeferli:{n:'Käferli',e:'🐞',t:'pflanze',evo:['florafly',22]},
+  florafly:{n:'Florafly',e:'🦋',t:'pflanze'},
+  plussi:{n:'Plussi',e:'🐰',t:'normal',evo:['hoppelix',14]},
+  hoppelix:{n:'Hoppelix',e:'🐇',t:'normal'},
+  pusti:{n:'Pusti',e:'🐦',t:'luft',evo:['sturmi',15]},
+  sturmi:{n:'Sturmi',e:'🦅',t:'luft'},
+  pilzli:{n:'Pilzli',e:'🍄',t:'pflanze'},
+  minuso:{n:'Minuso',e:'🦇',t:'geist'},
+  kieselo:{n:'Kieselo',e:'🦔',t:'stein',evo:['felsor',16]},
+  felsor:{n:'Felsor',e:'🦏',t:'stein'},
+  gespensti:{n:'Gespensti',e:'👻',t:'geist'},
+  ziegi:{n:'Ziegi',e:'🐐',t:'stein'},
+  funki:{n:'Funki',e:'🐥',t:'elektro',evo:['blitzhahn',16]},
+  blitzhahn:{n:'Blitzhahn',e:'🐓',t:'elektro'},
+  eulo:{n:'Eulo',e:'🦉',t:'luft'},
+  fuchsli:{n:'Fuchsli',e:'🦊',t:'feuer'},
+  baerli:{n:'Bärli',e:'🐻',t:'normal'},
+  quaki:{n:'Quaki',e:'🐸',t:'wasser'},
+  oktopi:{n:'Oktopi',e:'🐙',t:'wasser'},
+  krabbi:{n:'Krabbi',e:'🦀',t:'stein'},
+  miezi:{n:'Miezi',e:'🐱',t:'normal',evo:['tigrano',18]},
+  tigrano:{n:'Tigrano',e:'🐯',t:'normal'},
+  papagi:{n:'Papagi',e:'🦜',t:'luft'},
+  schnecki:{n:'Schnecki',e:'🐌',t:'pflanze'},
+  wolfi:{n:'Wolfi',e:'🐺',t:'normal'},
+  drakonix:{n:'Drakonix',e:'🦖',t:'drache'},
+  einhorni:{n:'Einhorni',e:'🦄',t:'magie',rare:1},
+  zahlodrak:{n:'Zahlodrak',e:'🐉',t:'drache',rare:1}
+};
+
+const PROF={who:'Professorin Rechenstein',face:'👩‍🔬'};
+const RG=[
+  {n:'Plus-Wiese',topic:'add',learn:'Plus rechnen bis 1000',icon:'🌼',c1:'#dcf2bd',c2:'#86c96a',lv:[2,5],wild:['plussi','pusti','pilzli','blatti'],
+   leader:{n:'Pia Plus',e:'👩‍🌾',badge:'Blüten-Orden',be:'🌸',team:[['pusti',6],['plussi',7]],
+     hi:'Hallo {N}! Ich bin Pia, die Arenaleiterin der Plus-Wiese. Hier wird addiert, bis die Blumen blühen. Bist du bereit?',
+     lose:'Wow, du rechnest super Plus-Aufgaben! Du hast dir den Blüten-Orden verdient.'}},
+  {n:'Minus-Höhle',topic:'sub',learn:'Minus rechnen und ergänzen',icon:'💎',c1:'#d8d2ea',c2:'#8373b0',lv:[5,8],wild:['minuso','kieselo','gespensti'],
+   leader:{n:'Max Minus',e:'🧔',badge:'Kristall-Orden',be:'💎',team:[['kieselo',9],['gespensti',10]],
+     hi:'Willkommen in meiner Höhle, {N}! Ich bin Max. Hier unten wird abgezogen und ergänzt. Mal sehen, ob du den Weg findest!',
+     lose:'Unglaublich! Du rechnest Minus wie ein Profi. Nimm den Kristall-Orden.'}},
+  {n:'Zahlen-Berg',topic:'zahl',learn:'Hunderter, Zehner, Einer, Nachbarzahlen und Runden',icon:'⛰️',c1:'#ece4d4',c2:'#a88f6a',lv:[8,11],wild:['ziegi','funki','kieselo'],rare:'einhorni',
+   leader:{n:'Hugo Hunderter',e:'🧗',badge:'Fels-Orden',be:'🪨',team:[['ziegi',12],['funki',12],['felsor',13]],
+     hi:'Hoch hinaus, {N}! Ich bin Hugo. Auf dem Zahlen-Berg zählen Hunderter, Zehner und Einer. Kennst du dich aus?',
+     lose:'Gipfel erreicht! Du kennst den Zahlenraum bis 1000. Hier ist der Fels-Orden.'}},
+  {n:'Mal-Wald',topic:'mal',learn:'Das Einmaleins',icon:'🌲',c1:'#cfe8cf',c2:'#4a9160',lv:[11,14],wild:['eulo','fuchsli','baerli','blatti'],
+   leader:{n:'Mira Mal',e:'🧝‍♀️',badge:'Eichel-Orden',be:'🌰',team:[['eulo',15],['fuchsli',15],['baerli',16]],
+     hi:'Psst, {N}! Im Mal-Wald flüstern die Bäume das Einmaleins. Ich bin Mira. Kannst du es auch?',
+     lose:'Du kennst das Einmaleins richtig gut! Der Eichel-Orden gehört dir.'}},
+  {n:'Geteilt-See',topic:'div',learn:'Geteilt rechnen',icon:'🌊',c1:'#cfe9f7',c2:'#4c9fd6',lv:[14,17],wild:['quaki','oktopi','krabbi','tropfi'],
+   leader:{n:'Tim Teiler',e:'🏊',badge:'Muschel-Orden',be:'🐚',team:[['quaki',18],['krabbi',18],['oktopi',19]],
+     hi:'Ahoi {N}! Ich bin Tim. Am Geteilt-See teilen wir alles gerecht auf. Zeig mir, was du kannst!',
+     lose:'Gerecht geteilt und gewonnen! Hier ist der Muschel-Orden.'}},
+  {n:'Markt-Stadt',topic:'markt',learn:'Franken, Meter, Minuten und die Uhr',icon:'🏘️',c1:'#f8e7c8',c2:'#e0a45a',lv:[17,20],wild:['miezi','papagi','schnecki','flammi'],
+   leader:{n:'Greta Geld',e:'👩‍💼',badge:'Münz-Orden',be:'🪙',team:[['papagi',21],['schnecki',21],['tigrano',22]],
+     hi:'Grüezi {N}! Ich bin Greta. In der Markt-Stadt geht es um Franken, Meter und Minuten. Bereit?',
+     lose:'Du rechnest wie ein echter Marktprofi! Der Münz-Orden ist deiner.'}},
+  {n:'Drachen-Gipfel',topic:'mix',learn:'Alles gemischt',icon:'🌋',c1:'#f5dcd8',c2:'#b5584c',lv:[21,25],wild:['wolfi','drakonix','sturmi','felsor'],rare:'einhorni',
+   leader:{n:'Meister Kalkulus',e:'🧙‍♂️',badge:'Drachen-Orden',be:'🐉',team:[['wolfi',25],['sturmi',25],['drakonix',26],['felsor',26]],
+     hi:'Du hast es bis zum Drachen-Gipfel geschafft, {N}. Ich bin Kalkulus. Hier kommt alles gemischt. Zeig mir alles, was du gelernt hast!',
+     lose:'Unglaublich … du hast mich besiegt! Ab heute bist du Zahlimon-Champion.'}}
+];
+const TOPICS={add:{n:'Plus',lp:'MA.1.A'},sub:{n:'Minus, Ergänzen',lp:'MA.1.A'},zahl:{n:'Zahlenraum 1000',lp:'MA.1.A/B'},mal:{n:'Einmaleins',lp:'MA.1.A'},div:{n:'Geteilt',lp:'MA.1.A'},markt:{n:'Grössen, Uhr',lp:'MA.3.A'}};
+
+const INTRO=[
+  {...PROF,text:'Hallo {N}! Willkommen in Zahlonien. Ich bin Professorin Rechenstein.'},
+  {...PROF,text:'Hier leben die Zahlimon. Das sind Wesen, die Zahlen über alles lieben.'},
+  {...PROF,text:'Ein Zahlimon wird stark, wenn sein Trainer gut rechnet. Jede richtige Antwort ist ein Angriff!'},
+  {...PROF,text:'Wenn du dich verrechnest, greift das andere Zahlimon an. Keine Angst: Ich zeige dir dann, wie die Aufgabe geht.'},
+  {...PROF,text:'In jedem Gebiet wartet eine Arena. Sammle alle 7 Orden und werde Zahlimon-Champion!'},
+  {...PROF,text:'Aber zuerst brauchst du einen Partner. Wähle dein erstes Zahlimon!'}
+];
+const TUT=[
+  {...PROF,text:'Dein erster Kampf! Tippe auf «Angreifen» und löse die Aufgabe.'},
+  {...PROF,text:'Ist das wilde Zahlimon schon schwach, kannst du es mit einem Zahlenball fangen. Auch dafür musst du richtig rechnen.'}
+];
+const CHAMP=[
+  {...PROF,text:'{N}, du bist jetzt Zahlimon-Champion! Ich bin so stolz auf dich.'},
+  {...PROF,text:'Man erzählt sich, dass auf dem Drachen-Gipfel manchmal das legendäre Zahlodrak auftaucht. Vielleicht findest du es!'},
+  {...PROF,text:'Und denk dran: Alle Arenen kannst du jederzeit wieder herausfordern, um weiter zu trainieren.'}
+];
+const STARTERS=[['flammi','Mutig und heiss wie ein Grillfeuer.'],['tropfi','Ruhig und schlau. Liebt kaltes Wasser.'],['blatti','Fröhlich und zäh. Wächst mit jeder Aufgabe.']];
+const SHOP=[['ball','Zahlenball','Damit fängst du wilde Zahlimon.',5],['trank','Trank','Gibt einem Zahlimon 30 Kraft zurück.',8]];
+
+/* ---------- Spielstand ---------- */
+const KEY='zahlimon_v1';
+const DEFSET={speech:true,sound:true,rate:1,fix:{}};
+let S=null,B=null,EVO_NEXT=null;
+function fresh(name){return {v:1,name,team:[],box:[],badges:0,stars:10,items:{ball:5,trank:3},seen:{},caught:{},stats:{},retry:{},log:[],days:{},settings:{...DEFSET,fix:{}},flags:{},champ:false,uid:1}}
+function migrate(){const d=fresh(S.name);for(const k in d)if(S[k]===undefined)S[k]=d[k];S.settings={...DEFSET,...S.settings};S.settings.fix=S.settings.fix||{};S.items={ball:0,trank:0,...S.items}}
+function save(){if(!S)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{const t=localStorage.getItem(KEY);return t?JSON.parse(t):null}catch(e){return null}}
+const maxHp=m=>30+m.lvl*4;
+const need=l=>l*10;
+const nm=m=>SP[m.id].n;
+function mkMon(id,lvl){const m={id,lvl,xp:0,uid:S.uid++};m.hp=maxHp(m);return m}
+function mkFoe(id,lvl,leader){const max=30+lvl*(leader?4:3);return {id,lvl,max,hp:max}}
+function healAll(){S.team.concat(S.box).forEach(m=>m.hp=maxHp(m))}
+const firstAlive=()=>S.team.findIndex(m=>m.hp>0);
+function stat(t){return S.stats[t]=S.stats[t]||{r:0,f:0,s:1,run:0,miss:0}}
+const getStufe=t=>+(S.settings.fix[t]||stat(t).s);
+function dayKey(){const d=new Date();return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`}
+
+/* ---------- Sprache und Töne ---------- */
+const SPK={voice:null};
+function pickVoice(){if(!('speechSynthesis' in window))return;const vs=speechSynthesis.getVoices();SPK.voice=vs.find(v=>v.lang==='de-DE'&&/google|anna|helena|katja|petra|marlene|vicki|markus/i.test(v.name))||vs.find(v=>v.lang==='de-DE')||vs.find(v=>/^de/i.test(v.lang))||null}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function sayify(t){return String(t)
+  .replace(/\p{Extended_Pictographic}\uFE0F?/gu,'')
+  .replace(/(\d+)\s*H\b/g,'$1 Hunderter').replace(/(\d+)\s*Z\b/g,'$1 Zehner').replace(/(\d+)\s*E\b/g,'$1 Einer')
+  .replace(/·/g,' mal ').replace(/\s:\s/g,' geteilt durch ').replace(/[−–]/g,' minus ').replace(/\+/g,' plus ').replace(/=/g,' gleich ')
+  .replace(/(^|\s)\?/g,'$1 wie viel ').replace(/Fr\./g,'Franken').replace(/Rp\./g,'Rappen').replace(/\bcm\b/g,'Zentimeter').replace(/(\d)\s*m\b/g,'$1 Meter')
+  .replace(/[◯→«»]/g,' ').replace(/\s+/g,' ').trim()}
+let sayT;
+function say(t){const st=S?S.settings:DEFSET;if(!st.speech||!('speechSynthesis' in window)||!t)return;
+  try{speechSynthesis.cancel();clearTimeout(sayT);sayT=setTimeout(()=>{const u=new SpeechSynthesisUtterance(sayify(t));u.lang='de-DE';if(SPK.voice)u.voice=SPK.voice;u.rate=st.rate||1;u.pitch=1.05;speechSynthesis.speak(u)},40)}catch(e){}}
+function stopSpeech(){try{clearTimeout(sayT);speechSynthesis.cancel()}catch(e){}}
+let AC=null,unlocked=false;
+function unlockAudio(){if(unlocked)return;unlocked=true;try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+function sfx(k){const st=S?S.settings:DEFSET;if(!st.sound||!AC)return;try{if(AC.state==='suspended')AC.resume();
+  const seq={ok:[660,880],bad:[300,220],hit:[170,120],win:[523,659,784,1046],lvl:[523,784,1046],tap:[900]}[k]||[];let t=AC.currentTime;
+  seq.forEach(f=>{const o=AC.createOscillator(),g=AC.createGain();o.type=k==='hit'?'square':'triangle';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(k==='tap'?.05:.16,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+.15);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.17);t+=.1})}catch(e){}}
+
+/* ---------- Aufgaben (LP21 Mathematik, 3. Klasse) ---------- */
+function parts(b){return [Math.floor(b/100)*100,Math.floor(b%100/10)*10,b%10].filter(Boolean)}
+function hintAdd(a,b){let c=a;const o=[];for(const p of parts(b)){const u=p>=100?100:p>=10?10:1;if(u<100){const d=Math.floor(c/u)%10,f=(10-d)*u;if(d>0&&p>f){o.push(`${c} + ${f} = ${c+f}`);c+=f;o.push(`${c} + ${p-f} = ${c+p-f}`);c+=p-f;continue}}o.push(`${c} + ${p} = ${c+p}`);c+=p}if(b<10&&a>=10&&o.length===1)return `Rechne die Einer: ${a%10} + ${b} = ${a%10+b}  →  ${a+b}`;return o.join('  →  ')}
+function hintSub(a,b){let c=a;const o=[];for(const p of parts(b)){const u=p>=100?100:p>=10?10:1;if(u<100){const d=Math.floor(c/u)%10,f=d*u;if(d>0&&p>f){o.push(`${c} − ${f} = ${c-f}`);c-=f;o.push(`${c} − ${p-f} = ${c-p+f}`);c-=p-f;continue}}o.push(`${c} − ${p} = ${c-p}`);c-=p}if(b<10&&a>=10&&o.length===1&&a%10>=b)return `Rechne die Einer: ${a%10} − ${b} = ${a%10-b}  →  ${a-b}`;return o.join('  →  ')}
+function hintMal(f,b){
+  if(f===1)return `1 · ${b} = ${b}`;
+  if(f===10)return `10 · ${b} = ${10*b} (eine Null anhängen)`;
+  if(f===2)return `Verdoppeln: ${b} + ${b} = ${2*b}`;
+  if(f===5)return `Die Hälfte von 10 · ${b}: ${10*b} : 2 = ${5*b}`;
+  if(f===9)return `10 · ${b} = ${10*b}, dann einmal ${b} weg: ${10*b} − ${b} = ${9*b}`;
+  if(f>5)return `5 · ${b} = ${5*b} und ${f-5} · ${b} = ${(f-5)*b}  →  ${5*b} + ${(f-5)*b} = ${f*b}`;
+  return `In ${b}er-Schritten: `+Array.from({length:f},(_,i)=>(i+1)*b).join(', ')}
+function halbHint(a){const t=Math.floor(a/10)*10,e=a-t;return e?`Die Hälfte von ${t} ist ${t/2}, die Hälfte von ${e} ist ${e/2}  →  ${a/2}`:`${a} : 2 = ${a/2}`}
+function cmpQ(a,b){const s=a<b?'<':a>b?'>':'=';return {text:`${a} ◯ ${b}`,say:`Was passt? ${a} ist kleiner, grösser oder gleich ${b}?`,kind:'choice',choices:['<','=','>'],ans:s,hint:`${a} ${s} ${b}. Vergleiche zuerst die grösste Stelle, dann die nächste.`}}
+const fmtCHF=rp=>{const f=Math.floor(rp/100),r=rp%100;return f&&r?`${f} Fr. ${r} Rp.`:f?`${f} Fr.`:`${r} Rp.`};
+const fmtT=(h,m)=>`${h}.${pad2(m)} Uhr`;
+function clockSVG(h,m){const rad=d=>d*Math.PI/180,X=(r,a)=>(60+r*Math.sin(rad(a))).toFixed(1),Y=(r,a)=>(60-r*Math.cos(rad(a))).toFixed(1);
+  let s='<svg viewBox="0 0 120 120" width="150" height="150" role="img" aria-label="Uhr"><circle cx="60" cy="60" r="56" fill="#fff" stroke="currentColor" stroke-width="4"/>';
+  for(let i=0;i<60;i++){const a=i*6,r1=i%5?50:45;s+=`<line x1="${X(r1,a)}" y1="${Y(r1,a)}" x2="${X(53,a)}" y2="${Y(53,a)}" stroke="currentColor" stroke-width="${i%5?1:2.5}"/>`}
+  for(let i=1;i<=12;i++){const a=i*30;s+=`<text x="${X(36,a)}" y="${(60-36*Math.cos(rad(a))+5).toFixed(1)}" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" font-family="sans-serif">${i}</text>`}
+  const ha=((h%12)+m/60)*30,ma=m*6;
+  s+=`<line x1="60" y1="60" x2="${X(26,ha)}" y2="${Y(26,ha)}" stroke="#d9443a" stroke-width="6" stroke-linecap="round"/>`;
+  s+=`<line x1="60" y1="60" x2="${X(44,ma)}" y2="${Y(44,ma)}" stroke="#2a66cc" stroke-width="3.5" stroke-linecap="round"/>`;
+  return s+'<circle cx="60" cy="60" r="4" fill="currentColor"/></svg>'}
+
+const RE={1:[2,5,10],2:[2,3,4,5,6,10],3:[3,4,6,7,8,9]};
+const GEN={
+  add(s){let a,b;
+    if(s===1){if(Math.random()<.3){a=R(1,8)*10;b=R(1,10-a/10)*10}else{a=R(11,89);b=R(2,9)}}
+    else if(s===2){if(Math.random()<.25){a=R(1,8)*100;b=R(1,9-a/100)*100}else{a=R(12,78);b=R(11,99-a)}}
+    else{a=R(101,880);const k=Math.random();b=k<.3?R(2,9):k<.6?R(1,9)*10:R(11,99);if(Math.random()<.3)b+=R(1,3)*100;if(a+b>1000)b=R(2,1000-a)}
+    return {text:`${a} + ${b} = ?`,ans:a+b,hint:hintAdd(a,b)}},
+  sub(s){
+    if(s>1&&Math.random()<.3){const c=s===2?100:P([1000,R(3,9)*100]);const a=s===2?R(11,89):R(Math.max(11,c-390),c-11);const e=(10-a%10)%10;
+      const h=e?`${a} + ${e} = ${a+e}  →  ${a+e} + ${c-a-e} = ${c}  →  zusammen ${c-a}`:`${a} + ${c-a} = ${c}`;
+      return {text:`${a} + ? = ${c}`,say:`${a} plus wie viel gleich ${c}?`,ans:c-a,hint:h}}
+    let a,b;
+    if(s===1){if(Math.random()<.3){a=R(2,10)*10;b=R(1,a/10-1)*10}else{a=R(11,100);b=R(2,9)}}
+    else if(s===2){if(Math.random()<.25){a=R(2,10)*100;b=R(1,a/100-1)*100}else{a=R(30,99);b=R(11,a-5)}}
+    else{a=R(150,1000);const k=Math.random();b=k<.3?R(2,9):k<.6?R(1,9)*10:R(11,99);if(Math.random()<.3)b+=R(1,3)*100;if(b>=a)b=R(2,a-50)}
+    return {text:`${a} − ${b} = ?`,ans:a-b,hint:hintSub(a,b)}},
+  mal(s){const b=P(RE[s]);
+    if(s===3&&Math.random()<.2){const f=R(2,9),t=R(2,9);return {text:`${f} · ${t*10} = ?`,ans:f*t*10,hint:`${f} · ${t} = ${f*t}  →  ${f} · ${t*10} = ${f*t*10}`}}
+    const f=R(1,10);
+    if(s===3&&Math.random()<.3)return {text:`? · ${b} = ${f*b}`,say:`Wie viel mal ${b} gleich ${f*b}?`,ans:f,hint:`${f} · ${b} = ${f*b}`};
+    return {text:`${f} · ${b} = ?`,ans:f*b,hint:hintMal(f,b)}},
+  div(s){const d=P(RE[s]),q=R(1,10),n=d*q;
+    if(s===3&&Math.random()<.25)return {text:`${S.name} verteilt ${n} Beeren gerecht an ${d} Zahlimon. Wie viele Beeren bekommt jedes?`,ans:q,hint:`${q} · ${d} = ${n}, also ${n} : ${d} = ${q}`};
+    if(s>=2&&Math.random()<.2)return {text:`Wie oft passt ${d} in ${n}?`,ans:q,hint:`${q} · ${d} = ${n}`};
+    return {text:`${n} : ${d} = ?`,ans:q,hint:`Welche Zahl mal ${d} gibt ${n}?  ${q} · ${d} = ${n}`}},
+  zahl(s){const k=s===1?['nach','vor','dopp','halb','cmp2']:s===2?['stw','ziff','zehner','cmp3','folge','dopp']:['runden','runden','folge','nach3','halb3','stw0','hunderter'];
+    let a,b;
+    switch(P(k)){
+      case 'nach':a=R(9,99);return {text:`Welche Zahl kommt nach ${a}?`,ans:a+1,hint:`${a} + 1 = ${a+1}`};
+      case 'vor':a=R(11,100);return {text:`Welche Zahl kommt vor ${a}?`,ans:a-1,hint:`${a} − 1 = ${a-1}`};
+      case 'nach3':a=P([R(100,998),R(1,9)*100-1,R(10,99)*10-1]);return {text:`Welche Zahl kommt nach ${a}?`,ans:a+1,hint:`${a} + 1 = ${a+1}`};
+      case 'dopp':a=s===1?R(6,50):R(51,250);return {text:`Verdopple ${a}.`,ans:2*a,hint:`${a} + ${a} = ${2*a}`};
+      case 'halb':a=R(3,50)*2;return {text:`Wie viel ist die Hälfte von ${a}?`,ans:a/2,hint:halbHint(a)};
+      case 'halb3':a=R(51,500)*2;return {text:`Wie viel ist die Hälfte von ${a}?`,ans:a/2,hint:halbHint(a)};
+      case 'cmp2':a=R(10,99);b=Math.random()<.1?a:R(10,99);return cmpQ(a,b);
+      case 'cmp3':a=R(100,999);b=Math.random()<.5?Number(String(a).split('').reverse().join('')):R(100,999);if(b<100)b+=100;if(Math.random()<.1)b=a;return cmpQ(a,b);
+      case 'stw':{const h=R(1,9),z=R(0,9),e=R(0,9),n=h*100+z*10+e;return {text:`${h} H + ${z} Z + ${e} E = ?`,say:`${h} Hunderter, ${z} Zehner und ${e} Einer. Welche Zahl ist das?`,ans:n,hint:`${h} Hunderter = ${h*100}, ${z} Zehner = ${z*10}, ${e} Einer = ${e}  →  ${n}`}}
+      case 'stw0':{const h=R(1,9),x=R(1,9);if(Math.random()<.5)return {text:`${x} E + ${h} H = ?`,say:`${x} Einer und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x,hint:`${h} Hunderter, 0 Zehner, ${x} Einer  →  ${h*100+x}`};
+        return {text:`${x} Z + ${h} H = ?`,say:`${x} Zehner und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x*10,hint:`${h} Hunderter, ${x} Zehner, 0 Einer  →  ${h*100+x*10}`}}
+      case 'ziff':{a=R(100,999);const pos=P([['Hunderter',0],['Zehner',1],['Einer',2]]),str=String(a);return {text:`Welche Ziffer steht bei ${a} an der ${pos[0]}stelle?`,ans:+str[pos[1]],hint:`${a}: ${str[0]} Hunderter, ${str[1]} Zehner, ${str[2]} Einer`}}
+      case 'zehner':{a=R(101,989);if(a%10===0)a++;const n=Math.ceil(a/10)*10;return {text:`Welche Zehnerzahl kommt nach ${a}?`,ans:n,hint:`${a} liegt zwischen ${n-10} und ${n}.`}}
+      case 'hunderter':{a=R(101,989);if(a%100===0)a++;const n=Math.ceil(a/100)*100;return {text:`Welche Hunderterzahl kommt nach ${a}?`,ans:n,hint:`${a} liegt zwischen ${n-100} und ${n}.`}}
+      case 'runden':{a=R(101,994);if(a%10===0)a+=3;const r=Math.round(a/10)*10;return {text:`Runde ${a} auf Zehner.`,ans:r,hint:`Die Einerziffer ist ${a%10}. ${a%10>=5?'Ab 5 wird aufgerundet':'Unter 5 wird abgerundet'}  →  ${r}`}}
+      default:{const st=s===2?P([2,5,10,20]):P([25,50,100,-10,-50]);let x;
+        if(st>0)x=R(1,st===100?6:st===50?14:st===25?30:30)*st;else x=st===-10?R(30,99)*10:R(4,20)*50;
+        const seq=[x,x+st,x+2*st];return {text:`${seq.join(', ')}, ?`,say:`Wie geht die Zahlenfolge weiter? ${seq.join(', ')}, und dann?`,ans:x+3*st,hint:`Immer ${st>0?'+':'−'} ${Math.abs(st)}  →  ${x+2*st} ${st>0?'+':'−'} ${Math.abs(st)} = ${x+3*st}`}}
+    }},
+  markt(s){return MK[P(['geld','laenge','zeit','uhr','text','text'])](s)}
+};
+const MK={
+  geld(s){
+    if(s===1){const f=R(1,9);return {text:`${f} Fr. = ? Rp.`,say:`Wie viele Rappen sind ${f} Franken?`,ans:f*100,hint:`1 Fr. = 100 Rp.  →  ${f} Fr. = ${f*100} Rp.`}}
+    if(s===2){if(Math.random()<.5){const f=R(1,9),r=R(1,19)*5;return {text:`${f} Fr. ${r} Rp. = ? Rp.`,say:`Wie viele Rappen sind ${f} Franken ${r} Rappen?`,ans:f*100+r,hint:`${f} Fr. = ${f*100} Rp., dazu ${r} Rp.  →  ${f*100+r} Rp.`}}
+      const p1=R(1,4)*100+R(0,19)*5,p2=R(0,3)*100+R(2,19)*5;return {text:`Ein Glace kostet ${fmtCHF(p1)}, ein Brötli ${fmtCHF(p2)}. Wie viele Rappen kostet beides zusammen?`,ans:p1+p2,hint:`${p1} Rp. + ${p2} Rp. = ${p1+p2} Rp.`}}
+    const pay=P([500,1000]),price=R(10,pay/10-2)*10;
+    return {text:`Du bezahlst mit ${pay/100} Fr. Ein Heft kostet ${fmtCHF(price)}. Wie viele Rappen Rückgeld bekommst du?`,ans:pay-price,hint:`${pay/100} Fr. = ${pay} Rp.  →  ${pay} − ${price} = ${pay-price} Rp.`}},
+  laenge(s){
+    if(s===1){const m=R(1,9);return {text:`${m} m = ? cm`,ans:m*100,hint:`1 m = 100 cm  →  ${m} m = ${m*100} cm`}}
+    if(s===2){const m=R(1,9),c=R(1,99);return {text:`${m} m ${c} cm = ? cm`,ans:m*100+c,hint:`${m} m = ${m*100} cm, dazu ${c} cm  →  ${m*100+c} cm`}}
+    if(Math.random()<.5){const c=R(5,95);return {text:`Wie viele cm fehlen von ${c} cm bis 1 m?`,ans:100-c,hint:`1 m = 100 cm  →  100 − ${c} = ${100-c}`}}
+    const a=R(2,9)*100;return {text:`${a} cm = ? m`,ans:a/100,hint:`100 cm = 1 m  →  ${a} cm = ${a/100} m`}},
+  zeit(s){
+    if(s===1){const [t,a]=P([['1 Stunde = ? Minuten',60],['Eine halbe Stunde = ? Minuten',30],['1 Tag = ? Stunden',24],['1 Woche = ? Tage',7],['1 Minute = ? Sekunden',60]]);return {text:t,ans:a,hint:t.replace('?',a)}}
+    if(s===2){if(Math.random()<.5){const [t,a]=P([['Eine Viertelstunde = ? Minuten',15],['Drei Viertelstunden = ? Minuten',45],['2 Stunden = ? Minuten',120]]);return {text:t,ans:a,hint:t.replace('?',a)}}
+      const h=R(7,17),m1=R(0,6)*5,d=R(2,5)*5;return {text:`Von ${fmtT(h,m1)} bis ${fmtT(h,m1+d)}. Wie viele Minuten sind das?`,ans:d,hint:`${m1+d} − ${m1} = ${d} Minuten`}}
+    if(Math.random()<.25)return {text:'3 Stunden = ? Minuten',ans:180,hint:'60 + 60 + 60 = 180'};
+    const h=R(7,17),m1=R(8,11)*5,d=R(3,9)*5,end=m1+d;
+    return {text:`Von ${fmtT(h,m1)} bis ${end>=60?fmtT(h+1,end-60):fmtT(h,end)}. Wie viele Minuten sind das?`,ans:d,hint:end>=60?`Bis ${fmtT(h+1,0)} sind es ${60-m1} Min., dann noch ${end-60} Min.  →  ${d} Minuten`:`${end} − ${m1} = ${d} Minuten`}},
+  uhr(s){const h=R(1,12),m=s===1?P([0,30]):s===2?P([0,15,30,45]):R(0,11)*5;const ok=fmtT(h,m);
+    const cand=[fmtT(h,(m+30)%60),fmtT(h%12+1,m),fmtT(m===0?12:m/5,(h*5)%60),fmtT(h===1?12:h-1,m),fmtT(h,(m+15)%60)];
+    const ch=[ok];for(const c of cand)if(ch.length<4&&!ch.includes(c))ch.push(c);
+    return {text:'Wie spät ist es?',kind:'choice',choices:shuffle(ch),ans:ok,vis:clockSVG(h,m),hint:`Der kurze rote Zeiger zeigt die Stunde, der lange blaue die Minuten: ${ok}`}},
+  text(s){return P(TX[s])()}
+};
+const TX={
+  1:[()=>{const a=R(12,48),b=R(11,40);return {text:`${S.name} hat ${a} Sammelkarten und bekommt ${b} dazu. Wie viele Karten sind es jetzt?`,ans:a+b,hint:hintAdd(a,b)}},
+     ()=>{const a=R(30,95),b=R(5,a-10);return {text:`Im Zahlencenter liegen ${a} Beeren. ${S.name} verfüttert ${b} davon. Wie viele Beeren bleiben übrig?`,ans:a-b,hint:hintSub(a,b)}},
+     ()=>{const a=R(20,60),b=R(10,35);return {text:`Im Bus sitzen ${a} Kinder. An der Haltestelle steigen ${b} ein. Wie viele Kinder sitzen jetzt im Bus?`,ans:a+b,hint:hintAdd(a,b)}}],
+  2:[()=>{const a=R(3,9),b=R(3,9);return {text:`Ein Zahlimon frisst jeden Tag ${a} Beeren. Wie viele Beeren frisst es in ${b} Tagen?`,ans:a*b,hint:hintMal(b,a)}},
+     ()=>{const d=R(2,9),q=R(2,10);return {text:`${S.name} verteilt ${d*q} Zahlenbälle gerecht auf ${d} Rucksäcke. Wie viele Bälle kommen in jeden Rucksack?`,ans:q,hint:`${q} · ${d} = ${d*q}`}},
+     ()=>{const a=R(120,450),b=R(110,400);return {text:`Auf der Plus-Wiese wohnen ${a} Zahlimon, im Mal-Wald ${b}. Wie viele sind es zusammen?`,ans:a+b,hint:hintAdd(a,b)}}],
+  3:[()=>{const p=R(3,9),k=R(2,5);return {text:`${S.name} hat 50 Fr. und kauft ${k} Bücher zu je ${p} Fr. Wie viele Franken bleiben übrig?`,ans:50-p*k,hint:`${k} · ${p} = ${p*k}  →  50 − ${p*k} = ${50-p*k}`}},
+     ()=>{const a=R(4,9),e=R(2,7);return {text:`Eine Arena hat ${a} Reihen mit je 8 Plätzen. ${e} Plätze sind leer. Wie viele Kinder sitzen in der Arena?`,ans:a*8-e,hint:`${a} · 8 = ${a*8}  →  ${a*8} − ${e} = ${a*8-e}`}},
+     ()=>{const w=R(1,4)*100+50;return {text:`${S.name} läuft jeden Tag ${w} m. Wie viele Meter sind es in 2 Tagen?`,ans:2*w,hint:`${w} + ${w} = ${2*w}`}},
+     ()=>{const n=R(3,9)*4;return {text:`${n} Zahlimon machen einen Ausflug. In jedes Boot passen 4. Wie viele Boote brauchen sie?`,ans:n/4,hint:`${n} : 4 = ${n/4}`}}]
+};
+function nextQ(topic){const t=topic==='mix'?P(['add','sub','zahl','mal','div','markt']):topic;
+  const rq=S.retry[t];if(rq&&rq.length&&Math.random()<.35)return {...rq.shift(),again:true};
+  const q=GEN[t](getStufe(t));q.topic=t;q.kind=q.kind||'num';q.say=q.say||q.text;return q}
+function record(q,ok,given){const st=stat(q.topic),fixed=!!S.settings.fix[q.topic];const dk=dayKey();S.days[dk]=S.days[dk]||[0,0];
+  if(ok){st.r++;st.run++;st.miss=0;S.days[dk][0]++;
+    if(st.run>=5&&st.s<3&&!fixed){st.s++;st.run=0;later(()=>toast('Du wirst immer besser! Die Aufgaben werden etwas schwieriger.'),900)}}
+  else{st.f++;st.run=0;st.miss++;S.days[dk][1]++;if(st.miss>=3&&st.s>1&&!fixed){st.s--;st.miss=0}
+    const arr=S.retry[q.topic]=S.retry[q.topic]||[];if(!arr.some(x=>x.text===q.text)){arr.push({text:q.text,say:q.say,ans:q.ans,kind:q.kind,choices:q.choices,hint:q.hint,vis:q.vis,topic:q.topic});if(arr.length>8)arr.shift()}
+    S.log.unshift({t:q.text,a:q.ans,g:given,topic:q.topic});if(S.log.length>30)S.log.length=30}
+  const keys=Object.keys(S.days).sort();while(keys.length>30)delete S.days[keys.shift()];save()}
+
+/* ---------- Oberfläche: Hilfen ---------- */
+const ACT={};
+let timers=[];
+const later=(fn,ms)=>{const t=setTimeout(fn,ms);timers.push(t);return t};
+function clearTimers(){timers.forEach(clearTimeout);timers=[]}
+function show(html){app.innerHTML=html;window.scrollTo(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll('.hp i[data-to]').forEach(el=>el.style.width=el.dataset.to+'%')))}
+let tT;function toast(t){toastEl.textContent=t;toastEl.hidden=false;toastEl.classList.remove('in');void toastEl.offsetWidth;toastEl.classList.add('in');clearTimeout(tT);tT=setTimeout(()=>toastEl.hidden=true,2800)}
+const chip=t=>`<span class="chip" style="--c:${TYPES[t].c}">${TYPES[t].n}</span>`;
+const dots=n=>`<span class="dots" aria-label="Stufe ${n} von 3">${[1,2,3].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>`;
+function bar(key,cur,max){const p=Math.round(cur/max*100);const prev=B&&B.prev[key]!=null?B.prev[key]:p;if(B)B.prev[key]=p;return `<div class="hp"><i class="${p>50?'':p>20?'mid':'low'}" data-to="${p}" style="width:${prev}%"></i></div>`}
+function hud(){return `<header class="hud"><div class="hud-n"><span class="hud-l">Trainer</span><b>${esc(S.name)}</b></div><div class="hud-s" aria-label="Sterne">⭐ ${S.stars}</div><div class="hud-b" aria-label="Orden: ${S.badges} von 7">${RG.map((r,i)=>`<span class="${i<S.badges?'got':''}">${i<S.badges?r.leader.be:''}</span>`).join('')}</div></header>`}
+function nav(){return `<nav class="nav"><div class="in">${[['map','🗺️','Karte'],['team','🎒','Team'],['dex','📖','Zahlidex'],['shop','🛒','Laden'],['center','❤️','Center']].map(([a,i,l])=>`<button data-act="${a}"><b>${i}</b>${l}</button>`).join('')}</div></nav>`}
+
+app.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;unlockAudio();const f=ACT[b.dataset.act];if(f)f(b.dataset.arg,b)});
+document.addEventListener('keydown',e=>{
+  if(!dlg.hidden&&(e.key==='Enter'||e.key===' ')){e.preventDefault();dlgTap();return}
+  if(!B||B.phase!=='q'||B.q.kind==='choice')return;
+  if(/^[0-9]$/.test(e.key))ACT.k(e.key);else if(e.key==='Backspace')ACT.del();else if(e.key==='Enter')ACT.submit()});
+
+/* ---------- Dialog ---------- */
+let DQ=[],Ddone=null,Dtyping=null,Dfull='';
+function talk(lines,done){DQ=lines.slice();Ddone=done;if(!DQ.length){done&&done();return}dlg.hidden=false;nextLine()}
+function nextLine(){if(!DQ.length){dlg.hidden=true;stopSpeech();const d=Ddone;Ddone=null;d&&d();return}
+  const l=DQ.shift(),text=l.text.replace(/\{N\}/g,S?S.name:'');$('#dlgFace').textContent=l.face||'';$('#dlgWho').textContent=l.who||'';$('#dlgWho').hidden=!l.who;
+  Dfull=text;const el=$('#dlgTxt');el.textContent='';say(text);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=text;return}
+  let i=0;clearInterval(Dtyping);Dtyping=setInterval(()=>{i+=2;el.textContent=text.slice(0,i);if(i>=text.length){clearInterval(Dtyping);Dtyping=null}},24)}
+function dlgTap(){unlockAudio();if(Dtyping){clearInterval(Dtyping);Dtyping=null;$('#dlgTxt').textContent=Dfull;return}nextLine()}
+dlg.addEventListener('click',dlgTap);
+
+/* ---------- Bildschirme ---------- */
+function titleScreen(){B=null;S=null;const sv=load();
+  show(`<div class="title"><p class="eyebrow">Das Rechen-Abenteuer · 3. Klasse</p><h1 class="logo">Zahli<span>mon</span></h1>
+  <div class="parade" aria-hidden="true"><span>🦎</span><span>🐧</span><span>🐛</span></div>
+  <div class="stack">${sv&&sv.name?`<button class="btn green big" data-act="cont">▶ Weiterspielen: ${esc(sv.name)}</button>`:''}
+  <button class="btn ${sv?'ghost':'green big'}" data-act="newgame">Neues Spiel</button></div>
+  <p class="fine center">🔊 Ton einschalten: Das Spiel liest dir alles vor.</p></div>`)}
+ACT.title=titleScreen;
+ACT.cont=()=>{S=load();migrate();save();mapScreen();say(`Willkommen zurück, ${S.name}!`)};
+ACT.newgame=()=>{const sv=load();if(!sv)return nameScreen();
+  show(`<div class="title"><h2 class="h2 center">Neues Spiel?</h2><p class="center">Es gibt schon einen Spielstand von <b>${esc(sv.name)}</b>. Wenn du neu beginnst, wird er gelöscht.</p>
+  <div class="stack"><button class="btn red" data-act="newgame2">Ja, neu beginnen</button><button class="btn ghost" data-act="title">Zurück</button></div></div>`)};
+ACT.newgame2=()=>nameScreen();
+function nameScreen(){show(`<div class="title"><h2 class="h2 center">Wie heisst du?</h2><form id="nameForm" class="stack"><label for="playerName" class="lbl">Dein Name</label>
+  <input id="playerName" class="inp" maxlength="14" autocomplete="off" autocapitalize="words" enterkeyhint="go" placeholder="Dein Vorname">
+  <button class="btn green" type="submit">Los geht's!</button><button type="button" class="btn ghost" data-act="title">Zurück</button></form></div>`);
+  $('#nameForm').addEventListener('submit',e=>{e.preventDefault();unlockAudio();const n=$('#playerName').value.trim().replace(/\s+/g,' ');if(!n){toast('Bitte schreib zuerst deinen Namen.');return}
+    S=fresh(n);save();talk(INTRO,()=>starterScreen())});
+  say('Wie heisst du?')}
+function starterScreen(sel){show(`<h2 class="h2">Wähle deinen Partner</h2><p class="fine">Tippe auf ein Zahlimon.</p><div class="starters">${STARTERS.map(([id,d])=>`<button class="starter ${sel===id?'on':''}" data-act="pick" data-arg="${id}" style="--c:${TYPES[SP[id].t].c}"><span class="se">${SP[id].e}</span><span class="sn">${SP[id].n}</span>${chip(SP[id].t)}<span class="sd">${d}</span></button>`).join('')}</div>
+  ${sel?`<button class="btn green big" data-act="takeStarter" data-arg="${sel}">${SP[sel].n} nehmen</button>`:''}`)}
+ACT.pick=id=>{starterScreen(id);say(`${SP[id].n}. Ein ${TYPES[SP[id].t].n}-Zahlimon. ${STARTERS.find(s=>s[0]===id)[1]}`)};
+ACT.takeStarter=id=>{S.team=[mkMon(id,5)];S.seen[id]=S.caught[id]=1;save();
+  talk([{...PROF,text:`Super Wahl! ${SP[id].n} freut sich schon auf dich.`},{...PROF,text:'Hier hast du 5 Zahlenbälle und 3 Tränke. Mit einem Zahlenball kannst du wilde Zahlimon fangen.'},{...PROF,text:'Deine Reise beginnt auf der Plus-Wiese. Viel Glück, {N}!'}],mapScreen)};
+
+function mapScreen(){B=null;clearTimers();
+  show(`${hud()}<h2 class="h2">Karte von Zahlonien</h2><p class="fine">Tippe auf ein Gebiet. Ein neues Gebiet öffnet sich, wenn du einen Orden gewinnst.</p>
+  <div class="map">${RG.map((r,i)=>{const open=i<=S.badges,done=i<S.badges;return `<button class="node ${open?'':'locked'} ${i===S.badges?'now':''}" style="--g1:${r.c1};--g2:${r.c2}" data-act="${open?'region':'locked'}" data-arg="${i}"><span class="ic">${open?r.icon:'🔒'}</span><span class="tx"><b>${r.n}</b><small>${open?r.learn:'Noch verschlossen'}</small></span><span class="st">${done?r.leader.be:''}</span></button>`}).join('')}</div>
+  <button class="linkish" data-act="parents">Bereich für Eltern</button>${nav()}`)}
+ACT.map=mapScreen;
+ACT.locked=i=>{const p=RG[i-1];const t=`Gewinne zuerst den Orden bei ${p.leader.n} in der ${p.n}.`;toast(t);say(t)};
+ACT.region=i=>regionScreen(+i);
+
+function regionScreen(i){B=null;clearTimers();const r=RG[i],L=r.leader,alive=firstAlive()>=0,beaten=S.badges>i,m=S.team[Math.max(0,firstAlive())];
+  show(`${hud()}<section class="rg" style="--g1:${r.c1};--g2:${r.c2}"><div class="rg-ic">${r.icon}</div><div><h2>${r.n}</h2><p>Hier übst du: <b>${r.learn}</b></p>${r.topic!=='mix'?`<p>Schwierigkeit ${dots(getStufe(r.topic))}</p>`:''}</div></section>
+  <div class="lead card"><span class="le">${SP[m.id].e}</span><div class="li"><div class="pn"><b>${nm(m)}</b><span class="lv">Lv ${m.lvl}</span></div>${bar('r'+m.uid,m.hp,maxHp(m))}<div class="pk">Kraft ${m.hp}/${maxHp(m)}</div></div></div>
+  <div class="stack">${alive?`<button class="btn green big" data-act="wild" data-arg="${i}">🌿 Im hohen Gras suchen</button>`:`<p class="warn">Deine Zahlimon sind erschöpft.</p><button class="btn" data-act="center">❤️ Ins Zahlencenter</button>`}
+  <button class="btn gold" data-act="arena" data-arg="${i}" ${alive?'':'disabled'}>🏟️ ${beaten?'Revanche':'Arena'}: ${L.n} ${beaten?L.be:''}</button></div>
+  <h3 class="h3">Zahlimon in diesem Gebiet</h3><div class="mini-dex">${r.wild.concat(r.rare?[r.rare]:[]).map(id=>S.caught[id]?`<span title="${SP[id].n}">${SP[id].e}</span>`:S.seen[id]?`<span class="seen" title="${SP[id].n}">${SP[id].e}</span>`:'<span class="unk">?</span>').join('')}</div>${nav()}`)}
+
+/* ---------- Kampf ---------- */
+const foe=()=>B.foes[B.fi];
+const myMon=()=>S.team[B.mi];
+function dmg(a,d,mult){const base=10+a.lvl*1.5,diff=clamp(1+(a.lvl-d.lvl)*.05,.6,1.5);return Math.max(3,Math.round(base*diff*mult*(.9+Math.random()*.2)))}
+function foeDmg(f,m,mult){return Math.max(2,Math.round((5+f.lvl*1.2)*clamp(1+(f.lvl-m.lvl)*.05,.7,1.4)*mult))}
+const effTxt=m=>m>1?' Das ist sehr effektiv!':m<1?' Das ist nicht sehr effektiv …':'';
+
+ACT.wild=i=>{i=+i;const r=RG[i];let id;
+  if(i===RG.length-1&&S.champ&&!S.caught.zahlodrak&&Math.random()<.25)id='zahlodrak';
+  else if(r.rare&&Math.random()<.06)id=r.rare;else id=P(r.wild);
+  const f=mkFoe(id,id==='zahlodrak'?30:R(r.lv[0],r.lv[1]),false);S.seen[id]=1;save();
+  B={kind:'wild',ri:i,foes:[f],fi:0,mi:firstAlive(),streak:0,phase:'anim',fx:'appear',prev:{},msg:id==='zahlodrak'?'Der Boden bebt … Das legendäre Zahlodrak erscheint!':`Ein wildes ${SP[id].n} erscheint!`};
+  renderBattle();say(B.msg);
+  later(()=>{if(!S.flags.tut){S.flags.tut=1;save();talk(TUT,toMenu)}else toMenu()},1400)};
+ACT.arena=i=>{i=+i;const L=RG[i].leader;
+  talk([{who:L.n,face:L.e,text:L.hi}],()=>{const foes=L.team.map(([id,l])=>mkFoe(id,l,true));S.seen[foes[0].id]=1;save();
+    B={kind:'leader',ri:i,leader:L,foes,fi:0,mi:firstAlive(),streak:0,phase:'anim',fx:'appear',prev:{},msg:`${L.n} schickt ${nm(foes[0])} in den Kampf!`};
+    renderBattle();say(B.msg);later(toMenu,1500)})};
+
+function plate(m,isFoe){const sp=SP[m.id],max=isFoe?m.max:maxHp(m);
+  return `<div class="plate"><div class="pn"><span>${sp.n}</span><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar(isFoe?'f'+B.fi:'m'+m.uid,m.hp,max)}
+  ${isFoe?(B.kind==='leader'?`<span class="own">${B.leader.e} ${esc(B.leader.n)} · ${B.fi+1}/${B.foes.length}</span>`:''):`<div class="pk">Kraft ${m.hp}/${max}</div><div class="xp"><i style="width:${Math.min(100,Math.round(m.xp/need(m.lvl)*100))}%"></i></div>`}</div>`}
+function renderBattle(){const r=RG[B.ri],f=foe(),m=myMon(),fx=B.fx||'';const compact=['q','wrong','switch'].includes(B.phase);
+  let foeInner=`<span class="e">${SP[f.id].e}</span>`;
+  if(fx==='ball')foeInner='<span class="zball throw"></span>';if(fx==='caught')foeInner='<span class="zball done"></span>';
+  const foeCls={hitFoe:'hit',appear:'appear',faintFoe:'faint',escape:'appear',hitMe:'lunge'}[fx]||'';
+  const meCls={hitMe:'hit',faintMe:'faint',appearMe:'appear',hitFoe:'lunge'}[fx]||'';
+  show(`<div class="bt ${compact?'compact':''}" style="--g1:${r.c1};--g2:${r.c2}">
+    <div class="bt-row foe-row">${plate(f,true)}<div class="mon foe ${foeCls}">${foeInner}</div></div>
+    <div class="bt-row me-row"><div class="mon me ${meCls}"><span class="e">${SP[m.id].e}</span></div>${plate(m,false)}</div></div>
+    <div class="bmsg" aria-live="polite">${esc(B.msg||'')}</div><div class="bctl">${ctl()}</div>`);
+  B.fx=null}
+function ctl(){const m=myMon();
+  switch(B.phase){
+    case 'menu':return `<div class="menu"><button class="btn green big" data-act="atk">⚔️ Angreifen</button><div class="menu2">
+      <button class="btn ghost" data-act="ball" ${B.kind!=='wild'?'disabled':''}><span class="zball"></span> Fangen (${S.items.ball})</button>
+      <button class="btn ghost" data-act="potion">🧪 Trank (${S.items.trank})</button>
+      <button class="btn ghost" data-act="switch" ${S.team.length<2?'disabled':''}>🔄 Wechseln</button>
+      <button class="btn ghost" data-act="run" ${B.kind!=='wild'?'disabled':''}>🏃 Flucht</button></div></div>`;
+    case 'q':return qCard();
+    case 'wrong':{const q=B.q;return `<div class="fb card"><p class="fb-h">Nicht ganz!</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}<p>${esc(q.text)}</p><p>Deine Antwort: <b>${esc(B.given)}</b><br>Richtig ist: <span class="bigans">${esc(String(q.ans))}</span></p><p class="hint">💡 ${esc(q.hint||'')}</p><button class="btn" data-act="goon">Verstanden</button></div>`}
+    case 'switch':return `<div class="swl">${S.team.map((t,i)=>`<button class="swb" data-act="swapTo" data-arg="${i}" ${t.hp<=0||i===B.mi?'disabled':''}><span class="e">${SP[t.id].e}</span><span class="i"><span class="pn"><b>${nm(t)}</b><span class="lv">Lv ${t.lvl}</span></span>${bar('s'+t.uid,t.hp,maxHp(t))}<span class="pk">${t.hp<=0?'erschöpft':i===B.mi?'kämpft gerade':`Kraft ${t.hp}/${maxHp(t)}`}</span></span></button>`).join('')}
+      ${B.forced?'':'<button class="btn ghost" data-act="backMenu">Zurück</button>'}</div>`;
+    default:return '<div class="wait"></div>'}}
+function qCard(){const q=B.q,long=q.text.length>22;
+  const lab=B.purpose==='catch'?'Richtig rechnen = Zahlenball werfen':'Richtig rechnen = Angriff';
+  return `<div class="qc card"><div class="qhead"><span class="qlab">${lab}${q.again?' · Nochmals üben':''}</span><button class="spk" data-act="speak" aria-label="Aufgabe vorlesen">🔊</button></div>
+  ${q.vis?`<div class="qvis">${q.vis}</div>`:''}<p class="qt ${long?'long':''}">${esc(q.text)}</p>
+  ${q.kind==='choice'?`<div class="ch ${q.choices.length===3?'c3':''}">${q.choices.map(c=>`<button class="chb" data-act="choose" data-arg="${esc(c)}">${esc(c)}</button>`).join('')}</div>`
+  :`<div class="entry" id="entry" aria-live="polite">${entryHTML()}</div><div class="kp">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-act="k" data-arg="${n}">${n}</button>`).join('')}<button data-act="del" aria-label="Löschen">⌫</button><button data-act="k" data-arg="0">0</button><button class="ok" data-act="submit">OK</button></div>`}</div>`}
+function entryHTML(){return B.input?B.input.split('').map(d=>`<span>${d}</span>`).join(''):'<span class="cur"></span>'}
+function toMenu(){if(!B)return;B.phase='menu';B.msg=`Was soll ${nm(myMon())} tun?`;renderBattle()}
+function newQ(){B.q=nextQ(RG[B.ri].topic);B.input='';B.phase='q';B.msg=B.purpose==='catch'?'Der Zahlenball ist bereit!':`${nm(myMon())} wartet auf deine Antwort …`;renderBattle();say(B.q.say)}
+ACT.atk=()=>{if(B.phase!=='menu')return;B.purpose='atk';newQ()};
+ACT.ball=()=>{if(B.phase!=='menu')return;if(S.items.ball<=0){toast('Du hast keine Zahlenbälle mehr. Im Laden gibt es neue.');return}B.purpose='catch';newQ()};
+ACT.potion=()=>{if(B.phase!=='menu')return;const m=myMon(),max=maxHp(m);if(S.items.trank<=0){toast('Du hast keinen Trank mehr.');return}if(m.hp>=max){toast(`${nm(m)} hat schon volle Kraft.`);return}
+  S.items.trank--;const h=Math.min(30,max-m.hp);m.hp+=h;save();B.msg=`${nm(m)} trinkt den Trank und bekommt ${h} Kraft zurück.`;B.phase='anim';sfx('lvl');renderBattle();say(B.msg);later(toMenu,1400)};
+ACT.switch=()=>{if(B.phase!=='menu')return;B.phase='switch';B.forced=false;B.msg='Welches Zahlimon soll kämpfen?';renderBattle()};
+ACT.backMenu=()=>toMenu();
+ACT.swapTo=i=>{B.mi=+i;B.forced=false;B.phase='anim';B.fx='appearMe';B.msg=`Los, ${nm(myMon())}!`;renderBattle();say(B.msg);later(toMenu,1000)};
+ACT.run=()=>{if(B.phase!=='menu'||B.kind!=='wild')return;endBattle('run')};
+ACT.speak=()=>{if(B&&B.q)say(B.q.say)};
+ACT.k=d=>{if(!B||B.phase!=='q'||B.input.length>=4)return;if(B.input==='0')B.input='';B.input+=d;const el=$('#entry');if(el)el.innerHTML=entryHTML();sfx('tap')};
+ACT.del=()=>{if(!B||B.phase!=='q')return;B.input=B.input.slice(0,-1);const el=$('#entry');if(el)el.innerHTML=entryHTML()};
+ACT.submit=()=>{if(!B||B.phase!=='q')return;if(!B.input){toast('Tippe zuerst deine Antwort ein.');return}answer(B.input)};
+ACT.choose=v=>answer(v);
+function answer(v){if(B.phase!=='q')return;const q=B.q;const ok=q.kind==='choice'?v===q.ans:parseInt(v,10)===q.ans;record(q,ok,v);ok?onCorrect():onWrong(v)}
+function onCorrect(){const m=myMon(),f=foe();B.streak++;S.stars++;m.xp+=3;sfx('ok');
+  const praise=P(['Richtig!','Super!','Toll gemacht!','Genau!','Stark!','Bravo!']);
+  if(B.purpose==='catch')return doCatch(praise);
+  const mult=eff(SP[m.id].t,SP[f.id].t),sup=B.streak>=3,d=dmg(m,f,mult*(sup?1.5:1));f.hp=Math.max(0,f.hp-d);
+  B.phase='anim';B.fx='hitFoe';B.msg=(sup?`${praise} ${B.streak} richtig in Folge: Superangriff von ${nm(m)}!`:`${praise} ${nm(m)} greift an!`)+effTxt(mult);
+  renderBattle();say(B.msg);later(()=>sfx('hit'),250);save();
+  later(()=>f.hp<=0?foeFainted():toMenu(),1700)}
+function onWrong(v){B.streak=0;B.given=v;B.phase='wrong';B.msg='Schau dir den Rechenweg an.';sfx('bad');renderBattle();say(`Nicht ganz. Richtig ist ${B.q.ans}. ${B.q.hint||''}`)}
+ACT.goon=()=>{if(B.phase!=='wrong')return;foeAttacks(B.purpose==='catch'?'Der Zahlenball fliegt daneben! ':'')};
+function foeAttacks(pre){const m=myMon(),f=foe(),mult=eff(SP[f.id].t,SP[m.id].t),d=foeDmg(f,m,mult);m.hp=Math.max(0,m.hp-d);save();
+  B.phase='anim';B.fx='hitMe';B.msg=`${pre}${nm(f)} greift an!${effTxt(mult)}`;renderBattle();say(B.msg);later(()=>sfx('hit'),250);
+  later(()=>m.hp<=0?meFainted():toMenu(),1600)}
+function doCatch(praise){S.items.ball--;const f=foe();let ch=.45+.55*(1-f.hp/f.max);if(SP[f.id].rare)ch*=.6;const ok=Math.random()<ch;
+  B.phase='anim';B.fx='ball';B.msg=`${praise} Du wirfst einen Zahlenball …`;renderBattle();say(B.msg);save();
+  later(()=>{if(ok){B.fx='caught';B.msg=`Hurra! ${nm(f)} wurde gefangen!`;sfx('win');const where=addCaught(f);if(where)B.msg+=' Dein Team ist voll, es kommt in die Box.';renderBattle();say(B.msg);later(()=>endBattle('caught'),2000)}
+    else{B.fx='escape';B.msg=`Oh nein! ${nm(f)} ist wieder ausgebrochen. Schwäche es noch etwas mehr!`;renderBattle();say(B.msg);later(toMenu,1900)}},2200)}
+function addCaught(f){const m={id:f.id,lvl:f.lvl,xp:0,uid:S.uid++};m.hp=maxHp(m);S.caught[f.id]=S.seen[f.id]=1;if(S.team.length<6){S.team.push(m);save();return false}S.box.push(m);save();return true}
+function foeFainted(){const f=foe(),m=myMon();m.xp+=f.lvl*5;S.stars+=2;save();B.phase='anim';B.fx='faintFoe';B.msg=`${nm(f)} ist besiegt! ${nm(m)} bekommt ${f.lvl*5} Erfahrung.`;sfx('win');renderBattle();say(B.msg);
+  later(()=>{if(B.fi<B.foes.length-1){B.fi++;const n=foe();S.seen[n.id]=1;save();B.fx='appear';B.msg=`${B.leader.n} schickt ${nm(n)} in den Kampf!`;renderBattle();say(B.msg);later(toMenu,1500)}else endBattle('win')},2000)}
+function meFainted(){const m=myMon();B.phase='anim';B.fx='faintMe';B.msg=`${nm(m)} ist erschöpft!`;renderBattle();say(B.msg);
+  later(()=>{if(firstAlive()>=0){B.phase='switch';B.forced=true;B.msg='Wähle dein nächstes Zahlimon!';renderBattle();say(B.msg)}
+    else{const ri=B.ri;clearTimers();healAll();B=null;save();talk([{who:'Pflegerin Nina',face:'👩‍⚕️',text:'Oh je, deine Zahlimon waren erschöpft. Ich habe sie wieder gesund gepflegt. Versuch es gleich nochmal, {N}!'}],()=>regionScreen(ri))}},1600)}
+function levelUps(m,lines,evos){let up=false;while(m.xp>=need(m.lvl)&&m.lvl<50){m.xp-=need(m.lvl);m.lvl++;if(m.hp>0)m.hp=Math.min(maxHp(m),m.hp+4);up=true;lines.push({face:SP[m.id].e,text:`${nm(m)} erreicht Level ${m.lvl}!`})}
+  const e=SP[m.id].evo;if(up&&e&&m.lvl>=e[1])evos.push({m,to:e[0]})}
+function endBattle(res){clearTimers();const ri=B.ri,lead=B.kind==='leader',L=RG[ri].leader,lines=[],evos=[];
+  if(res==='run')lines.push({face:'🏃',text:'Du bist sicher entkommen.'});
+  if(lead&&res==='win'){lines.push({who:L.n,face:L.e,text:L.lose});
+    if(S.badges===ri){S.badges=ri+1;S.stars+=20;lines.push({face:L.be,text:`{N} erhält den ${L.badge}! Dazu gibt es 20 Sterne.`});
+      if(ri===RG.length-1){S.champ=true;lines.push(...CHAMP)}else lines.push({...PROF,text:`Toll gemacht, {N}! Ein neues Gebiet ist offen: ${RG[ri+1].n}.`})}
+    else{S.stars+=5;lines.push({face:'⭐',text:'Revanche gewonnen! Du bekommst 5 Sterne.'})}}
+  S.team.forEach(m=>levelUps(m,lines,evos));B=null;save();
+  if(lines.length)sfx('lvl');
+  talk(lines,()=>runEvos(evos,()=>lead&&res==='win'?mapScreen():regionScreen(ri)))}
+function runEvos(list,done){if(!list.length)return done();const {m,to}=list.shift(),from=m.id;
+  show(`<div class="evo"><p class="evo-t" id="evoT">Nanu? ${SP[from].n} verändert sich …</p><div class="evo-m" id="evoM">${SP[from].e}</div><button class="btn green" id="evoB" data-act="evoNext" hidden>Weiter</button></div>`);
+  say(`Nanu? ${SP[from].n} verändert sich!`);EVO_NEXT=()=>runEvos(list,done);
+  later(()=>{m.id=to;S.seen[to]=S.caught[to]=1;save();const el=$('#evoM');if(!el)return;el.textContent=SP[to].e;el.classList.add('done');const t=`Glückwunsch! Aus ${SP[from].n} wurde ${SP[to].n}!`;$('#evoT').textContent=t;$('#evoB').hidden=false;sfx('win');say(t)},2700)}
+ACT.evoNext=()=>{clearTimers();const f=EVO_NEXT;EVO_NEXT=null;f&&f()};
+
+/* ---------- Team, Zahlidex, Laden, Zahlencenter ---------- */
+function monRow(m,i,where){const sp=SP[m.id],max=maxHp(m);
+  const btns=where==='team'?[i>0?`<button class="mini" data-act="lead" data-arg="${i}">Nach vorne</button>`:'<span class="pill">kämpft zuerst</span>',m.hp<max&&S.items.trank?`<button class="mini" data-act="potionT" data-arg="${i}">🧪 Trank</button>`:'',S.team.length>1?`<button class="mini" data-act="toBox" data-arg="${i}">In die Box</button>`:'']
+    :[S.team.length<6?`<button class="mini" data-act="fromBox" data-arg="${i}">Ins Team</button>`:'<span class="fine">Das Team ist voll.</span>'];
+  const e=sp.evo?`Entwickelt sich mit Level ${sp.evo[1]}`:'';
+  return `<div class="tm card"><div class="tm-e" style="--c:${TYPES[sp.t].c}">${sp.e}</div><div class="tm-i"><div class="pn"><b>${sp.n}</b><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar('t'+m.uid,m.hp,max)}<div class="pk">Kraft ${m.hp}/${max} · Erfahrung ${m.xp}/${need(m.lvl)}${e?'<br>'+e:''}</div><div class="tm-b">${btns.join('')}</div></div></div>`}
+function teamScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Dein Team</h2><p class="fine">Das oberste Zahlimon kämpft zuerst. Nur wer kämpft, sammelt Erfahrung. Tränke: ${S.items.trank}</p>
+  <div class="list">${S.team.map((m,i)=>monRow(m,i,'team')).join('')}</div>${S.box.length?`<h3 class="h3">Zahlimon-Box (${S.box.length})</h3><div class="list">${S.box.map((m,i)=>monRow(m,i,'box')).join('')}</div>`:''}${nav()}`)}
+ACT.team=teamScreen;
+ACT.lead=i=>{const m=S.team.splice(+i,1)[0];S.team.unshift(m);save();teamScreen()};
+ACT.potionT=i=>{const m=S.team[+i];if(!S.items.trank)return;S.items.trank--;m.hp=Math.min(maxHp(m),m.hp+30);save();sfx('lvl');toast(`${nm(m)} fühlt sich besser!`);teamScreen()};
+ACT.toBox=i=>{if(S.team.length<2)return;S.box.push(S.team.splice(+i,1)[0]);save();teamScreen()};
+ACT.fromBox=i=>{if(S.team.length>=6)return;S.team.push(S.box.splice(+i,1)[0]);save();teamScreen()};
+function dexScreen(){B=null;clearTimers();const ids=Object.keys(SP),c=ids.filter(i=>S.caught[i]).length;
+  show(`${hud()}<h2 class="h2">Zahlidex</h2><p class="fine">Gefangen: <b>${c}</b> von ${ids.length}. Graue Zahlimon hast du schon gesehen, aber noch nicht gefangen.</p>
+  <div class="dex">${ids.map((id,i)=>{const sp=SP[id],st=S.caught[id]?'c':S.seen[id]?'s':'u';return `<div class="dx ${st}"><span class="no">Nr. ${pad2(i+1)}</span><span class="de">${st==='u'?'?':sp.e}</span><span class="dn">${st==='u'?'???':sp.n}</span>${st!=='u'?chip(sp.t):''}</div>`}).join('')}</div>${nav()}`)}
+ACT.dex=dexScreen;
+function shopScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Laden</h2><p class="fine">Für jede richtige Antwort bekommst du einen Stern.</p>
+  <div class="list">${SHOP.map(([k,n,d,p])=>`<div class="card shop"><div class="shop-ic">${k==='ball'?'<span class="zball"></span>':'🧪'}</div><div class="shop-t"><b>${n}</b><small>${d}</small><small>Im Rucksack: ${S.items[k]}</small></div><button class="btn gold sm" data-act="buy" data-arg="${k}" ${S.stars<p?'disabled':''}>⭐ ${p}</button></div>`).join('')}</div>${nav()}`)}
+ACT.shop=shopScreen;
+ACT.buy=k=>{const it=SHOP.find(s=>s[0]===k);if(S.stars<it[3])return;S.stars-=it[3];S.items[k]++;save();sfx('ok');toast(`${it[1]} gekauft!`);shopScreen()};
+function centerScreen(){B=null;clearTimers();show(`${hud()}<section class="card pad center"><div class="nurse">👩‍⚕️</div><h2 class="h2">Zahlencenter</h2><p>Pflegerin Nina macht deine Zahlimon wieder gesund. Das kostet nichts.</p><button class="btn green" data-act="heal">❤️ Alle gesund pflegen</button></section>
+  <div class="list">${S.team.map(m=>`<div class="tm card"><div class="tm-e" style="--c:${TYPES[SP[m.id].t].c}">${SP[m.id].e}</div><div class="tm-i"><div class="pn"><b>${nm(m)}</b><span class="lv">Lv ${m.lvl}</span></div>${bar('c'+m.uid,m.hp,maxHp(m))}<div class="pk">Kraft ${m.hp}/${maxHp(m)}</div></div></div>`).join('')}</div>${nav()}`)}
+ACT.center=centerScreen;
+ACT.heal=()=>{healAll();save();sfx('win');const t='Deine Zahlimon sind wieder fit!';say(t);toast(t);centerScreen()};
+
+/* ---------- Eltern ---------- */
+const pct=(a,b)=>b?Math.round(a/b*100)+' %':'–';
+function voiceInfo(){if(!('speechSynthesis' in window))return 'Dieser Browser kann nicht vorlesen.';return SPK.voice?`Stimme: ${esc(SPK.voice.name)} (${esc(SPK.voice.lang)})`:'Keine deutsche Stimme gefunden. In den Einstellungen des Geräts eine deutsche Stimme installieren.'}
+function exportCode(){try{return btoa(unescape(encodeURIComponent(JSON.stringify(S))))}catch(e){return ''}}
+function parentsScreen(confirmReset){B=null;clearTimers();const d=S.days[dayKey()]||[0,0];let tr=0,tf=0;Object.values(S.stats).forEach(s=>{tr+=s.r;tf+=s.f});
+  show(`<h2 class="h2">Bereich für Eltern</h2>
+  <section class="card pad"><h3 class="h3">Überblick</h3><div class="kpis"><div><b>${d[0]+d[1]}</b><span>Aufgaben heute</span></div><div><b>${pct(d[0],d[0]+d[1])}</b><span>heute richtig</span></div><div><b>${tr+tf}</b><span>Aufgaben total</span></div></div>
+  <p class="fine">Trainer: ${esc(S.name)} · Orden ${S.badges} von 7 · Zahlidex ${Object.keys(S.caught).length} von ${Object.keys(SP).length}</p></section>
+  <section class="card pad"><h3 class="h3">Themen und Stufen</h3><div class="tblwrap"><table class="tbl"><thead><tr><th>Thema</th><th>LP21</th><th>Stufe</th><th>✓</th><th>✗</th><th>Quote</th></tr></thead><tbody>
+  ${Object.keys(TOPICS).map(t=>{const s=stat(t),fx=S.settings.fix[t]||'';return `<tr><td>${TOPICS[t].n}</td><td>${TOPICS[t].lp}</td><td><select id="fix-${t}" class="fixsel" data-topic="${t}" aria-label="Stufe ${TOPICS[t].n}"><option value="" ${!fx?'selected':''}>Auto (${s.s})</option>${[1,2,3].map(v=>`<option value="${v}" ${String(fx)===String(v)?'selected':''}>fix ${v}</option>`).join('')}</select></td><td>${s.r}</td><td>${s.f}</td><td>${pct(s.r,s.r+s.f)}</td></tr>`}).join('')}</tbody></table></div>
+  <p class="fine">Stufe 1: Zahlenraum bis 100, einfache Reihen. Stufe 2: Übergänge, Hunderter, alle Grundreihen. Stufe 3: Zahlenraum bis 1000, 7er/8er/9er-Reihe, Textaufgaben mit zwei Schritten. «Auto» passt die Stufe laufend an: 5 richtige Antworten in Folge heben sie an, 3 falsche in Folge senken sie.</p></section>
+  <section class="card pad"><h3 class="h3">Zuletzt falsch gelöst</h3>${S.log.length?`<ul class="log">${S.log.slice(0,15).map(l=>`<li><span>${esc(l.t)}</span><span>Antwort: <b>${esc(l.g)}</b> · richtig: <b>${esc(String(l.a))}</b></span></li>`).join('')}</ul>`:'<p class="fine">Noch keine Fehler.</p>'}
+  <p class="fine">Falsch gelöste Aufgaben kommen später noch einmal, bis sie sitzen.</p></section>
+  <section class="card pad"><h3 class="h3">Einstellungen</h3>
+  <label class="row" for="optSpeech"><span>Vorlesen (Hochdeutsch)</span><input type="checkbox" id="optSpeech" ${S.settings.speech?'checked':''}></label>
+  <label class="row" for="optRate"><span>Sprechtempo</span><input type="range" id="optRate" min="0.7" max="1.2" step="0.05" value="${S.settings.rate}"></label>
+  <label class="row" for="optSound"><span>Töne</span><input type="checkbox" id="optSound" ${S.settings.sound?'checked':''}></label>
+  <button class="btn ghost" data-act="testVoice">🔊 Stimme testen</button><p class="fine">${voiceInfo()}</p></section>
+  <section class="card pad"><h3 class="h3">Spielstand übertragen</h3><p class="fine">Der Spielstand ist nur in diesem Browser gespeichert. Für ein anderes Gerät: Code kopieren und dort hier einfügen.</p>
+  <textarea id="exportCode" class="inp code" readonly rows="3">${exportCode()}</textarea><button class="btn ghost" data-act="copyCode">Code kopieren</button>
+  <label for="importCode" class="lbl" style="display:block;margin-top:14px">Code einfügen</label><textarea id="importCode" class="inp code" rows="3"></textarea><button class="btn ghost" data-act="importCode">Spielstand laden</button></section>
+  <section class="card pad"><h3 class="h3">Neu beginnen</h3>${confirmReset?`<p class="warn">Wirklich alles löschen? Das lässt sich nicht rückgängig machen.</p><div class="row2"><button class="btn red" data-act="reset2">Ja, löschen</button><button class="btn ghost" data-act="parents">Abbrechen</button></div>`:'<button class="btn ghost" data-act="reset1">Spielstand löschen</button>'}</section>
+  <button class="btn" data-act="map">⬅ Zurück zum Spiel</button>`);
+  $('#optSpeech').addEventListener('change',e=>{S.settings.speech=e.target.checked;save();if(!e.target.checked)stopSpeech()});
+  $('#optRate').addEventListener('change',e=>{S.settings.rate=+e.target.value;save();say('So schnell spreche ich jetzt.')});
+  $('#optSound').addEventListener('change',e=>{S.settings.sound=e.target.checked;save()});
+  app.querySelectorAll('.fixsel').forEach(sel=>sel.addEventListener('change',e=>{const t=e.target.dataset.topic,v=e.target.value;if(v){S.settings.fix[t]=+v;stat(t).s=+v}else delete S.settings.fix[t];save()}))}
+ACT.parents=()=>parentsScreen(false);
+ACT.testVoice=()=>say(`Hallo ${S.name}! Wie viel ist 7 · 8?`);
+ACT.copyCode=()=>{const ta=$('#exportCode');const fb=()=>{ta.focus();ta.select();toast('Code markiert. Jetzt kopieren.')};try{navigator.clipboard.writeText(ta.value).then(()=>toast('Code kopiert.'),fb)}catch(e){fb()}};
+ACT.importCode=()=>{const v=$('#importCode').value.trim();try{const o=JSON.parse(decodeURIComponent(escape(atob(v))));if(!o||!o.name||!Array.isArray(o.team)||!o.team.length)throw 0;S=o;migrate();save();toast(`Spielstand von ${S.name} geladen.`);mapScreen()}catch(e){toast('Dieser Code funktioniert nicht. Bitte vollständig einfügen.')}};
+ACT.reset1=()=>parentsScreen(true);
+ACT.reset2=()=>{try{localStorage.removeItem(KEY)}catch(e){}titleScreen()};
+
+window.__zahlimon={GEN,MK,get S(){return S},set S(v){S=v},get B(){return B},fresh};
+titleScreen();
+})();
+</script>
+</body>
+</html>
