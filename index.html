@@ -663,6 +663,7 @@ const ballsTotal=()=>BALLS.reduce((a,b)=>a+(S.items[b.k]||0),0);
 const SHOP=[['ball','Zahlenball','Damit fängst du wilde Zahlimon.',5],['b10','Zehnerball','Fängt besser als der Zahlenball.',12],['b100','Hunderterball','Fängt sehr gut.',25],['trank','Trank','Gibt einem Zahlimon 30 Kraft zurück.',8],['bonbon','Level-Bonbon','Ein Zahlimon steigt sofort ein Level auf.',30]];
 
 /* ---------- Spielstand ---------- */
+const APP_VERSION='2026-10-12d';
 const KEY='zahlimon_v1';
 const DEFSET={speechMode:'off',speech:false,sound:true,rate:1,fix:{},goalMin:30,goalDays:[1,1,1,1,1,1,1],conseq:'back',holiday:false};
 let S=null,B=null,EVO_NEXT=null;
@@ -693,8 +694,8 @@ function dayKey(){const d=new Date();return `${d.getFullYear()}-${pad2(d.getMont
 
 /* ---------- Sprache und Töne ---------- */
 const SPK={voice:null};
-function pickVoice(){if(!('speechSynthesis' in window))return;const vs=speechSynthesis.getVoices();SPK.voice=vs.find(v=>v.lang==='de-DE'&&/google|anna|helena|katja|petra|marlene|vicki|markus/i.test(v.name))||vs.find(v=>v.lang==='de-DE')||vs.find(v=>/^de/i.test(v.lang))||null}
-if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+/* Die App spricht nicht: keine Sprachausgabe. Falls ein alter Stand noch spricht, wird das sofort gestoppt. */
+try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}
 function sayify(t){return String(t)
   .replace(/\p{Extended_Pictographic}\uFE0F?/gu,'')
   .replace(/(\d+)\s*H\b/g,'$1 Hunderter').replace(/(\d+)\s*Z\b/g,'$1 Zehner').replace(/(\d+)\s*E\b/g,'$1 Einer')
@@ -702,12 +703,10 @@ function sayify(t){return String(t)
   .replace(/(^|\s)\?/g,'$1 wie viel ').replace(/Fr\./g,'Franken').replace(/Rp\./g,'Rappen').replace(/\bcm\b/g,'Zentimeter').replace(/(\d)\s*m\b/g,'$1 Meter')
   .replace(/□/g,' wie viel ').replace(/[◯→«»]/g,' ').replace(/\s+/g,' ').trim()}
 let sayT;
-const speechMode=()=>'off'; // Die App spricht nicht.
-function sayQ(q){const md=speechMode();if(!q||md==='off')return;if(md==='all')return say(q.say,true);if(q.kind==='choice')return;
-  const bare=q.text.replace(/\b(H|Z|E|Fr|Rp|cm|m)\b\.?/g,'');if(/[a-zäöüA-ZÄÖÜ]{2,}/.test(bare))return;say(q.text,true)}
-function say(t,isQ){if(speechMode()==='off'||(speechMode()==='numbers'&&!isQ))return;const st=S?S.settings:DEFSET;if(!('speechSynthesis' in window)||!t)return;
-  try{speechSynthesis.cancel();clearTimeout(sayT);sayT=setTimeout(()=>{const u=new SpeechSynthesisUtterance(sayify(t));u.lang='de-DE';if(SPK.voice)u.voice=SPK.voice;u.rate=st.rate||1;u.pitch=1.05;speechSynthesis.speak(u)},40)}catch(e){}}
-function stopSpeech(){try{clearTimeout(sayT);speechSynthesis.cancel()}catch(e){}}
+const speechMode=()=>'off';
+function sayQ(){}
+function say(){}
+function stopSpeech(){}
 let AC=null,unlocked=false;
 function unlockAudio(){if(unlocked)return;unlocked=true;try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
 function sfx(k){const st=S?S.settings:DEFSET;if(!st.sound||!AC)return;try{if(AC.state==='suspended')AC.resume();
@@ -953,7 +952,7 @@ ACT.takeStarter=id=>{S.team=[mkMon(id,5)];S.starterUid=S.team[0].uid;S.seen[id]=
 function mapScreen(){B=null;clearTimers();
   show(`${hud()}${STORE_OK?'':'<p class="warn center">⚠️ Dieser Browser speichert den Spielstand nicht (privater Modus?). Bitte im normalen Modus öffnen.</p>'}${todayCard(false)}<h2 class="h2">Karte von Zahlonien</h2><p class="fine">Tippe auf ein Gebiet. Ein neues Gebiet öffnet sich, wenn du einen Orden gewinnst.</p>
   <div class="map">${RG.map((r,i)=>{const open=i<=S.badges,done=i<S.badges;return `<button class="node ${open?'':'locked'} ${i===S.badges?'now':''}" style="--g1:${r.c1};--g2:${r.c2}" data-act="${open?'region':'locked'}" data-arg="${i}">${i===Math.min(S.badges,RG.length-1)?'<span class="me-av" aria-hidden="true">🧒</span>':''}<span class="ic">${open?r.icon:'🔒'}</span><span class="tx"><b>${r.n}</b><small>${open?r.learn:'Noch verschlossen'}</small></span><span class="st">${done?r.leader.be:''}</span></button>`}).join('')}</div>
-  <button class="linkish" data-act="parents">Bereich für Eltern</button>${nav()}`)}
+  <button class="linkish" data-act="parents">Bereich für Eltern</button><p class="fine center">Version ${APP_VERSION}</p>${nav()}`)}
 ACT.map=mapScreen;
 ACT.locked=i=>{const p=RG[i-1];const t=`Gewinne zuerst den Orden bei ${p.leader.n} in der ${p.n}.`;toast(t);say(t)};
 ACT.region=i=>regionScreen(+i);
@@ -1126,7 +1125,7 @@ ACT.heal=()=>{healAll();save();sfx('win');const t='Deine Zahlimon sind wieder fi
 
 /* ---------- Eltern ---------- */
 const pct=(a,b)=>b?Math.round(a/b*100)+' %':'–';
-function voiceInfo(){if(!('speechSynthesis' in window))return 'Dieser Browser kann nicht vorlesen.';return SPK.voice?`Stimme: ${esc(SPK.voice.name)} (${esc(SPK.voice.lang)})`:'Keine deutsche Stimme gefunden. In den Einstellungen des Geräts eine deutsche Stimme installieren.'}
+function voiceInfo(){return '';return SPK.voice?`Stimme: ${esc(SPK.voice.name)} (${esc(SPK.voice.lang)})`:'Keine deutsche Stimme gefunden. In den Einstellungen des Geräts eine deutsche Stimme installieren.'}
 function exportCode(){try{return btoa(unescape(encodeURIComponent(JSON.stringify(S))))}catch(e){return ''}}
 function parentsScreen(confirmReset){B=null;clearTimers();const d=S.days[dayKey()]||[0,0];let tr=0,tf=0;Object.values(S.stats).forEach(s=>{tr+=s.r;tf+=s.f});
   show(`<h2 class="h2">Bereich für Eltern</h2>
@@ -1279,7 +1278,10 @@ window.__zahlimon={GEN,MK,aidHTML,addTime,load,dayCheck,onGoal,startDay,get S(){
 (async function boot(){try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
   try{localStorage.setItem('zahlimon_test','1');localStorage.removeItem('zahlimon_test')}catch(e){STORE_OK=false}
   try{const j=await idbGet();if(j)IDBSAVE=JSON.parse(j)}catch(e){}
-  const sv=load();if(sv){S=sv;migrate();dayCheck();save();startDay()}else titleScreen()})();
+  const sv=load();if(sv){S=sv;migrate();dayCheck();save();startDay()}else titleScreen();
+  /* Neue Version auf GitHub? Dann einmal frisch laden (umgeht alte Zwischenspeicher, v. a. bei Apps auf dem Home-Bildschirm). */
+  if(/^https?:/.test(location.protocol)&&!/claude\.ai|claudeusercontent/.test(location.host))setTimeout(()=>{fetch(location.pathname+'?check='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(t=>{const m=t.match(/APP_VERSION='([^']+)'/);
+    if(m&&m[1]!==APP_VERSION&&sessionStorage.getItem('zahlimon_upd')!==m[1]){sessionStorage.setItem('zahlimon_upd',m[1]);save();location.replace(location.pathname+'?v='+encodeURIComponent(m[1]))}}).catch(()=>{})},1500)})();
 })();
 </script>
 </body>
