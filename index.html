@@ -419,6 +419,30 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .ballpick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ballpick .btn{font-size:1rem;min-height:52px;padding:8px}
 .ballpick .btn:last-child{grid-column:1/-1}
+.moves{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.move{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:66px;border:0;border-radius:14px;background:var(--c);color:#fff;box-shadow:0 4px 0 rgba(20,28,48,.35);padding:6px 4px;font-family:var(--f-disp);text-shadow:1px 1px 0 rgba(0,0,0,.25);transition:transform .08s}
+.move b{font-weight:400;font-size:.92rem;line-height:1.1;text-align:center;hyphens:auto;-webkit-hyphens:auto}
+.move small{font-family:var(--f-body);font-size:.72rem;font-weight:700;text-shadow:none}
+.move:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 rgba(20,28,48,.35)}
+.move:disabled{opacity:.4}
+.blitzw{display:flex;align-items:center;gap:6px;margin-top:6px}
+.blitzl{font-size:.72rem;font-weight:700;color:var(--gold-d);white-space:nowrap}
+.blitz{flex:1;height:8px;background:var(--soft);border-radius:4px;overflow:hidden;position:relative}
+.blitz i{position:absolute;inset:0;background:linear-gradient(90deg,#f08a3c,#ffd35a);transform-origin:left;animation:blitz linear forwards}
+@keyframes blitz{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.combo{position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:3;background:var(--ink);color:#ffd35a;font-family:var(--f-disp);font-size:.95rem;padding:2px 12px;border-radius:99px;white-space:nowrap;animation:comboIn .4s ease-out}
+@keyframes comboIn{from{transform:translateY(-50%) scale(1.6);opacity:0}}
+.chg{display:flex;gap:3px;align-items:center;font-size:.7rem;font-weight:700;margin-top:4px;color:var(--ink2)}
+.chg i{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:var(--card)}
+.chg i.on{background:var(--red);box-shadow:0 0 6px var(--red)}
+.plate.danger{border-color:var(--red);animation:danger 1s ease-in-out infinite}
+@keyframes danger{50%{box-shadow:0 0 0 4px rgba(217,68,58,.45)}}
+.plate.angry{border-color:var(--red)}
+.mon.charge{animation:charge .55s ease-in-out 2}
+@keyframes charge{50%{transform:scale(1.2);filter:drop-shadow(0 0 14px #ff3b2f)}}
+.mon.angry .e{filter:drop-shadow(0 0 8px #ff3b2f)}
+.mon.me.dodge{animation:dodge .6s ease}
+@keyframes dodge{30%{transform:translateX(-46px) rotate(-14deg)}}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}.arc{stroke-dashoffset:0}.fi,#cel p{opacity:1}.scene{display:none}}
 </style>
 </head>
@@ -623,7 +647,7 @@ const INTRO=[
   {...PROF,text:'Aber zuerst brauchst du einen Partner. Wähle dein erstes Zahlimon!'}
 ];
 const TUT=[
-  {...PROF,text:'Dein erster Kampf! Tippe auf «Angreifen» und löse die Aufgabe.'},
+  {...PROF,text:'Dein erster Kampf! Wähle eine Attacke und löse die Aufgabe.'},
   {...PROF,text:'Ist das wilde Zahlimon schon schwach, kannst du es mit einem Zahlenball fangen. Auch dafür musst du richtig rechnen.'}
 ];
 const CHAMP=[
@@ -855,7 +879,7 @@ const TX={
 };
 function nextQ(topic){const t=topic==='mix'?P(['add','sub','zahl','mal','div','markt']):topic;
   const rq=S.retry[t];if(rq&&rq.length&&Math.random()<.35)return {...rq.shift(),again:true};
-  const q=GEN[t](getStufe(t));q.topic=t;q.kind=q.kind||'num';q.say=q.say||q.text;return q}
+  const q=GEN[t](clamp(getStufe(t)+(arguments[1]||0),1,3));q.topic=t;q.kind=q.kind||'num';q.say=q.say||q.text;return q}
 function record(q,ok,given){const st=stat(q.topic),fixed=!!S.settings.fix[q.topic];const dk=dayKey();S.days[dk]=S.days[dk]||[0,0];
   if(ok){st.r++;st.run++;st.miss=0;S.days[dk][0]++;
     if(st.run>=5&&st.s<3&&!fixed){st.s++;st.run=0;later(()=>toast('Du wirst immer besser! Die Aufgaben werden etwas schwieriger.'),900)}}
@@ -960,20 +984,20 @@ ACT.arena=i=>{i=+i;const L=RG[i].leader;
     wipe('vs',{e:SP[me.id].e,n:S.name},{e:L.e,n:L.n},()=>{renderBattle();say(B.msg);later(toMenu,1500)})})};
 
 function plate(m,isFoe){const sp=SP[m.id],max=isFoe?m.max:maxHp(m);
-  return `<div class="plate"><div class="pn"><span>${m.sh?'✨ ':''}${sp.n}</span><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar(isFoe?'f'+B.fi:'m'+m.uid,m.hp,max)}
+  return `<div class="plate${!isFoe&&m.hp>0&&m.hp/max<.25?' danger':''}${isFoe&&B.angry?' angry':''}"><div class="pn"><span>${m.sh?'✨ ':''}${sp.n}${isFoe&&B.angry?' 😠':''}</span><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar(isFoe?'f'+B.fi:'m'+m.uid,m.hp,max)}${isFoe?`<div class="chg" title="Angriff lädt">⚡ ${Array.from({length:chargeMax()},(_,i)=>`<i class="${i<(B.charge||0)?'on':''}"></i>`).join('')}</div>`:''}
   ${isFoe?(B.kind==='leader'?`<span class="own">${B.leader.e} ${esc(B.leader.n)} · ${B.fi+1}/${B.foes.length}</span>`:''):`<div class="pk">Kraft ${m.hp}/${max}</div><div class="xp"><i style="width:${Math.min(100,Math.round(m.xp/need(m.lvl)*100))}%"></i></div>`}</div>`}
 const monHTML=(m,side,cls,inner)=>`<div class="mon ${side} ${cls}" data-t="${SP[m.id].t}">${inner||`<span class="b"><span class="e${m.sh?' shiny':''}">${SP[m.id].e}</span></span>`}</div>`;
 function battleFrame(){const r=RG[B.ri];SCR='battle';show(`<div class="bt" id="bt" style="--g1:${r.c1};--g2:${r.c2}">${scene(r.deco)}<div id="btIn"></div></div><div class="bmsg"><span id="bmsgT" aria-live="polite"></span><span class="bpills"><span class="bstar" aria-label="Rechenminuten heute">🧮 <b data-tmin>${minOf(dayKey())}</b>/${goalMin()}</span><span class="bstar">⭐ <b id="bstars"></b></span></span></div><div class="bctl" id="bctl"></div>`)}
 function renderBattle(){if(!$('#btIn'))battleFrame();const f=foe(),m=myMon(),fx=B.fx||'';
   let foeInner='';const bc=ballOf(B.ballK).c;if(fx==='ball')foeInner=`<span class="zball throw" style="--bc:${bc}"></span>`;if(fx==='caught')foeInner=`<span class="zball done" style="--bc:${bc}"></span>`;
-  const foeCls={hitFoe:'hit',appear:'appear',faintFoe:'faint',escape:'appear',hitMe:'lunge'}[fx]||'';
-  const meCls={hitMe:'hit',faintMe:'faint',appearMe:'appear',hitFoe:'lunge'}[fx]||'';
+  const foeCls=({hitFoe:'hit',appear:'appear',faintFoe:'faint',escape:'appear',hitMe:'lunge',charge:'charge'}[fx]||'')+(B.angry?' angry':'');
+  const meCls={hitMe:'hit',faintMe:'faint',appearMe:'appear',hitFoe:'lunge',dodge:'dodge'}[fx]||'';
   $('#bt').classList.toggle('compact',['q','wrong','switch'].includes(B.phase));
-  $('#btIn').innerHTML=`<div class="bt-row foe-row">${plate(f,true)}${monHTML(f,'foe',foeCls,foeInner)}</div><div class="bt-row me-row">${monHTML(m,'me',meCls)}${plate(m,false)}</div>`;
+  $('#btIn').innerHTML=`${B.streak>=2?`<div class="combo">🔥 ${B.streak} richtig in Folge${B.streak>=5?' · Mega!':B.streak>=3?' · Super!':''}</div>`:''}<div class="bt-row foe-row">${plate(f,true)}${monHTML(f,'foe',foeCls,foeInner)}</div><div class="bt-row me-row">${monHTML(m,'me',meCls)}${plate(m,false)}</div>`;
   $('#bmsgT').textContent=B.msg||'';$('#bstars').textContent=S.stars;$('#bctl').innerHTML=ctl();animBars();B.fx=null}
 function ctl(){
   switch(B.phase){
-    case 'menu':return `<div class="menu"><button class="btn green big" data-act="atk">⚔️ Angreifen</button><div class="menu2">
+    case 'menu':return `<div class="menu">${movesHTML()}<div class="menu2">
       <button class="btn ghost" data-act="ball" ${B.kind!=='wild'?'disabled':''}><span class="zball"></span> Fangen (${ballsTotal()})</button>
       <button class="btn ghost" data-act="potion">🧪 Trank (${S.items.trank})</button>
       <button class="btn ghost" data-act="switch" ${S.team.length<2?'disabled':''}>🔄 Wechseln</button>
@@ -985,15 +1009,27 @@ function ctl(){
       ${B.forced?'':'<button class="btn ghost" data-act="backMenu">Zurück</button>'}</div>`;
     default:return '<div class="wait"></div>'}}
 function qCard(){const q=B.q,long=q.text.length>22;
-  const lab=B.purpose==='catch'?'Rechne richtig, dann wirfst du den Ball!':'Rechne richtig, dann greifst du an!';
+  const lab=B.purpose==='catch'?'Rechne richtig, dann wirfst du den Ball!':B.purpose==='def'?'🛡️ Rechne richtig, dann weichst du aus!':`${MOVES[SP[myMon().id].t][B.tier||0]}: Rechne richtig, dann greifst du an!`;
   return `<div class="qc card"><div class="qhead"><span class="qlab">${lab}${q.again?' · Nochmals üben':''}</span><span class="qbtns">${q.aid&&!B.tip?'<button class="tipb" data-act="tip">💡 Tipp</button>':''}${speechMode()!=='off'&&!/[a-zäöüA-ZÄÖÜ]{2,}/.test(q.text.replace(/\b(H|Z|E|Fr|Rp|cm|m)\b\.?/g,''))||speechMode()==='all'?'<button class="spk" data-act="speak" aria-label="Aufgabe vorlesen">🔊</button>':''}</span></div>
-  ${q.vis?`<div class="qvis">${q.vis}</div>`:''}${B.tip?aidHTML(q.aid,false):''}<p class="qt ${long?'long':''}">${esc(q.text)}</p>
+  ${q.vis?`<div class="qvis">${q.vis}</div>`:''}${B.tip?aidHTML(q.aid,false):`<div class="blitzw"><span class="blitzl">⚡ Blitz</span><div class="blitz"><i style="animation-duration:${B.blitzT}s"></i></div></div>`}<p class="qt ${long?'long':''}">${esc(q.text)}</p>
   ${q.kind==='choice'?`<div class="ch ${q.choices.length===3?'c3':''}">${q.choices.map(c=>`<button class="chb" data-act="choose" data-arg="${esc(c)}">${esc(c)}</button>`).join('')}</div>`
   :`<div class="entry" id="entry" aria-live="polite">${entryHTML()}</div><div class="kp">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-act="k" data-arg="${n}">${n}</button>`).join('')}<button data-act="del" aria-label="Löschen">⌫</button><button data-act="k" data-arg="0">0</button><button class="ok" data-act="submit">OK</button></div>`}</div>`}
 function entryHTML(){return B.input?B.input.split('').map(d=>`<span>${d}</span>`).join(''):'<span class="cur"></span>'}
-function toMenu(){if(!B)return;B.phase='menu';B.msg=`Was soll ${nm(myMon())} tun?`;renderBattle()}
-function newQ(){B.q=nextQ(RG[B.ri].topic);B.input='';B.tip=false;B.qT=Date.now();B.phase='q';B.msg=B.purpose==='catch'?`Dein ${ballOf(B.ballK).n} ist bereit!`:`${nm(myMon())} wartet auf deine Antwort …`;renderBattle();sayQ(B.q)}
-ACT.atk=()=>{if(B.phase!=='menu')return;B.purpose='atk';newQ()};
+function toMenu(){if(!B)return;if(!S.flags.tutMoves){S.flags.tutMoves=1;save();talk([{...PROF,text:'Neu im Kampf: Jedes Zahlimon hat drei Attacken. ⭐ leicht ist eine leichte Rechnung, ⭐⭐⭐ schwer ist eine schwierige Rechnung, aber sehr stark.'},{...PROF,text:'Antworte schnell, solange der gelbe Blitz-Balken läuft: Dann gibt es einen Blitz-Bonus ⚡.'},{...PROF,text:'Aber Achtung: Der Gegner lädt seinen Angriff auf ⚡⚡⚡. Wenn er angreift, kannst du mit einer richtigen Rechnung ausweichen!'}],toMenu);return}B.phase='menu';B.msg=`Was soll ${nm(myMon())} tun?`;renderBattle()}
+function newQ(){B.q=nextQ(RG[B.ri].topic,B.purpose==='def'?-1:B.purpose==='atk'?TIERS[B.tier||0].d:0);B.input='';B.tip=false;B.qT=Date.now();B.blitzT=B.q.text.length>30||B.q.vis?20:10;B.phase='q';B.msg=B.purpose==='catch'?`Dein ${ballOf(B.ballK).n} ist bereit!`:B.purpose==='def'?`${nm(foe())} greift gleich an. Wehre ab!`:`${nm(myMon())} bereitet ${MOVES[SP[myMon().id].t][B.tier||0]} vor …`;renderBattle();sayQ(B.q)}
+ACT.atk=i=>{if(B.phase!=='menu')return;i=+(i||0);const m=myMon();if(i===2){if(!apLeft(m))return;B.ap[m.uid]=apLeft(m)-1}B.tier=i;B.purpose='atk';newQ()};
+const MOVES={feuer:['Glut','Flammenwurf','Feuersturm'],wasser:['Blubber','Wasserstrahl','Flutwelle'],pflanze:['Rankenhieb','Blätterwirbel','Sonnenstrahl'],elektro:['Funke','Donnerschlag','Blitzgewitter'],stein:['Steinwurf','Felslawine','Erdbeben'],luft:['Windstoss','Wirbelwind','Orkan'],geist:['Spuk','Schattenstoss','Geisterwelle'],magie:['Glitzer','Sternschnuppe','Regenbogen'],drache:['Drachenklaue','Drachenatem','Drachenwut'],normal:['Rempler','Doppelschlag','Hyperstoss']};
+const TIERS=[{n:'leicht',p:.75,d:-1,ic:'⭐'},{n:'mittel',p:1.2,d:0,ic:'⭐⭐'},{n:'schwer',p:1.8,d:1,ic:'⭐⭐⭐'}];
+const apLeft=m=>{B.ap=B.ap||{};return B.ap[m.uid]==null?3:B.ap[m.uid]};
+const chargeMax=()=>B.angry?2:3;
+function movesHTML(){const m=myMon(),t=SP[m.id].t,mv=MOVES[t],ap=apLeft(m);
+  return `<div class="moves">${TIERS.map((x,i)=>`<button class="move" data-act="atk" data-arg="${i}" style="--c:${TYPES[t].c}" ${i===2&&!ap?'disabled':''}><b>${mv[i]}</b><small>${x.ic} ${x.n}${i===2?` · ${ap}/3`:''}</small></button>`).join('')}</div>`}
+function checkAngry(){const f=foe();if(B.angry||f.hp<=0||f.hp/f.max>=.35)return;if((B.kind==='leader'&&B.fi===B.foes.length-1)||f.id==='zahlodrak'){B.angry=true;sfx('bad');toast(`${nm(f)} wird wütend! 😠 Es greift jetzt öfter an.`)}}
+function startDefense(){B.charge=0;B.purpose='def';B.phase='anim';B.fx='charge';B.msg=`${nm(foe())} holt zum Angriff aus! Wehre ab!`;renderBattle();sfx('bad');later(()=>{if(B)newQ()},1300)}
+function onDefend(praise,fast){const m=myMon(),f=foe();let d=0;if(fast){d=Math.max(2,dmg(m,f,.5));f.hp=Math.max(0,f.hp-d)}
+  B.phase='anim';B.fx='dodge';B.msg=`${praise} ${nm(m)} weicht aus!${fast?` ⚡ Blitz-Konter: ${nm(f)} verliert ${d} Kraft.`:''}`;renderBattle();stamp('Ausgewichen!');
+  const me=$('.mon.me');if(me){const c=ctr(me);floatText('Ausgewichen!',c.x,c.y-40,'heal')}if(fast)attackFx(true,SP[m.id].t,d,false);save();
+  later(()=>f.hp<=0?foeFainted():toMenu(),1900)}
 ACT.ball=()=>{if(B.phase!=='menu')return;if(!ballsTotal()){toast('Du hast keine Bälle mehr. Im Laden gibt es neue.');return}B.phase='pickball';B.msg='Welchen Ball willst du werfen?';renderBattle()};
 ACT.useBall=k=>{if(!B||B.phase!=='pickball'||!S.items[k])return;B.ballK=k;B.purpose='catch';newQ()};
 ACT.potion=()=>{if(B.phase!=='menu')return;const m=myMon(),max=maxHp(m);if(S.items.trank<=0){toast('Du hast keinen Trank mehr.');return}if(m.hp>=max){toast(`${nm(m)} hat schon volle Kraft.`);return}
@@ -1010,19 +1046,23 @@ ACT.submit=()=>{if(!B||B.phase!=='q')return;if(!B.input){toast('Tippe zuerst dei
 ACT.choose=v=>answer(v);
 function answer(v){if(B.phase!=='q')return;const q=B.q;addTime(Math.min(60,(Date.now()-(B.qT||Date.now()))/1000));const ok=q.kind==='choice'?v===q.ans:parseInt(v,10)===q.ans;record(q,ok,v);
   if(ok){ev('correct',{ri:B.ri});return onCorrect()}B.phase='anim';sfx('bad');const qc=$('.qc');if(qc){qc.classList.remove('shake');void qc.offsetWidth;qc.classList.add('shake')}later(()=>onWrong(v),480)}
-function onCorrect(){const m=myMon(),f=foe(),qc=$('.qc'),ap=qc?ctr(qc):{x:innerWidth/2,y:innerHeight*.7};B.streak++;S.stars++;m.xp+=m.uid===(S.plan&&S.plan.partner)?6:3;sfx('ok');sparkle(ap.x,ap.y,12);flyStar(ap);
+function onCorrect(){const m=myMon(),f=foe(),qc=$('.qc'),ap=qc?ctr(qc):{x:innerWidth/2,y:innerHeight*.7},fast=!B.tip&&(Date.now()-B.qT)/1000<=B.blitzT;
+  B.streak++;S.stars++;m.xp+=m.uid===(S.plan&&S.plan.partner)?6:3;sfx('ok');sparkle(ap.x,ap.y,12);flyStar(ap);
   const praise=P(['Richtig!','Super!','Toll gemacht!','Genau!','Stark!','Bravo!']);
   if(B.purpose==='catch')return doCatch(praise);
-  const mult=eff(SP[m.id].t,SP[f.id].t),sup=B.streak>=3&&!B.tip,d=dmg(m,f,mult*(sup?1.5:1));f.hp=Math.max(0,f.hp-d);if(sup)ev('super');
-  B.phase='anim';B.fx='hitFoe';B.msg=(sup?`${praise} ${B.streak} richtig in Folge: Superangriff von ${nm(m)}!`:`${praise} ${nm(m)} greift an!`)+effTxt(mult);
-  renderBattle();stamp(sup?'Superangriff!':praise);say(B.msg);attackFx(true,SP[m.id].t,d,sup);save();
-  later(()=>f.hp<=0?foeFainted():toMenu(),1900)}
+  if(B.purpose==='def')return onDefend(praise,fast);
+  const tier=TIERS[B.tier||0],mult=eff(SP[m.id].t,SP[f.id].t),combo=B.tip?1:B.streak>=5?2:B.streak>=3?1.5:1,crit=Math.random()<(fast?.25:.1);
+  const d=dmg(m,f,mult*tier.p*combo*(fast?1.3:1)*(crit?1.5:1));f.hp=Math.max(0,f.hp-d);if(combo>1)ev('super');
+  const tags=[fast?'⚡ Blitz!':'',crit?'💥 Volltreffer!':'',combo>=2?'🔥 Mega-Combo!':combo>1?'🔥 Superangriff!':''].filter(Boolean);
+  B.phase='anim';B.fx='hitFoe';B.msg=`${praise} ${MOVES[SP[m.id].t][B.tier||0]}!${effTxt(mult)}`;
+  renderBattle();stamp(crit?'Volltreffer!':combo>=2?'Mega-Combo!':combo>1?'Superangriff!':fast?'Blitz!':praise);say(B.msg);attackFx(true,SP[m.id].t,d,combo>1||crit||B.tier===2);tags.slice(0,-1).forEach((t,k)=>later(()=>{const e=$('.mon.foe');if(e){const c=ctr(e);floatText(t,c.x-60+k*30,c.y+30,'heal')}},300+k*350));save();
+  later(()=>{if(!B)return;if(f.hp<=0)return foeFainted();checkAngry();B.charge=(B.charge||0)+1;if(B.charge>=chargeMax())startDefense();else toMenu()},1900)}
 function onWrong(v){if(!B)return;B.streak=0;B.err=true;B.wT=Date.now();B.given=v;B.phase='wrong';B.msg='Schau dir den Rechenweg an.';renderBattle();say(`Nicht ganz. Richtig ist ${B.q.ans}. ${B.q.hint||''}`)}
-ACT.goon=()=>{if(B.phase!=='wrong')return;addTime(Math.min(30,(Date.now()-(B.wT||Date.now()))/1000));foeAttacks(B.purpose==='catch'?'Der Ball fliegt daneben! ':'')};
+ACT.goon=()=>{if(B.phase!=='wrong')return;addTime(Math.min(30,(Date.now()-(B.wT||Date.now()))/1000));foeAttacks(B.purpose==='catch'?'Der Ball fliegt daneben! ':B.purpose==='def'?'Abwehr verfehlt! ':'')};
 function attackFx(mine,type,d,sup){const a=$(mine?'.mon.me':'.mon.foe'),t=$(mine?'.mon.foe':'.mon.me');if(!a||!t)return;const pa=ctr(a),pt=ctr(t);
   later(()=>projectile((TFX[type]||TFX.normal).ch[0],pa,pt,380,()=>{burst(type,pt.x,pt.y,sup?26:14);if(sup)confetti(pt.x,pt.y,40);sfx('hit');floatText('−'+d,pt.x,pt.y-40,'dmg');
     const bt=$('#bt');if(bt){bt.classList.remove('quake');void bt.offsetWidth;bt.classList.add('quake')}}),120)}
-function foeAttacks(pre){const m=myMon(),f=foe(),mult=eff(SP[f.id].t,SP[m.id].t),d=foeDmg(f,m,mult);m.hp=Math.max(0,m.hp-d);save();
+function foeAttacks(pre){B.charge=0;const m=myMon(),f=foe(),mult=eff(SP[f.id].t,SP[m.id].t),d=foeDmg(f,m,mult);m.hp=Math.max(0,m.hp-d);save();
   B.phase='anim';B.fx='hitMe';B.msg=`${pre}${nm(f)} greift an!${effTxt(mult)}`;renderBattle();say(B.msg);attackFx(false,SP[f.id].t,d,false);
   later(()=>m.hp<=0?meFainted():toMenu(),1700)}
 function doCatch(praise){const bk=B.ballK||'ball',bb=ballOf(bk);S.items[bk]=Math.max(0,(S.items[bk]||0)-1);const f=foe();let ch=(.45+.55*(1-f.hp/f.max))*bb.m;if(SP[f.id].rare)ch*=.6;const ok=bk==='b1000'||Math.random()<ch;
@@ -1033,7 +1073,7 @@ function doCatch(praise){const bk=B.ballK||'ball',bb=ballOf(bk);S.items[bk]=Math
 function addCaught(f){const m={id:f.id,lvl:f.lvl,xp:0,uid:S.uid++,sh:f.sh||0};if(f.sh)S.shiny[f.id]=1;m.hp=maxHp(m);S.caught[f.id]=S.seen[f.id]=1;if(S.team.length<6){S.team.push(m);save();return false}S.box.push(m);save();return true}
 function foeFainted(){const f=foe(),m=myMon(),xg=f.lvl*5*(m.uid===(S.plan&&S.plan.partner)?2:1);m.xp+=xg;S.stars+=2;save();B.phase='anim';B.fx='faintFoe';B.msg=`${nm(f)} ist besiegt! ${nm(m)} bekommt ${xg} Erfahrung${xg>f.lvl*5?' (doppelt als Tagespartner)':''}.`;sfx('win');renderBattle();say(B.msg);
   {const fe=$('.mon.foe');if(fe){const c=ctr(fe);later(()=>{sparkle(c.x,c.y,18);floatText('+'+xg+' EP',c.x,c.y-30,'heal')},450)}}
-  later(()=>{if(B.fi<B.foes.length-1){B.fi++;const n=foe();S.seen[n.id]=1;save();B.fx='appear';B.msg=`${B.leader.n} schickt ${nm(n)} in den Kampf!`;renderBattle();say(B.msg);later(toMenu,1500)}else endBattle('win')},2000)}
+  later(()=>{if(B.fi<B.foes.length-1){B.fi++;B.charge=0;const n=foe();S.seen[n.id]=1;save();B.fx='appear';B.msg=`${B.leader.n} schickt ${nm(n)} in den Kampf!`;renderBattle();say(B.msg);later(toMenu,1500)}else endBattle('win')},2000)}
 function meFainted(){const m=myMon();B.phase='anim';B.fx='faintMe';B.msg=`${nm(m)} ist erschöpft!`;renderBattle();say(B.msg);
   later(()=>{if(firstAlive()>=0){B.phase='switch';B.forced=true;B.msg='Wähle dein nächstes Zahlimon!';renderBattle();say(B.msg)}
     else{const ri=B.ri;clearTimers();healAll();B=null;save();talk([{who:'Pflegerin Nina',face:'👩‍⚕️',text:'Oh je, deine Zahlimon waren erschöpft. Ich habe sie wieder gesund gepflegt. Versuch es gleich nochmal, {N}!'}],()=>regionScreen(ri))}},1600)}

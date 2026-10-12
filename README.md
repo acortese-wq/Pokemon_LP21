@@ -36,6 +36,14 @@ Die Schwierigkeit passt sich pro Thema in drei Stufen an. Falsch gelöste Aufgab
 - **Eier und Serie:** Ein Ei schlüpft nach 20 richtigen Aufgaben. Die Serie 🔥 zählt die Tage in Folge mit erreichtem Ziel; nach 3, 7, 14, 21 und 30 Tagen gibt es ein seltenes Ei.
 - **Konsequenz:** Ein Zahlimon sagt jeden Tag, dass es weglaufen wird, wenn das Ziel nicht erreicht wird. Wird ein Zieltag verpasst, läuft es tatsächlich weg und kommt zurück, sobald das nächste Tagesziel geschafft ist. Die Eltern können stattdessen «für immer» oder «keine Folge» wählen und einen Ferienmodus einschalten. Das Start-Zahlimon läuft nie weg.
 
+## Kämpfe
+- Jedes Zahlimon hat drei Attacken passend zu seinem Typ: ⭐ leicht (leichtere Rechnung, schwach), ⭐⭐ mittel und ⭐⭐⭐ schwer (schwierigere Rechnung, sehr stark, 3× pro Kampf).
+- **Blitz-Bonus ⚡:** Wer antwortet, solange der Balken läuft (10 bzw. 20 Sekunden), macht mehr Schaden. Das ist nur ein Bonus, ohne Strafe.
+- **Combo:** Ab 3 richtigen Antworten in Folge gibt es einen Superangriff, ab 5 eine Mega-Combo.
+- **Volltreffer 💥:** Zufälliger Zusatzschaden.
+- **Der Gegner greift an:** Er lädt seinen Angriff auf (⚡○○○). Ist die Anzeige voll, gibt es eine Abwehr-Aufgabe. Richtig gelöst heisst: ausweichen. Mit Blitz-Antwort gibt es einen Konter.
+- **Wütende Bosse 😠:** Das letzte Zahlimon einer Arena greift bei wenig Kraft öfter an.
+
 ## Zahlimon und Bälle
 - 88 verschiedene Zahlimon, 8 bis 11 pro Gebiet, dazu seltene in fast jedem Gebiet.
 - Selten (1 von 30) erscheint ein **schillerndes** Zahlimon ✨ in anderer Farbe.
