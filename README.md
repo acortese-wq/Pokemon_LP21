@@ -29,6 +29,13 @@ Oder `index.html` herunterladen und im Browser öffnen. Mehr Dateien braucht es 
 
 Die Schwierigkeit passt sich pro Thema in drei Stufen an. Falsch gelöste Aufgaben kommen später noch einmal.
 
+## Tagesziel und Motivation
+- **Selbst entscheiden:** Jeden Tag wählt das Kind 2 von 4 Missionen (z. B. «Gewinne 4 Kämpfe», «Mach 3 Superangriffe», «Löse 15 Aufgaben im Mal-Wald») und einen Tagespartner, der doppelte Erfahrung bekommt.
+- **Zeitziel:** standardmässig 30 Minuten aktive Rechenzeit pro Tag (in den Elterneinstellungen anpassbar). Der Fortschritt ist immer oben sichtbar.
+- **Belohnungen:** Für das Tagesziel und für jede Mission darf das Kind eine von drei Schatztruhen öffnen. Darin sind Sterne, Zahlenbälle, Tränke, ein Level-Bonbon oder ein Zahlimon-Ei.
+- **Eier und Serie:** Ein Ei schlüpft nach 20 richtigen Aufgaben. Die Serie 🔥 zählt die Tage in Folge mit erreichtem Ziel; nach 3, 7, 14, 21 und 30 Tagen gibt es ein seltenes Ei.
+- **Konsequenz:** Ein Zahlimon sagt jeden Tag, dass es weglaufen wird, wenn das Ziel nicht erreicht wird. Wird ein Zieltag verpasst, läuft es tatsächlich weg und kommt zurück, sobald das nächste Tagesziel geschafft ist. Die Eltern können stattdessen «für immer» oder «keine Folge» wählen und einen Ferienmodus einschalten. Das Start-Zahlimon läuft nie weg.
+
 ## Bewegte Bilder und Rechenhilfen
 - Die Zahlimon bewegen sich, je nach Typ atmen, schweben oder hüpfen sie.
 - Die Gebiete sind belebt: Wolken, Bienen, Blätter, Luftblasen, Glut.

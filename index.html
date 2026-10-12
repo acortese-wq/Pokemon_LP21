@@ -79,7 +79,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .starter .sd{font-size:.9rem;color:var(--ink2)}
 
 /* HUD */
-.hud{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px;background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:8px 14px;box-shadow:0 4px 0 rgba(30,40,66,.18)}
+.hud{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:6px 12px;background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:8px 14px;box-shadow:0 4px 0 rgba(30,40,66,.18)}
 .hud-n{display:flex;flex-direction:column;line-height:1.1;min-width:0}
 .hud-n b{font-family:var(--f-disp);font-weight:400;font-size:1.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hud-l{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
@@ -369,6 +369,51 @@ h1,h2,h3{text-wrap:balance;margin:0}
 #cel p{position:relative;font-weight:700;font-size:1.15rem;margin:0;max-width:22em;animation:fadeIn .4s .5s both;opacity:0}
 #cel .more{position:relative;margin-top:14px;color:#ffd35a;font-size:.9rem;animation:hop 1s ease-in-out infinite}
 @keyframes celIn{from{transform:scale(0) rotate(-25deg);opacity:0}}
+
+/* Tagesziel, Missionen, Schatztruhen */
+.hud-t{font-weight:700;font-variant-numeric:tabular-nums;font-size:.95rem;white-space:nowrap}
+.today{padding:12px 14px;margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.today-h{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-disp);font-size:1.25rem}
+.streak{font-family:var(--f-body);font-weight:700;font-size:.95rem;background:#fff1e6;border:2px solid #f08a3c;border-radius:99px;padding:1px 10px}
+.tbar{position:relative;height:28px;background:var(--soft);border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.tbar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--gold),var(--green));transition:width .6s}
+.tbar span{position:relative;display:block;text-align:center;font-weight:700;font-size:.92rem;line-height:24px;font-variant-numeric:tabular-nums}
+.risk{display:flex;gap:10px;align-items:center;background:#fff1ef;border-radius:12px;padding:8px 10px;font-weight:700;font-size:.92rem}
+.risk.good{background:#e9f7ee}
+.risk .re{flex:none;font-family:var(--f-emoji);font-size:32px;animation:worry 1.3s ease-in-out infinite}
+.risk.good .re{animation:breathe 2.4s ease-in-out infinite}
+@keyframes worry{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+.mrow{display:grid;grid-template-columns:28px 1fr auto;gap:2px 8px;align-items:center;font-size:.92rem;font-weight:700}
+.mrow .mi{font-family:var(--f-emoji);font-size:20px;grid-row:1/3}
+.mrow .mp{font-variant-numeric:tabular-nums}
+.mrow.done{color:var(--green-d)}
+.mbar{grid-column:2/4;height:6px;background:var(--soft);border-radius:3px;overflow:hidden}
+.mbar i{display:block;height:100%;background:var(--blue)}
+.mrow.done .mbar i{background:var(--green)}
+.missions{display:flex;flex-direction:column;gap:10px}
+.mis{display:grid;grid-template-columns:36px 1fr 30px;gap:10px;align-items:center;text-align:left;background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:10px 12px;box-shadow:0 4px 0 rgba(30,40,66,.18);font-weight:700}
+.mis .mi{font-family:var(--f-emoji);font-size:28px}
+.mis .chk{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:transparent}
+.mis.on{outline:4px solid var(--green);outline-offset:1px}
+.mis.on .chk{background:var(--green);border-color:var(--green-d);color:#fff;animation:pop .35s ease-out}
+.partners{display:flex;flex-wrap:wrap;gap:10px}
+.ptn{display:flex;flex-direction:column;align-items:center;width:96px;padding:8px 4px;background:var(--card);border:2px solid var(--ink);border-radius:14px;font-weight:700;font-size:.85rem}
+.ptn .pe{font-family:var(--f-emoji);font-size:36px;display:inline-block}
+.ptn small{color:var(--ink2);font-weight:400}
+.ptn.on{outline:4px solid var(--gold);outline-offset:1px;background:#fff6dc}
+.ptn.on .pe{animation:hopi 1.4s ease-in-out infinite}
+.chests{position:relative;display:flex;gap:12px;justify-content:center;margin:12px 0}
+.chest{width:94px;height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-family:var(--f-emoji);font-size:58px;line-height:1;color:#fff;border:3px solid #ffd35a;border-radius:18px;background:rgba(255,255,255,.12);padding:0;animation:chestIdle 1.6s ease-in-out infinite}
+.chest:nth-child(2){animation-delay:.25s}
+.chest:nth-child(3){animation-delay:.5s}
+@keyframes chestIdle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(-4deg)}}
+.chest small{font-family:var(--f-body);font-size:.72rem;font-weight:700;padding:0 4px}
+.chest .zball{font-size:.8em}
+.chest.open{background:rgba(255,211,90,.35);animation:pop .5s ease-out}
+.chest.other{opacity:.45;animation:none;transform:scale(.88)}
+.days{display:flex;flex-wrap:wrap;gap:6px;font-size:.8rem;justify-content:flex-end}
+.days label{display:flex;flex-direction:column;align-items:center}
+.row select{max-width:58%}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}.arc{stroke-dashoffset:0}.fi,#cel p{opacity:1}.scene{display:none}}
 </style>
 </head>
@@ -427,7 +472,13 @@ function celebrate(o,done){const nmx=t=>String(t||'').replace(/\{N\}/g,S?S.name:
   celEl.innerHTML=`<div class="rays"></div><div class="cel-ic"><span>${o.icon}</span></div><h2>${esc(nmx(o.title))}</h2>${o.sub?`<p>${esc(nmx(o.sub))}</p>`:''}<span class="more">▼ tippen</span>`;
   celEl.hidden=false;celDone=done;sfx('win');say(`${nmx(o.title)} ${nmx(o.sub)}`);
   const x=innerWidth/2,y=innerHeight*.4;confetti(x,y,90);setTimeout(()=>confetti(x*.4,y,40),350);setTimeout(()=>confetti(x*1.6,y,40),650)}
-celEl.addEventListener('click',()=>{if(celEl.hidden)return;celEl.hidden=true;const d=celDone;celDone=null;d&&d()});
+celEl.addEventListener('click',e=>{if(celEl.hidden)return;
+  if(CH){const b=e.target.closest('.chest');
+    if(!CH.picked){if(!b)return;CH.picked=true;const i=+b.dataset.i,x=CH.l[i];x.f();save();sfx('win');b.classList.add('open');b.innerHTML=`${x.ic}<small>${x.t}</small>`;
+      const c=ctr(b);confetti(c.x,c.y,60);$('#chestMsg').textContent=`Du bekommst: ${x.t}!`;say(`Du bekommst ${x.t}!`);
+      setTimeout(()=>{celEl.querySelectorAll('.chest').forEach((o,j)=>{if(j!==i){o.classList.add('other');o.innerHTML=`${CH.l[j].ic}<small>${CH.l[j].t}</small>`}});CH.ready=true;const m=$('#chestMsg');if(m)m.insertAdjacentHTML('afterend','<span class="more">▼ tippen</span>')},900);return}
+    if(!CH.ready)return;const d=CH.done;CH=null;celEl.hidden=true;d&&d();return}
+  celEl.hidden=true;const d=celDone;celDone=null;d&&d()});
 
 /* ---------- Daten: Typen, Zahlimon, Gebiete ---------- */
 const TYPES={normal:{n:'Normal',c:'#8a7f69'},feuer:{n:'Feuer',c:'#e0582a'},wasser:{n:'Wasser',c:'#2a74cf'},pflanze:{n:'Pflanze',c:'#35934a'},elektro:{n:'Elektro',c:'#c99a00'},stein:{n:'Stein',c:'#86693f'},luft:{n:'Luft',c:'#4d98bd'},geist:{n:'Geist',c:'#6a4fa3'},magie:{n:'Magie',c:'#c9509b'},drache:{n:'Drache',c:'#473bb0'}};
@@ -523,14 +574,14 @@ const CHAMP=[
   {...PROF,text:'Und denk dran: Alle Arenen kannst du jederzeit wieder herausfordern, um weiter zu trainieren.'}
 ];
 const STARTERS=[['flammi','Mutig und heiss wie ein Grillfeuer.'],['tropfi','Ruhig und schlau. Liebt kaltes Wasser.'],['blatti','Fröhlich und zäh. Wächst mit jeder Aufgabe.']];
-const SHOP=[['ball','Zahlenball','Damit fängst du wilde Zahlimon.',5],['trank','Trank','Gibt einem Zahlimon 30 Kraft zurück.',8]];
+const SHOP=[['ball','Zahlenball','Damit fängst du wilde Zahlimon.',5],['trank','Trank','Gibt einem Zahlimon 30 Kraft zurück.',8],['bonbon','Level-Bonbon','Ein Zahlimon steigt sofort ein Level auf.',30]];
 
 /* ---------- Spielstand ---------- */
 const KEY='zahlimon_v1';
-const DEFSET={speech:true,sound:true,rate:1,fix:{}};
+const DEFSET={speech:true,sound:true,rate:1,fix:{},goalMin:30,goalDays:[1,1,1,1,1,1,1],conseq:'back',holiday:false};
 let S=null,B=null,EVO_NEXT=null;
-function fresh(name){return {v:1,name,team:[],box:[],badges:0,stars:10,items:{ball:5,trank:3},seen:{},caught:{},stats:{},retry:{},log:[],days:{},settings:{...DEFSET,fix:{}},flags:{},champ:false,uid:1}}
-function migrate(){const d=fresh(S.name);for(const k in d)if(S[k]===undefined)S[k]=d[k];S.settings={...DEFSET,...S.settings};S.settings.fix=S.settings.fix||{};S.items={ball:0,trank:0,...S.items}}
+function fresh(name){return {v:1,name,team:[],box:[],badges:0,stars:10,items:{ball:5,trank:3,bonbon:0},seen:{},caught:{},stats:{},retry:{},log:[],days:{},settings:{...DEFSET,fix:{},goalDays:DEFSET.goalDays.slice()},flags:{},champ:false,uid:1,time:{},goalHit:{},plan:null,lastDay:null,streak:0,best:0,lost:[],news:[],rq:[],eggs:[],sad:false,starterUid:null}}
+function migrate(){const d=fresh(S.name);for(const k in d)if(S[k]===undefined)S[k]=d[k];S.settings={...DEFSET,...S.settings};S.settings.fix=S.settings.fix||{};S.items={ball:0,trank:0,bonbon:0,...S.items};S.settings.goalDays=(S.settings.goalDays||DEFSET.goalDays).slice();if(S.starterUid==null){const u=S.team.concat(S.box).map(m=>m.uid);if(u.length)S.starterUid=Math.min(...u)}}
 function save(){if(!S)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function load(){try{const t=localStorage.getItem(KEY);return t?JSON.parse(t):null}catch(e){return null}}
 const maxHp=m=>30+m.lvl*4;
@@ -750,7 +801,7 @@ let tT;function toast(t){toastEl.textContent=t;toastEl.hidden=false;toastEl.clas
 const chip=t=>`<span class="chip" style="--c:${TYPES[t].c}">${TYPES[t].n}</span>`;
 const dots=n=>`<span class="dots" aria-label="Stufe ${n} von 3">${[1,2,3].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>`;
 function bar(key,cur,max){const p=Math.round(cur/max*100);const prev=B&&B.prev[key]!=null?B.prev[key]:p;if(B)B.prev[key]=p;return `<div class="hp"><i class="${p>50?'':p>20?'mid':'low'}" data-to="${p}" style="width:${prev}%"></i></div>`}
-function hud(){return `<header class="hud"><div class="hud-n"><span class="hud-l">Trainer</span><b>${esc(S.name)}</b></div><div class="hud-s" aria-label="Sterne">⭐ ${S.stars}</div><div class="hud-b" aria-label="Orden: ${S.badges} von 7">${RG.map((r,i)=>`<span class="${i<S.badges?'got':''}">${i<S.badges?r.leader.be:''}</span>`).join('')}</div></header>`}
+function hud(){return `<header class="hud"><div class="hud-n"><span class="hud-l">Trainer</span><b>${esc(S.name)}</b></div>${S.lastDay?`<div class="hud-t" aria-label="Minuten heute">⏱ <b data-tmin>${minOf(dayKey())}</b>/${goalMin()}</div>`:'<span></span>'}<div class="hud-s" aria-label="Sterne">⭐ ${S.stars}</div><div class="hud-b" aria-label="Orden: ${S.badges} von 7">${RG.map((r,i)=>`<span class="${i<S.badges?'got':''}">${i<S.badges?r.leader.be:''}</span>`).join('')}</div></header>`}
 function nav(){return `<nav class="nav"><div class="in">${[['map','🗺️','Karte'],['team','🎒','Team'],['dex','📖','Zahlidex'],['shop','🛒','Laden'],['center','❤️','Center']].map(([a,i,l])=>`<button data-act="${a}"><b>${i}</b>${l}</button>`).join('')}</div></nav>`}
 
 app.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;unlockAudio();const f=ACT[b.dataset.act];if(f)f(b.dataset.arg,b)});
@@ -780,7 +831,7 @@ function titleScreen(){B=null;S=null;const sv=load();
   <button class="btn ${sv?'ghost':'green big'}" data-act="newgame">Neues Spiel</button></div>
   <p class="fine center">🔊 Ton einschalten: Das Spiel liest dir alles vor.</p></div>`)}
 ACT.title=titleScreen;
-ACT.cont=()=>{S=load();migrate();save();mapScreen();say(`Willkommen zurück, ${S.name}!`)};
+ACT.cont=()=>{S=load();migrate();dayCheck();save();if(!S.news.length)say(`Willkommen zurück, ${S.name}!`);startDay()};
 ACT.newgame=()=>{const sv=load();if(!sv)return nameScreen();
   show(`<div class="title"><h2 class="h2 center">Neues Spiel?</h2><p class="center">Es gibt schon einen Spielstand von <b>${esc(sv.name)}</b>. Wenn du neu beginnst, wird er gelöscht.</p>
   <div class="stack"><button class="btn red" data-act="newgame2">Ja, neu beginnen</button><button class="btn ghost" data-act="title">Zurück</button></div></div>`)};
@@ -794,11 +845,11 @@ function nameScreen(){show(`<div class="title"><h2 class="h2 center">Wie heisst 
 function starterScreen(sel){show(`<h2 class="h2">Wähle deinen Partner</h2><p class="fine">Tippe auf ein Zahlimon.</p><div class="starters">${STARTERS.map(([id,d])=>`<button class="starter ${sel===id?'on':''}" data-act="pick" data-arg="${id}" style="--c:${TYPES[SP[id].t].c}"><span class="se">${SP[id].e}</span><span class="sn">${SP[id].n}</span>${chip(SP[id].t)}<span class="sd">${d}</span></button>`).join('')}</div>
   ${sel?`<button class="btn green big" data-act="takeStarter" data-arg="${sel}">${SP[sel].n} nehmen</button>`:''}`)}
 ACT.pick=id=>{starterScreen(id);say(`${SP[id].n}. Ein ${TYPES[SP[id].t].n}-Zahlimon. ${STARTERS.find(s=>s[0]===id)[1]}`)};
-ACT.takeStarter=id=>{S.team=[mkMon(id,5)];S.seen[id]=S.caught[id]=1;save();
-  talk([{...PROF,text:`Super Wahl! ${SP[id].n} freut sich schon auf dich.`},{...PROF,text:'Hier hast du 5 Zahlenbälle und 3 Tränke. Mit einem Zahlenball kannst du wilde Zahlimon fangen.'},{...PROF,text:'Deine Reise beginnt auf der Plus-Wiese. Viel Glück, {N}!'}],mapScreen)};
+ACT.takeStarter=id=>{S.team=[mkMon(id,5)];S.starterUid=S.team[0].uid;S.seen[id]=S.caught[id]=1;S.lastDay=dayKey();newPlan();save();
+  talk([{...PROF,text:`Super Wahl! ${SP[id].n} freut sich schon auf dich.`},{...PROF,text:'Hier hast du 5 Zahlenbälle und 3 Tränke. Mit einem Zahlenball kannst du wilde Zahlimon fangen.'},{...PROF,text:'Deine Reise beginnt auf der Plus-Wiese. Viel Glück, {N}!'}],planScreen)};
 
 function mapScreen(){B=null;clearTimers();
-  show(`${hud()}<h2 class="h2">Karte von Zahlonien</h2><p class="fine">Tippe auf ein Gebiet. Ein neues Gebiet öffnet sich, wenn du einen Orden gewinnst.</p>
+  show(`${hud()}${todayCard(false)}<h2 class="h2">Karte von Zahlonien</h2><p class="fine">Tippe auf ein Gebiet. Ein neues Gebiet öffnet sich, wenn du einen Orden gewinnst.</p>
   <div class="map">${RG.map((r,i)=>{const open=i<=S.badges,done=i<S.badges;return `<button class="node ${open?'':'locked'} ${i===S.badges?'now':''}" style="--g1:${r.c1};--g2:${r.c2}" data-act="${open?'region':'locked'}" data-arg="${i}">${i===Math.min(S.badges,RG.length-1)?'<span class="me-av" aria-hidden="true">🧒</span>':''}<span class="ic">${open?r.icon:'🔒'}</span><span class="tx"><b>${r.n}</b><small>${open?r.learn:'Noch verschlossen'}</small></span><span class="st">${done?r.leader.be:''}</span></button>`}).join('')}</div>
   <button class="linkish" data-act="parents">Bereich für Eltern</button>${nav()}`)}
 ACT.map=mapScreen;
@@ -878,15 +929,15 @@ ACT.del=()=>{if(!B||B.phase!=='q')return;B.input=B.input.slice(0,-1);const el=$(
 ACT.submit=()=>{if(!B||B.phase!=='q')return;if(!B.input){toast('Tippe zuerst deine Antwort ein.');return}answer(B.input)};
 ACT.choose=v=>answer(v);
 function answer(v){if(B.phase!=='q')return;const q=B.q;const ok=q.kind==='choice'?v===q.ans:parseInt(v,10)===q.ans;record(q,ok,v);
-  if(ok)return onCorrect();B.phase='anim';sfx('bad');const qc=$('.qc');if(qc){qc.classList.remove('shake');void qc.offsetWidth;qc.classList.add('shake')}later(()=>onWrong(v),480)}
-function onCorrect(){const m=myMon(),f=foe(),qc=$('.qc'),ap=qc?ctr(qc):{x:innerWidth/2,y:innerHeight*.7};B.streak++;S.stars++;m.xp+=3;sfx('ok');sparkle(ap.x,ap.y,12);flyStar(ap);
+  if(ok){ev('correct',{ri:B.ri});return onCorrect()}B.phase='anim';sfx('bad');const qc=$('.qc');if(qc){qc.classList.remove('shake');void qc.offsetWidth;qc.classList.add('shake')}later(()=>onWrong(v),480)}
+function onCorrect(){const m=myMon(),f=foe(),qc=$('.qc'),ap=qc?ctr(qc):{x:innerWidth/2,y:innerHeight*.7};B.streak++;S.stars++;m.xp+=m.uid===(S.plan&&S.plan.partner)?6:3;sfx('ok');sparkle(ap.x,ap.y,12);flyStar(ap);
   const praise=P(['Richtig!','Super!','Toll gemacht!','Genau!','Stark!','Bravo!']);
   if(B.purpose==='catch')return doCatch(praise);
-  const mult=eff(SP[m.id].t,SP[f.id].t),sup=B.streak>=3&&!B.tip,d=dmg(m,f,mult*(sup?1.5:1));f.hp=Math.max(0,f.hp-d);
+  const mult=eff(SP[m.id].t,SP[f.id].t),sup=B.streak>=3&&!B.tip,d=dmg(m,f,mult*(sup?1.5:1));f.hp=Math.max(0,f.hp-d);if(sup)ev('super');
   B.phase='anim';B.fx='hitFoe';B.msg=(sup?`${praise} ${B.streak} richtig in Folge: Superangriff von ${nm(m)}!`:`${praise} ${nm(m)} greift an!`)+effTxt(mult);
   renderBattle();stamp(sup?'Superangriff!':praise);say(B.msg);attackFx(true,SP[m.id].t,d,sup);save();
   later(()=>f.hp<=0?foeFainted():toMenu(),1900)}
-function onWrong(v){if(!B)return;B.streak=0;B.given=v;B.phase='wrong';B.msg='Schau dir den Rechenweg an.';renderBattle();say(`Nicht ganz. Richtig ist ${B.q.ans}. ${B.q.hint||''}`)}
+function onWrong(v){if(!B)return;B.streak=0;B.err=true;B.given=v;B.phase='wrong';B.msg='Schau dir den Rechenweg an.';renderBattle();say(`Nicht ganz. Richtig ist ${B.q.ans}. ${B.q.hint||''}`)}
 ACT.goon=()=>{if(B.phase!=='wrong')return;foeAttacks(B.purpose==='catch'?'Der Zahlenball fliegt daneben! ':'')};
 function attackFx(mine,type,d,sup){const a=$(mine?'.mon.me':'.mon.foe'),t=$(mine?'.mon.foe':'.mon.me');if(!a||!t)return;const pa=ctr(a),pt=ctr(t);
   later(()=>projectile((TFX[type]||TFX.normal).ch[0],pa,pt,380,()=>{burst(type,pt.x,pt.y,sup?26:14);if(sup)confetti(pt.x,pt.y,40);sfx('hit');floatText('−'+d,pt.x,pt.y-40,'dmg');
@@ -900,8 +951,8 @@ function doCatch(praise){S.items.ball--;const f=foe();let ch=.45+.55*(1-f.hp/f.m
     if(ok){B.fx='caught';B.msg=`Hurra! ${nm(f)} wurde gefangen!`;sfx('win');B.boxed=addCaught(f);renderBattle();const c=fe();if(c)sparkle(c.x,c.y,22);say(B.msg);later(()=>endBattle('caught'),1600)}
     else{B.fx='escape';B.msg=`Oh nein! ${nm(f)} ist wieder ausgebrochen. Schwäche es noch etwas mehr!`;renderBattle();const c=fe();if(c)burst('normal',c.x,c.y,8);say(B.msg);later(toMenu,1900)}},2200)}
 function addCaught(f){const m={id:f.id,lvl:f.lvl,xp:0,uid:S.uid++};m.hp=maxHp(m);S.caught[f.id]=S.seen[f.id]=1;if(S.team.length<6){S.team.push(m);save();return false}S.box.push(m);save();return true}
-function foeFainted(){const f=foe(),m=myMon();m.xp+=f.lvl*5;S.stars+=2;save();B.phase='anim';B.fx='faintFoe';B.msg=`${nm(f)} ist besiegt! ${nm(m)} bekommt ${f.lvl*5} Erfahrung.`;sfx('win');renderBattle();say(B.msg);
-  {const fe=$('.mon.foe');if(fe){const c=ctr(fe);later(()=>{sparkle(c.x,c.y,18);floatText('+'+f.lvl*5+' EP',c.x,c.y-30,'heal')},450)}}
+function foeFainted(){const f=foe(),m=myMon(),xg=f.lvl*5*(m.uid===(S.plan&&S.plan.partner)?2:1);m.xp+=xg;S.stars+=2;save();B.phase='anim';B.fx='faintFoe';B.msg=`${nm(f)} ist besiegt! ${nm(m)} bekommt ${xg} Erfahrung${xg>f.lvl*5?' (doppelt als Tagespartner)':''}.`;sfx('win');renderBattle();say(B.msg);
+  {const fe=$('.mon.foe');if(fe){const c=ctr(fe);later(()=>{sparkle(c.x,c.y,18);floatText('+'+xg+' EP',c.x,c.y-30,'heal')},450)}}
   later(()=>{if(B.fi<B.foes.length-1){B.fi++;const n=foe();S.seen[n.id]=1;save();B.fx='appear';B.msg=`${B.leader.n} schickt ${nm(n)} in den Kampf!`;renderBattle();say(B.msg);later(toMenu,1500)}else endBattle('win')},2000)}
 function meFainted(){const m=myMon();B.phase='anim';B.fx='faintMe';B.msg=`${nm(m)} ist erschöpft!`;renderBattle();say(B.msg);
   later(()=>{if(firstAlive()>=0){B.phase='switch';B.forced=true;B.msg='Wähle dein nächstes Zahlimon!';renderBattle();say(B.msg)}
@@ -910,6 +961,7 @@ function levelUps(m,lines,evos){const from=m.lvl;while(m.xp>=need(m.lvl)&&m.lvl<
   if(m.lvl>from)lines.push({cel:{icon:SP[m.id].e,title:`Level ${m.lvl}!`,sub:`${nm(m)} ist stärker geworden.`}});
   const e=SP[m.id].evo;if(m.lvl>from&&e&&m.lvl>=e[1])evos.push({m,to:e[0]})}
 function endBattle(res){clearTimers();const ri=B.ri,lead=B.kind==='leader',L=RG[ri].leader,lines=[],evos=[];
+  if(res==='win'){ev('win');if(!B.err)ev('perfect');if(lead)ev('arena')}if(res==='caught')ev('catch');
   if(res==='run')lines.push({face:'🏃',text:'Du bist sicher entkommen.'});
   if(res==='caught'){const f=B.foes[0];lines.push({cel:{icon:SP[f.id].e,title:'Gefangen!',sub:B.boxed?`${SP[f.id].n} wartet in der Zahlimon-Box auf dich.`:`${SP[f.id].n} ist jetzt in deinem Team.`}})}
   if(lead&&res==='win'){lines.push({who:L.n,face:L.e,text:L.lose});
@@ -917,7 +969,7 @@ function endBattle(res){clearTimers();const ri=B.ri,lead=B.kind==='leader',L=RG[
       if(ri===RG.length-1){S.champ=true;lines.push({cel:{icon:'🏆',title:'Zahlimon-Champion!',sub:'{N} hat alle 7 Orden gewonnen!'}},...CHAMP)}else lines.push({...PROF,text:`Toll gemacht, {N}! Ein neues Gebiet ist offen: ${RG[ri+1].n}.`})}
     else{S.stars+=5;lines.push({face:'⭐',text:'Revanche gewonnen! Du bekommst 5 Sterne.'})}}
   S.team.forEach(m=>levelUps(m,lines,evos));B=null;save();
-  talk(lines,()=>runEvos(evos,()=>lead&&res==='win'?mapScreen():regionScreen(ri)))}
+  talk(lines,()=>runRewards(()=>runEvos(evos,()=>lead&&res==='win'?mapScreen():regionScreen(ri))))}
 function runEvos(list,done){if(!list.length)return done();const {m,to}=list.shift(),from=m.id;SCR='evo'+Math.random();
   show(`<div class="evo"><div class="rays"></div><p class="evo-t" id="evoT">Nanu? ${SP[from].n} verändert sich …</p><div class="evo-m" id="evoM">${SP[from].e}</div><button class="btn green" id="evoB" data-act="evoNext" hidden>Weiter</button></div>`);
   say(`Nanu? ${SP[from].n} verändert sich!`);EVO_NEXT=()=>runEvos(list,done);
@@ -927,15 +979,16 @@ ACT.evoNext=()=>{clearTimers();const f=EVO_NEXT;EVO_NEXT=null;f&&f()};
 
 /* ---------- Team, Zahlidex, Laden, Zahlencenter ---------- */
 function monRow(m,i,where){const sp=SP[m.id],max=maxHp(m);
-  const btns=where==='team'?[i>0?`<button class="mini" data-act="lead" data-arg="${i}">Nach vorne</button>`:'<span class="pill">kämpft zuerst</span>',m.hp<max&&S.items.trank?`<button class="mini" data-act="potionT" data-arg="${i}">🧪 Trank</button>`:'',S.team.length>1?`<button class="mini" data-act="toBox" data-arg="${i}">In die Box</button>`:'']
+  const btns=where==='team'?[i>0?`<button class="mini" data-act="lead" data-arg="${i}">Nach vorne</button>`:'<span class="pill">kämpft zuerst</span>',m.hp<max&&S.items.trank?`<button class="mini" data-act="potionT" data-arg="${i}">🧪 Trank</button>`:'',S.items.bonbon?`<button class="mini" data-act="bonbon" data-arg="${i}">🍬 Bonbon</button>`:'',S.team.length>1?`<button class="mini" data-act="toBox" data-arg="${i}">In die Box</button>`:'']
     :[S.team.length<6?`<button class="mini" data-act="fromBox" data-arg="${i}">Ins Team</button>`:'<span class="fine">Das Team ist voll.</span>'];
   const e=sp.evo?`Entwickelt sich mit Level ${sp.evo[1]}`:'';
   return `<div class="tm card"><div class="tm-e" style="--c:${TYPES[sp.t].c}"><span>${sp.e}</span></div><div class="tm-i"><div class="pn"><b>${sp.n}</b><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar('t'+m.uid,m.hp,max)}<div class="pk">Kraft ${m.hp}/${max} · Erfahrung ${m.xp}/${need(m.lvl)}${e?'<br>'+e:''}</div><div class="tm-b">${btns.join('')}</div></div></div>`}
-function teamScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Dein Team</h2><p class="fine">Das oberste Zahlimon kämpft zuerst. Nur wer kämpft, sammelt Erfahrung. Tränke: ${S.items.trank}</p>
+function teamScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Dein Team</h2><p class="fine">Das oberste Zahlimon kämpft zuerst. Nur wer kämpft, sammelt Erfahrung. Tränke: ${S.items.trank} · Bonbons: ${S.items.bonbon}</p>
   <div class="list">${S.team.map((m,i)=>monRow(m,i,'team')).join('')}</div>${S.box.length?`<h3 class="h3">Zahlimon-Box (${S.box.length})</h3><div class="list">${S.box.map((m,i)=>monRow(m,i,'box')).join('')}</div>`:''}${nav()}`)}
 ACT.team=teamScreen;
 ACT.lead=i=>{const m=S.team.splice(+i,1)[0];S.team.unshift(m);save();teamScreen()};
 ACT.potionT=i=>{const m=S.team[+i];if(!S.items.trank)return;S.items.trank--;m.hp=Math.min(maxHp(m),m.hp+30);save();sfx('lvl');toast(`${nm(m)} fühlt sich besser!`);teamScreen()};
+ACT.bonbon=i=>{const m=S.team[+i];if(!m||!S.items.bonbon)return;S.items.bonbon--;m.xp=Math.max(m.xp,need(m.lvl));const lines=[],evos=[];levelUps(m,lines,evos);save();talk(lines,()=>runEvos(evos,()=>teamScreen()))};
 ACT.toBox=i=>{if(S.team.length<2)return;S.box.push(S.team.splice(+i,1)[0]);save();teamScreen()};
 ACT.fromBox=i=>{if(S.team.length>=6)return;S.team.push(S.box.splice(+i,1)[0]);save();teamScreen()};
 function dexScreen(){B=null;clearTimers();const ids=Object.keys(SP),c=ids.filter(i=>S.caught[i]).length;
@@ -943,7 +996,7 @@ function dexScreen(){B=null;clearTimers();const ids=Object.keys(SP),c=ids.filter
   <div class="dex">${ids.map((id,i)=>{const sp=SP[id],st=S.caught[id]?'c':S.seen[id]?'s':'u';return `<div class="dx ${st}"><span class="no">Nr. ${pad2(i+1)}</span><span class="de">${st==='u'?'?':sp.e}</span><span class="dn">${st==='u'?'???':sp.n}</span>${st!=='u'?chip(sp.t):''}</div>`}).join('')}</div>${nav()}`)}
 ACT.dex=dexScreen;
 function shopScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Laden</h2><p class="fine">Für jede richtige Antwort bekommst du einen Stern.</p>
-  <div class="list">${SHOP.map(([k,n,d,p])=>`<div class="card shop"><div class="shop-ic">${k==='ball'?'<span class="zball"></span>':'🧪'}</div><div class="shop-t"><b>${n}</b><small>${d}</small><small>Im Rucksack: ${S.items[k]}</small></div><button class="btn gold sm" data-act="buy" data-arg="${k}" ${S.stars<p?'disabled':''}>⭐ ${p}</button></div>`).join('')}</div>${nav()}`)}
+  <div class="list">${SHOP.map(([k,n,d,p])=>`<div class="card shop"><div class="shop-ic">${k==='ball'?'<span class="zball"></span>':k==='bonbon'?'🍬':'🧪'}</div><div class="shop-t"><b>${n}</b><small>${d}</small><small>Im Rucksack: ${S.items[k]}</small></div><button class="btn gold sm" data-act="buy" data-arg="${k}" ${S.stars<p?'disabled':''}>⭐ ${p}</button></div>`).join('')}</div>${nav()}`)}
 ACT.shop=shopScreen;
 ACT.buy=k=>{const it=SHOP.find(s=>s[0]===k);if(S.stars<it[3])return;S.stars-=it[3];S.items[k]++;save();sfx('ok');toast(`${it[1]} gekauft!`);shopScreen()};
 function centerScreen(){B=null;clearTimers();show(`${hud()}<section class="card pad center"><div class="nurse">👩‍⚕️</div><h2 class="h2">Zahlencenter</h2><p>Pflegerin Nina macht deine Zahlimon wieder gesund. Das kostet nichts.</p><button class="btn green" data-act="heal">❤️ Alle gesund pflegen</button></section>
@@ -959,7 +1012,7 @@ function parentsScreen(confirmReset){B=null;clearTimers();const d=S.days[dayKey(
   show(`<h2 class="h2">Bereich für Eltern</h2>
   <section class="card pad"><h3 class="h3">Überblick</h3><div class="kpis"><div><b>${d[0]+d[1]}</b><span>Aufgaben heute</span></div><div><b>${pct(d[0],d[0]+d[1])}</b><span>heute richtig</span></div><div><b>${tr+tf}</b><span>Aufgaben total</span></div></div>
   <p class="fine">Trainer: ${esc(S.name)} · Orden ${S.badges} von 7 · Zahlidex ${Object.keys(S.caught).length} von ${Object.keys(SP).length}</p></section>
-  <section class="card pad"><h3 class="h3">Themen und Stufen</h3><div class="tblwrap"><table class="tbl"><thead><tr><th>Thema</th><th>LP21</th><th>Stufe</th><th>✓</th><th>✗</th><th>Quote</th></tr></thead><tbody>
+  ${goalSection()}<section class="card pad"><h3 class="h3">Themen und Stufen</h3><div class="tblwrap"><table class="tbl"><thead><tr><th>Thema</th><th>LP21</th><th>Stufe</th><th>✓</th><th>✗</th><th>Quote</th></tr></thead><tbody>
   ${Object.keys(TOPICS).map(t=>{const s=stat(t),fx=S.settings.fix[t]||'';return `<tr><td>${TOPICS[t].n}</td><td>${TOPICS[t].lp}</td><td><select id="fix-${t}" class="fixsel" data-topic="${t}" aria-label="Stufe ${TOPICS[t].n}"><option value="" ${!fx?'selected':''}>Auto (${s.s})</option>${[1,2,3].map(v=>`<option value="${v}" ${String(fx)===String(v)?'selected':''}>fix ${v}</option>`).join('')}</select></td><td>${s.r}</td><td>${s.f}</td><td>${pct(s.r,s.r+s.f)}</td></tr>`}).join('')}</tbody></table></div>
   <p class="fine">Stufe 1: Zahlenraum bis 100, einfache Reihen. Stufe 2: Übergänge, Hunderter, alle Grundreihen. Stufe 3: Zahlenraum bis 1000, 7er/8er/9er-Reihe, Textaufgaben mit zwei Schritten. «Auto» passt die Stufe laufend an: 5 richtige Antworten in Folge heben sie an, 3 falsche in Folge senken sie.</p></section>
   <section class="card pad"><h3 class="h3">Zuletzt falsch gelöst</h3>${S.log.length?`<ul class="log">${S.log.slice(0,15).map(l=>`<li><span>${esc(l.t)}</span><span>Antwort: <b>${esc(l.g)}</b> · richtig: <b>${esc(String(l.a))}</b></span></li>`).join('')}</ul>`:'<p class="fine">Noch keine Fehler.</p>'}
@@ -977,18 +1030,123 @@ function parentsScreen(confirmReset){B=null;clearTimers();const d=S.days[dayKey(
   $('#optSpeech').addEventListener('change',e=>{S.settings.speech=e.target.checked;save();if(!e.target.checked)stopSpeech()});
   $('#optRate').addEventListener('change',e=>{S.settings.rate=+e.target.value;save();say('So schnell spreche ich jetzt.')});
   $('#optSound').addEventListener('change',e=>{S.settings.sound=e.target.checked;save()});
+  $('#optGoal').addEventListener('change',e=>{S.settings.goalMin=+e.target.value;save();const k=dayKey();if(!S.goalHit[k]&&(S.time[k]||0)>=goalMin()*60)onGoal()});
+  $('#optConseq').addEventListener('change',e=>{S.settings.conseq=e.target.value;save()});
+  $('#optHoliday').addEventListener('change',e=>{S.settings.holiday=e.target.checked;save()});
+  app.querySelectorAll('.gday').forEach(c=>c.addEventListener('change',e=>{S.settings.goalDays[+e.target.dataset.day]=e.target.checked?1:0;save()}));
   app.querySelectorAll('.fixsel').forEach(sel=>sel.addEventListener('change',e=>{const t=e.target.dataset.topic,v=e.target.value;if(v){S.settings.fix[t]=+v;stat(t).s=+v}else delete S.settings.fix[t];save()}))}
 ACT.parents=()=>parentsScreen(false);
 ACT.testVoice=()=>say(`Hallo ${S.name}! Wie viel ist 7 · 8?`);
 ACT.copyCode=()=>{const ta=$('#exportCode');const fb=()=>{ta.focus();ta.select();toast('Code markiert. Jetzt kopieren.')};try{navigator.clipboard.writeText(ta.value).then(()=>toast('Code kopiert.'),fb)}catch(e){fb()}};
-ACT.importCode=()=>{const v=$('#importCode').value.trim();try{const o=JSON.parse(decodeURIComponent(escape(atob(v))));if(!o||!o.name||!Array.isArray(o.team)||!o.team.length)throw 0;S=o;migrate();save();toast(`Spielstand von ${S.name} geladen.`);mapScreen()}catch(e){toast('Dieser Code funktioniert nicht. Bitte vollständig einfügen.')}};
+ACT.importCode=()=>{const v=$('#importCode').value.trim();try{const o=JSON.parse(decodeURIComponent(escape(atob(v))));if(!o||!o.name||!Array.isArray(o.team)||!o.team.length)throw 0;S=o;migrate();save();toast(`Spielstand von ${S.name} geladen.`);dayCheck();save();startDay()}catch(e){toast('Dieser Code funktioniert nicht. Bitte vollständig einfügen.')}};
 ACT.reset1=()=>parentsScreen(true);
 ACT.reset2=()=>{try{localStorage.removeItem(KEY)}catch(e){}titleScreen()};
+
+/* ---------- Tagesziel, Missionen, Schatztruhen, Eier ---------- */
+const WD=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const dkOf=d=>`${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+const parseDay=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
+const isGoalDay=k=>!!S.settings.goalDays[parseDay(k).getDay()];
+const minOf=k=>Math.floor((S.time[k]||0)/60);
+const goalMin=()=>S.settings.goalMin;
+const allMons=()=>S.team.concat(S.box);
+const riskMon=()=>S.plan&&S.plan.risk!=null?allMons().find(m=>m.uid===S.plan.risk):null;
+function pickRisk(){const t=S.team.filter(m=>m.uid!==S.starterUid),b=S.box.filter(m=>m.uid!==S.starterUid),c=t.length?t:b;return c.length?P(c).uid:null}
+const MT={
+  win:{ic:'⚔️',t:n=>`Gewinne ${n} Kämpfe`,n:()=>R(3,5)},
+  catch:{ic:'🎯',t:n=>n>1?`Fange ${n} Zahlimon`:'Fange ein Zahlimon',n:()=>R(1,2)},
+  correct:{ic:'✅',t:n=>`Löse ${n} Aufgaben richtig`,n:()=>P([25,30,40])},
+  super:{ic:'💥',t:n=>`Mach ${n} Superangriffe (3 richtig in Folge)`,n:()=>R(2,4)},
+  region:{ic:'🗺️',t:(n,r)=>`Löse ${n} Aufgaben im Gebiet ${RG[r].n}`,n:()=>15},
+  learn:{ic:'📺',t:n=>`Schau dir ${n} Erklärungen «So geht's» an`,n:()=>2},
+  perfect:{ic:'🌟',t:()=>'Gewinne einen Kampf ganz ohne Fehler',n:()=>1},
+  arena:{ic:'🏟️',t:()=>'Gewinne einen Arenakampf',n:()=>1}
+};
+const misText=m=>MT[m.k].t(m.n,m.r);
+function newPlan(){S.plan={day:dayKey(),offer:shuffle(Object.keys(MT)).slice(0,4).map(k=>({k,n:MT[k].n(),r:R(0,Math.min(S.badges,RG.length-1))})),sel:[],missions:[],partner:S.team.length===1?S.team[0].uid:null,risk:pickRisk(),chosen:false}}
+function dayCheck(){const today=dayKey();if(!S.lastDay){S.lastDay=today;newPlan();return}if(S.lastDay===today)return;
+  const missed=[],d=parseDay(S.lastDay),end=parseDay(today);
+  while(d<end){const k=dkOf(d);if(isGoalDay(k)&&!S.goalHit[k])missed.push(k);d.setDate(d.getDate()+1)}
+  if(missed.length&&!S.settings.holiday){S.streak=0;if(S.settings.conseq!=='none')missed.slice(-2).forEach(runAway)}
+  S.lastDay=today;newPlan();
+  for(const o of [S.time,S.goalHit]){const ks=Object.keys(o).sort();while(ks.length>60)delete o[ks.shift()]}}
+function runAway(k){const y=new Date();y.setDate(y.getDate()-1);const when=k===dkOf(y)?'Gestern':`Am ${WD[parseDay(k).getDay()]}`;
+  const c=allMons().filter(m=>m.uid!==S.starterUid),m=c.find(x=>S.plan&&x.uid===S.plan.risk)||(c.length?P(c):null);
+  if(!m){S.sad=true;const loss=Math.min(S.stars,15);S.stars-=loss;S.news.push({face:'😢',text:`${when} hast du dein Tagesziel nicht geschafft. ${nm(S.team[0])} ist traurig${loss?` und du verlierst ${loss} Sterne`:''}.`});return}
+  S.team=S.team.filter(x=>x!==m);S.box=S.box.filter(x=>x!==m);if(!S.team.length&&S.box.length)S.team.push(S.box.shift());
+  if(S.settings.conseq==='forever')S.news.push({face:SP[m.id].e,text:`${when} hast du dein Tagesziel nicht geschafft. ${nm(m)} ist für immer zurück in die Wildnis gelaufen …`});
+  else{S.lost.push(m);S.news.push({face:SP[m.id].e,text:`${when} hast du dein Tagesziel nicht geschafft. ${nm(m)} ist weggelaufen! Schaffe heute dein Tagesziel, dann kommt ${nm(m)} zurück.`})}}
+function onGoal(){const k=dayKey();if(S.goalHit[k])return;S.goalHit[k]=1;S.streak++;S.best=Math.max(S.best,S.streak);S.sad=false;
+  S.rq.push({icon:'🏆',title:'Tagesziel geschafft!',sub:`${goalMin()} Minuten gerechnet. ${S.streak} ${S.streak===1?'Tag':'Tage'} in Folge! Wähle eine Schatztruhe.`,chest:'big'});
+  S.lost.splice(0).forEach(m=>{m.hp=maxHp(m);(S.team.length<6?S.team:S.box).push(m);S.rq.push({icon:SP[m.id].e,title:`${nm(m)} ist zurück!`,sub:'Es hat dich vermisst und freut sich riesig.'})});
+  if([3,7,14,21,30,50,100].includes(S.streak))S.rq.push({icon:'🥚',title:`${S.streak} Tage in Folge!`,sub:'Dafür bekommst du ein seltenes Zahlimon-Ei.',egg:'rare'});
+  save();toast('🏆 Tagesziel geschafft!');maybeRewards()}
+function addEgg(rare){S.eggs.push({rare:!!rare,p:0,need:rare?30:20})}
+function hatchId(rare){const pool=rare?['einhorni','drakonix','tigrano','sturmi','felsor','blitzhahn']:[...new Set(RG.slice(0,Math.min(S.badges,RG.length-1)+1).flatMap(r=>r.wild))];const nu=pool.filter(id=>!S.caught[id]);return P(nu.length?nu:pool)}
+function ev(kind,data){if(!S)return;
+  if(kind==='correct'){S.eggs.forEach(e=>e.p++);S.eggs=S.eggs.filter(e=>{if(e.p<e.need)return true;const id=hatchId(e.rare),avg=S.team.reduce((a,m)=>a+m.lvl,0)/Math.max(1,S.team.length);
+    const m=mkMon(id,Math.max(3,Math.round(avg)-2));S.seen[id]=S.caught[id]=1;(S.team.length<6?S.team:S.box).push(m);S.rq.push({icon:SP[id].e,title:'Das Ei schlüpft!',sub:`Es ist ein ${SP[id].n}! Es gehört jetzt zu deinem Team.`});toast('🐣 Dein Ei schlüpft!');return false})}
+  if(S.plan&&S.plan.chosen)for(const m of S.plan.missions){if(m.done)continue;
+    const hit=m.k==='region'?kind==='correct'&&data&&data.ri===m.r:m.k===kind;if(!hit)continue;
+    if(++m.p>=m.n){m.done=true;S.rq.push({icon:MT[m.k].ic,title:'Mission geschafft!',sub:misText(m),chest:'small'});toast('✅ Mission geschafft!')}}
+  save()}
+let CUR=null,CH=null;
+function refresh(){if(CUR)CUR.f.apply(null,CUR.a)}
+function maybeRewards(){if(!S||B||!dlg.hidden||!celEl.hidden||!wipeEl.hidden||!S.rq.length)return;if(/^(plan|title|name|starter|evo)/.test(String(SCR)))return;runRewards(refresh)}
+function runRewards(done){if(!S.rq.length){save();return done()}const r=S.rq.shift();if(r.egg)addEgg(r.egg==='rare');save();
+  celebrate(r,()=>r.chest?chestPick(r.chest==='big',()=>runRewards(done)):runRewards(done))}
+const LOOT=[{ic:'⭐',t:'25 Sterne',f:()=>{S.stars+=25}},{ic:'🌟',t:'40 Sterne',f:()=>{S.stars+=40}},{ic:'<span class="zball"></span>',t:'3 Zahlenbälle',f:()=>{S.items.ball+=3}},{ic:'🧪',t:'2 Tränke',f:()=>{S.items.trank+=2}},{ic:'🍬',t:'Level-Bonbon',f:()=>{S.items.bonbon++}},{ic:'🥚',t:'Zahlimon-Ei',f:()=>addEgg(false)}];
+function chestPick(big,done){const l=shuffle(LOOT.slice()).slice(0,3);if(big&&!l.includes(LOOT[5]))l[R(0,2)]=LOOT[5];CH={l,done,picked:false,ready:false};
+  celEl.innerHTML=`<div class="rays"></div><h2>Wähle eine Schatztruhe!</h2><div class="chests">${l.map((x,i)=>`<button class="chest" data-i="${i}" aria-label="Truhe ${i+1}">🎁</button>`).join('')}</div><p id="chestMsg">Tippe auf eine Truhe. Du darfst eine behalten.</p>`;
+  celEl.hidden=false;say('Wähle eine Schatztruhe!')}
+let lastAct=Date.now();['pointerdown','keydown'].forEach(t=>addEventListener(t,()=>{lastAct=Date.now()},{passive:true,capture:true}));
+function updTime(){if(!S)return;const m=minOf(dayKey()),g=goalMin();document.querySelectorAll('[data-tmin]').forEach(el=>el.textContent=m);document.querySelectorAll('[data-tbar]').forEach(el=>el.style.width=Math.min(100,m/g*100)+'%')}
+setInterval(()=>{if(!S||!S.lastDay||document.hidden||Date.now()-lastAct>90000)return;const k=dayKey();
+  if(S.lastDay!==k){if(B||!dlg.hidden||!celEl.hidden)return;dayCheck();save();startDay();return}
+  S.time[k]=(S.time[k]||0)+5;if(!S.goalHit[k]&&S.time[k]>=goalMin()*60)onGoal();else save();updTime()},5000);
+function startDay(){const news=S.news.splice(0);save();const go=()=>{if(!S.plan||!S.plan.chosen)planScreen();else mapScreen()};if(news.length)talk(news,go);else go()}
+function todayCard(planMode){const k=dayKey(),m=minOf(k),g=goalMin(),rm=riskMon(),p=S.plan;let st='';
+  if(S.settings.holiday)st='<div class="risk good"><span class="re">🏖️</span><span>Ferienmodus: Heute gibt es kein Pflichtziel.</span></div>';
+  else if(S.goalHit[k])st='<div class="risk good"><span class="re">✅</span><span>Tagesziel geschafft! Alle Zahlimon sind glücklich.</span></div>';
+  else if(!isGoalDay(k))st='<div class="risk good"><span class="re">😎</span><span>Heute ist ein freier Tag. Rechnen lohnt sich trotzdem!</span></div>';
+  else if(S.settings.conseq!=='none')st=rm?`<div class="risk"><span class="re">${SP[rm.id].e}</span><span>${nm(rm)} schaut dich an: «Bitte schaff dein Ziel, sonst laufe ich weg!»</span></div>`:`<div class="risk"><span class="re">${SP[S.team[0].id].e}</span><span>Schaffst du dein Ziel nicht, wird ${nm(S.team[0])} traurig und du verlierst 15 Sterne.</span></div>`;
+  const lost=S.lost.map(x=>`<div class="risk"><span class="re">${SP[x.id].e}</span><span>${nm(x)} ist weggelaufen. Schaffe dein Tagesziel, dann kommt es zurück!</span></div>`).join('');
+  const bar=(a,b)=>`<div class="mbar"><i style="width:${Math.min(100,a/b*100)}%"></i></div>`;
+  const mis=!planMode&&p&&p.chosen?p.missions.map(x=>`<div class="mrow ${x.done?'done':''}"><span class="mi">${x.done?'✅':MT[x.k].ic}</span><span>${esc(misText(x))}</span><span class="mp">${Math.min(x.p,x.n)}/${x.n}</span>${bar(x.p,x.n)}</div>`).join(''):'';
+  const eggs=S.eggs.map(e=>`<div class="mrow"><span class="mi">🥚</span><span>${e.rare?'Seltenes Ei':'Zahlimon-Ei'} schlüpft nach ${e.need} richtigen Aufgaben</span><span class="mp">${Math.min(e.p,e.need)}/${e.need}</span>${bar(e.p,e.need)}</div>`).join('');
+  return `<section class="card today"><div class="today-h"><span>Heute</span><span class="streak" title="Tage in Folge mit erreichtem Ziel">🔥 ${S.streak} ${S.streak===1?'Tag':'Tage'}</span></div>
+  <div class="tbar"><i data-tbar style="width:${Math.min(100,m/g*100)}%"></i><span>⏱ <b data-tmin>${m}</b> von ${g} Minuten</span></div>${st}${lost}${mis}${eggs}
+  ${!planMode&&p&&!p.chosen?'<button class="btn gold" data-act="plan">📋 Tagesplan wählen</button>':''}</section>`}
+function planScreen(){B=null;clearTimers();SCR='plan';const p=S.plan;
+  if(!S.flags.tutDay){S.flags.tutDay=1;save();const c=S.settings.conseq;
+    talk([{...PROF,text:`Ab jetzt hast du jeden Tag ein Ziel, {N}: ${goalMin()} Minuten rechnen.`},{...PROF,text:'Schaffst du es, darfst du eine Schatztruhe öffnen, und deine Serie wächst.'},
+      ...(c==='none'?[]:[{...PROF,text:c==='forever'?'Aber Achtung: Schaffst du es nicht, läuft eines deiner Zahlimon für immer weg!':'Aber Achtung: Schaffst du es nicht, läuft eines deiner Zahlimon weg! Es kommt erst zurück, wenn du dein nächstes Tagesziel schaffst.'}]),
+      {...PROF,text:'Und du entscheidest selbst: Wähle jeden Tag zwei Missionen und deinen Tagespartner.'}],planScreen);return}
+  const ready=p.sel.length===2&&p.partner!=null;
+  show(`${hud()}<h2 class="h2">Dein Tag, ${esc(S.name)}!</h2>${todayCard(true)}
+  <h3 class="h3">1. Wähle 2 Missionen</h3><div class="missions">${p.offer.map((m,i)=>`<button class="mis ${p.sel.includes(i)?'on':''}" data-act="pickMis" data-arg="${i}"><span class="mi">${MT[m.k].ic}</span><span>${esc(misText(m))}</span><span class="chk">✓</span></button>`).join('')}</div>
+  <h3 class="h3">2. Wähle deinen Tagespartner</h3><p class="fine">Dein Partner bekommt heute doppelte Erfahrung.</p>
+  <div class="partners">${S.team.map(m=>`<button class="ptn ${p.partner===m.uid?'on':''}" data-act="pickPartner" data-arg="${m.uid}"><span class="pe">${SP[m.id].e}</span>${nm(m)}<small>Lv ${m.lvl}</small></button>`).join('')}</div>
+  <button class="btn green big" style="margin-top:18px" data-act="startPlan" ${ready?'':'disabled'}>${ready?"Los geht's!":'Wähle 2 Missionen und einen Partner'}</button>`)}
+ACT.plan=()=>planScreen();
+ACT.pickMis=i=>{i=+i;const s=S.plan.sel,j=s.indexOf(i);if(j>=0)s.splice(j,1);else{s.push(i);if(s.length>2)s.shift()}save();planScreen();if(j<0){sfx('tap');say(misText(S.plan.offer[i]))}};
+ACT.pickPartner=u=>{S.plan.partner=+u;save();planScreen();const m=allMons().find(x=>x.uid===+u);if(m){sfx('ok');say(`${nm(m)} ist dein Tagespartner!`)}};
+ACT.startPlan=()=>{const p=S.plan;if(p.sel.length!==2||p.partner==null)return;p.missions=p.sel.map(i=>({...p.offer[i],p:0,done:false}));p.chosen=true;save();sfx('win');say("Super! Dein Plan steht. Los geht's!");mapScreen()};
+function goalSection(){const st=S.settings,rows=[];for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()-i);const k=dkOf(d);
+    rows.push(`<li><span>${i===0?'Heute':WD[d.getDay()]}, ${d.getDate()}.${d.getMonth()+1}.</span><span>${minOf(k)} Min. · ${S.goalHit[k]?'✓ Ziel erreicht':!isGoalDay(k)?'kein Ziel':i===0?'läuft noch':'✗ verpasst'}</span></li>`)}
+  return `<section class="card pad"><h3 class="h3">Tagesziel und Motivation</h3>
+  <div class="kpis"><div><b>${minOf(dayKey())}</b><span>Minuten heute</span></div><div><b>${S.streak}</b><span>Tage in Folge</span></div><div><b>${S.best}</b><span>beste Serie</span></div></div>
+  <label class="row" for="optGoal"><span>Minuten pro Tag</span><select id="optGoal">${[10,15,20,30,45,60].map(v=>`<option value="${v}" ${st.goalMin===v?'selected':''}>${v} Minuten</option>`).join('')}</select></label>
+  <div class="row"><span>Tage mit Ziel</span><span class="days">${[1,2,3,4,5,6,0].map(d=>`<label for="gd${d}"><input type="checkbox" id="gd${d}" class="gday" data-day="${d}" ${st.goalDays[d]?'checked':''}>${WD[d].slice(0,2)}</label>`).join('')}</span></div>
+  <label class="row" for="optConseq"><span>Ziel verpasst</span><select id="optConseq"><option value="back" ${st.conseq==='back'?'selected':''}>Zahlimon läuft weg, kommt zurück</option><option value="forever" ${st.conseq==='forever'?'selected':''}>Zahlimon läuft für immer weg</option><option value="none" ${st.conseq==='none'?'selected':''}>Keine Folge</option></select></label>
+  <label class="row" for="optHoliday"><span>Ferienmodus (kein Pflichtziel, Serie bleibt)</span><input type="checkbox" id="optHoliday" ${st.holiday?'checked':''}></label>
+  <p class="fine">«Läuft weg, kommt zurück»: Für jeden verpassten Zieltag läuft ein Zahlimon weg, höchstens zwei auf einmal. Es kommt zurück, sobald das nächste Tagesziel erreicht ist. Das Start-Zahlimon läuft nie weg. Gezählt wird nur aktive Zeit: Das Spiel ist offen, und in den letzten 90 Sekunden wurde getippt.</p>
+  ${S.lost.length?`<p class="warn">Zurzeit weggelaufen: ${S.lost.map(m=>esc(nm(m))).join(', ')}</p>`:''}<ul class="log">${rows.join('')}</ul></section>`}
 
 /* ---------- Erklärung «So geht's» ---------- */
 let LQ=null;
 function learnScreen(i,again){const r=RG[i],t=r.topic;if(!again||!LQ){let q;for(let k=0;k<40;k++){q=GEN[t](getStufe(t));if(q.aid||q.vis)break}q.topic=t;q.say=q.say||q.text;LQ=q}
-  const q=LQ,dl=q.aid&&q.aid.t==='line'?q.aid.jumps.length*.7+.6:1.6;SCR='learn'+i;B=null;clearTimers();
+  const q=LQ,dl=q.aid&&q.aid.t==='line'?q.aid.jumps.length*.7+.6:1.6;SCR='learn'+i;B=null;clearTimers();CUR={f:learnScreen,a:[i,true]};if(!again)ev('learn');later(maybeRewards,(dl+2)*1000);
   show(`${hud()}<h2 class="h2">So geht's: ${TOPICS[t].n}</h2><div class="card pad learn"><p class="qt ${q.text.length>22?'long':''}">${esc(q.text)}</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}${aidHTML(q.aid,true)}
   <p class="hint fi" style="animation-delay:${dl.toFixed(1)}s">💡 ${esc(q.hint)}</p><p class="fi" style="animation-delay:${(dl+.4).toFixed(1)}s">Lösung: <span class="bigans">${esc(String(q.ans))}</span></p></div>
   <div class="row2"><button class="btn ghost" data-act="learnAgain" data-arg="${i}">🔁 Nochmal</button><button class="btn" data-act="learnNew" data-arg="${i}">✨ Neues Beispiel</button></div>
@@ -996,12 +1154,12 @@ function learnScreen(i,again){const r=RG[i],t=r.topic;if(!again||!LQ){let q;for(
   say(`Schau zu! ${q.say} ${q.hint}`)}
 ACT.learn=i=>learnScreen(+i,false);ACT.learnNew=i=>learnScreen(+i,false);ACT.learnAgain=i=>learnScreen(+i,true);
 
-const wrapS=(f,k)=>function(...a){SCR=typeof k==='function'?k(...a):k;return f.apply(this,a)};
+const wrapS=(f,k)=>{const w=function(...a){SCR=typeof k==='function'?k(...a):k;CUR={f:w,a};const r=f.apply(this,a);setTimeout(maybeRewards,450);return r};return w};
 titleScreen=wrapS(titleScreen,'title');nameScreen=wrapS(nameScreen,'name');starterScreen=wrapS(starterScreen,'starter');mapScreen=wrapS(mapScreen,'map');regionScreen=wrapS(regionScreen,i=>'region'+i);
 teamScreen=wrapS(teamScreen,'team');dexScreen=wrapS(dexScreen,'dex');shopScreen=wrapS(shopScreen,'shop');centerScreen=wrapS(centerScreen,'center');parentsScreen=wrapS(parentsScreen,'parents');
 ACT.title=titleScreen;ACT.map=mapScreen;ACT.team=teamScreen;ACT.dex=dexScreen;ACT.shop=shopScreen;ACT.center=centerScreen;
 
-window.__zahlimon={GEN,MK,aidHTML,get S(){return S},set S(v){S=v},get B(){return B},fresh};
+window.__zahlimon={GEN,MK,aidHTML,dayCheck,onGoal,startDay,get S(){return S},set S(v){S=v},get B(){return B},fresh};
 titleScreen();
 })();
 </script>
