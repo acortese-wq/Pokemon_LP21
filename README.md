@@ -14,7 +14,7 @@ Oder `index.html` herunterladen und im Browser öffnen. Mehr Dateien braucht es 
 - Wer drei Aufgaben in Folge richtig löst, macht einen Superangriff.
 - Mit Zahlenbällen fängt man wilde Zahlimon, auch dafür muss man richtig rechnen. Zahlimon steigen im Level auf und entwickeln sich weiter.
 - Es gibt 7 Gebiete mit je einer Arena und einem Orden. Mit jedem Orden öffnet sich das nächste Gebiet.
-- Das Spiel liest alles auf Hochdeutsch vor. Dafür nutzt es die Sprachausgabe des Geräts.
+- Vorlesen ist standardmässig aus und lässt sich im Bereich für Eltern einschalten.
 - Der Fortschritt wird automatisch im Browser gespeichert.
 
 | Gebiet | Thema |
@@ -31,10 +31,20 @@ Die Schwierigkeit passt sich pro Thema in drei Stufen an. Falsch gelöste Aufgab
 
 ## Tagesziel und Motivation
 - **Selbst entscheiden:** Jeden Tag wählt das Kind 2 von 4 Missionen (z. B. «Gewinne 4 Kämpfe», «Mach 3 Superangriffe», «Löse 15 Aufgaben im Mal-Wald») und einen Tagespartner, der doppelte Erfahrung bekommt.
-- **Zeitziel:** standardmässig 30 Minuten aktive Rechenzeit pro Tag (in den Elterneinstellungen anpassbar). Der Fortschritt ist immer oben sichtbar.
+- **Zeitziel:** standardmässig 30 Rechenminuten pro Tag (in den Elterneinstellungen anpassbar). Es zählt nur echte Rechenzeit: Zeit mit offener Aufgabe (max. 60 Sekunden pro Aufgabe), das Lesen des Rechenwegs und die Erklärseiten. Karte, Laden und Animationen zählen nicht. Die Anzeige 🧮 12/30 ist oben und im Kampf immer sichtbar.
 - **Belohnungen:** Für das Tagesziel und für jede Mission darf das Kind eine von drei Schatztruhen öffnen. Darin sind Sterne, Zahlenbälle, Tränke, ein Level-Bonbon oder ein Zahlimon-Ei.
 - **Eier und Serie:** Ein Ei schlüpft nach 20 richtigen Aufgaben. Die Serie 🔥 zählt die Tage in Folge mit erreichtem Ziel; nach 3, 7, 14, 21 und 30 Tagen gibt es ein seltenes Ei.
 - **Konsequenz:** Ein Zahlimon sagt jeden Tag, dass es weglaufen wird, wenn das Ziel nicht erreicht wird. Wird ein Zieltag verpasst, läuft es tatsächlich weg und kommt zurück, sobald das nächste Tagesziel geschafft ist. Die Eltern können stattdessen «für immer» oder «keine Folge» wählen und einen Ferienmodus einschalten. Das Start-Zahlimon läuft nie weg.
+
+## Zahlimon und Bälle
+- 88 verschiedene Zahlimon, 8 bis 11 pro Gebiet, dazu seltene in fast jedem Gebiet.
+- Selten (1 von 30) erscheint ein **schillerndes** Zahlimon ✨ in anderer Farbe.
+- Vier Bälle: Zahlenball, Zehnerball (fängt besser), Hunderterball (fängt sehr gut) und Tausenderball (fängt sicher; nur aus Truhen und für lange Serien).
+
+## Spielstand
+- Der Spielstand wird nach jeder Aktion doppelt gespeichert (Browser-Speicher und IndexedDB, dazu eine Sicherungskopie). Beim Öffnen geht es automatisch weiter.
+- «Neues Spiel» ist geschützt und nur mit einer Rechenfrage für Erwachsene möglich.
+- Wichtig: Jeder Browser und jedes Symbol auf dem Home-Bildschirm hat einen eigenen Speicher. Immer gleich starten, nicht im privaten Modus spielen.
 
 ## Bewegte Bilder und Rechenhilfen
 - Die Zahlimon bewegen sich, je nach Typ atmen, schweben oder hüpfen sie.

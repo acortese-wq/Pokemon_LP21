@@ -184,7 +184,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .swb .i{flex:1;min-width:0}
 
 /* Zahlenball (eigenes Design) */
-.zball{display:inline-block;width:1em;height:1em;border-radius:50%;background:linear-gradient(180deg,var(--blue) 0 46%,var(--ink) 46% 54%,#fff 54%);border:.06em solid var(--ink);position:relative;vertical-align:middle}
+.zball{display:inline-block;width:1em;height:1em;border-radius:50%;background:linear-gradient(180deg,var(--bc,var(--blue)) 0 46%,var(--ink) 46% 54%,#fff 54%);border:.06em solid var(--ink);position:relative;vertical-align:middle}
 .zball::after{content:"";position:absolute;left:50%;top:50%;width:.32em;height:.32em;margin:-.16em;border-radius:50%;background:var(--gold);border:.05em solid var(--ink)}
 .mon .zball{font-size:.6em}
 .menu2 .zball,.shop-ic .zball{font-size:1.1em}
@@ -414,6 +414,11 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .days{display:flex;flex-wrap:wrap;gap:6px;font-size:.8rem;justify-content:flex-end}
 .days label{display:flex;flex-direction:column;align-items:center}
 .row select{max-width:58%}
+.shiny{filter:hue-rotate(150deg) saturate(1.6) brightness(1.1) drop-shadow(0 0 6px #ffd35a)}
+.bpills{display:flex;gap:6px;flex:none}
+.ballpick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ballpick .btn{font-size:1rem;min-height:52px;padding:8px}
+.ballpick .btn:last-child{grid-column:1/-1}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}.arc{stroke-dashoffset:0}.fi,#cel p{opacity:1}.scene{display:none}}
 </style>
 </head>
@@ -519,37 +524,90 @@ const SP={
   schnecki:{n:'Schnecki',e:'🐌',t:'pflanze'},
   wolfi:{n:'Wolfi',e:'🐺',t:'normal'},
   drakonix:{n:'Drakonix',e:'🦖',t:'drache'},
+  summi:{n:'Summi',e:'🐝',t:'pflanze'},
+  maulwi:{n:'Maulwi',e:'🐭',t:'normal',evo:['rattix',14]},
+  rattix:{n:'Rattix',e:'🐀',t:'normal'},
+  hamsti:{n:'Hamsti',e:'🐹',t:'normal'},
+  schafi:{n:'Schafi',e:'🐑',t:'normal',evo:['widdro',16]},
+  widdro:{n:'Widdro',e:'🐏',t:'stein'},
+  sonni:{n:'Sonni',e:'🌻',t:'pflanze'},
+  entli:{n:'Entli',e:'🦆',t:'wasser',evo:['schwanix',16]},
+  schwanix:{n:'Schwanix',e:'🦢',t:'luft'},
+  spinnix:{n:'Spinnix',e:'🕷️',t:'geist'},
+  skorpi:{n:'Skorpi',e:'🦂',t:'stein'},
+  dachsi:{n:'Dachsi',e:'🦡',t:'stein'},
+  ameiso:{n:'Ameiso',e:'🐜',t:'pflanze'},
+  kuerbsi:{n:'Kürbsi',e:'🎃',t:'geist'},
+  kristalli:{n:'Kristalli',e:'💎',t:'magie',rare:1},
+  murmli:{n:'Murmli',e:'🐿️',t:'normal'},
+  lamali:{n:'Lamali',e:'🦙',t:'normal'},
+  rindli:{n:'Rindli',e:'🐮',t:'normal',evo:['stierix',17]},
+  stierix:{n:'Stierix',e:'🐂',t:'stein'},
+  steinkopf:{n:'Steinkopf',e:'🗿',t:'stein'},
+  schneeli:{n:'Schneeli',e:'☃️',t:'wasser'},
+  hirschi:{n:'Hirschi',e:'🦌',t:'pflanze'},
+  wildschwi:{n:'Wildschwi',e:'🐗',t:'normal'},
+  pandi:{n:'Pandi',e:'🐼',t:'normal'},
+  waschbi:{n:'Waschbi',e:'🦝',t:'normal'},
+  zischi:{n:'Zischi',e:'🐍',t:'geist'},
+  grilli:{n:'Grilli',e:'🦗',t:'pflanze'},
+  fischli:{n:'Fischli',e:'🐟',t:'wasser',evo:['haiko',20]},
+  haiko:{n:'Haiko',e:'🦈',t:'wasser'},
+  kugli:{n:'Kugli',e:'🐡',t:'wasser'},
+  delfi:{n:'Delfi',e:'🐬',t:'wasser',rare:1},
+  schildi:{n:'Schildi',e:'🐢',t:'wasser'},
+  hummi:{n:'Hummi',e:'🦞',t:'wasser'},
+  kalmi:{n:'Kalmi',e:'🦑',t:'wasser'},
+  otti:{n:'Otti',e:'🦦',t:'wasser'},
+  flamingi:{n:'Flamingi',e:'🦩',t:'luft'},
+  hundi:{n:'Hundi',e:'🐶',t:'normal',evo:['pudelix',20]},
+  pudelix:{n:'Pudelix',e:'🐩',t:'normal'},
+  pferdi:{n:'Pferdi',e:'🐴',t:'normal',evo:['zebrino',21]},
+  zebrino:{n:'Zebrino',e:'🦓',t:'normal'},
+  tauby:{n:'Tauby',e:'🕊️',t:'luft'},
+  schweini:{n:'Schweini',e:'🐷',t:'normal'},
+  robo:{n:'Robo',e:'🤖',t:'elektro'},
+  pfaui:{n:'Pfaui',e:'🦚',t:'magie',rare:1},
+  dromi:{n:'Dromi',e:'🐪',t:'stein',evo:['kamelix',20]},
+  kamelix:{n:'Kamelix',e:'🐫',t:'stein'},
+  loewix:{n:'Löwix',e:'🦁',t:'feuer'},
+  leopardo:{n:'Leopardo',e:'🐆',t:'normal'},
+  elefo:{n:'Elefo',e:'🐘',t:'stein'},
+  gorillo:{n:'Gorillo',e:'🦍',t:'normal'},
+  brontix:{n:'Brontix',e:'🦕',t:'drache'},
+  giraffi:{n:'Giraffi',e:'🦒',t:'normal'},
+  pixlo:{n:'Pixlo',e:'👾',t:'magie',rare:1},
   einhorni:{n:'Einhorni',e:'🦄',t:'magie',rare:1},
   zahlodrak:{n:'Zahlodrak',e:'🐉',t:'drache',rare:1}
 };
 
 const PROF={who:'Professorin Rechenstein',face:'👩‍🔬'};
 const RG=[
-  {n:'Plus-Wiese',topic:'add',learn:'Plus rechnen bis 1000',icon:'🌼',deco:[['☁️',3,'drift'],['🌼',6,'sway'],['🐝',1,'buzz']],c1:'#dcf2bd',c2:'#86c96a',lv:[2,5],wild:['plussi','pusti','pilzli','blatti'],
+  {n:'Plus-Wiese',topic:'add',learn:'Plus rechnen bis 1000',icon:'🌼',deco:[['☁️',3,'drift'],['🌼',6,'sway'],['🐝',1,'buzz']],c1:'#dcf2bd',c2:'#86c96a',lv:[2,5],wild:['plussi','pusti','pilzli','blatti','summi','maulwi','hamsti','schafi','sonni','entli'],
    leader:{n:'Pia Plus',e:'👩‍🌾',badge:'Blüten-Orden',be:'🌸',team:[['pusti',6],['plussi',7]],
      hi:'Hallo {N}! Ich bin Pia, die Arenaleiterin der Plus-Wiese. Hier wird addiert, bis die Blumen blühen. Bist du bereit?',
      lose:'Wow, du rechnest super Plus-Aufgaben! Du hast dir den Blüten-Orden verdient.'}},
-  {n:'Minus-Höhle',topic:'sub',learn:'Minus rechnen und ergänzen',icon:'💎',deco:[['✨',7,'twinkle'],['💧',3,'fall']],c1:'#d8d2ea',c2:'#8373b0',lv:[5,8],wild:['minuso','kieselo','gespensti'],
+  {n:'Minus-Höhle',topic:'sub',learn:'Minus rechnen und ergänzen',icon:'💎',deco:[['✨',7,'twinkle'],['💧',3,'fall']],c1:'#d8d2ea',c2:'#8373b0',lv:[5,8],wild:['minuso','kieselo','gespensti','spinnix','skorpi','dachsi','ameiso','kuerbsi'],rare:['kristalli'],
    leader:{n:'Max Minus',e:'🧔',badge:'Kristall-Orden',be:'💎',team:[['kieselo',9],['gespensti',10]],
      hi:'Willkommen in meiner Höhle, {N}! Ich bin Max. Hier unten wird abgezogen und ergänzt. Mal sehen, ob du den Weg findest!',
      lose:'Unglaublich! Du rechnest Minus wie ein Profi. Nimm den Kristall-Orden.'}},
-  {n:'Zahlen-Berg',topic:'zahl',learn:'Hunderter, Zehner, Einer, Nachbarzahlen und Runden',icon:'⛰️',deco:[['☁️',3,'drift'],['❄️',5,'fall']],c1:'#ece4d4',c2:'#a88f6a',lv:[8,11],wild:['ziegi','funki','kieselo'],rare:'einhorni',
+  {n:'Zahlen-Berg',topic:'zahl',learn:'Hunderter, Zehner, Einer, Nachbarzahlen und Runden',icon:'⛰️',deco:[['☁️',3,'drift'],['❄️',5,'fall']],c1:'#ece4d4',c2:'#a88f6a',lv:[8,11],wild:['ziegi','funki','kieselo','murmli','lamali','rindli','steinkopf','schneeli'],rare:['einhorni'],
    leader:{n:'Hugo Hunderter',e:'🧗',badge:'Fels-Orden',be:'🪨',team:[['ziegi',12],['funki',12],['felsor',13]],
      hi:'Hoch hinaus, {N}! Ich bin Hugo. Auf dem Zahlen-Berg zählen Hunderter, Zehner und Einer. Kennst du dich aus?',
      lose:'Gipfel erreicht! Du kennst den Zahlenraum bis 1000. Hier ist der Fels-Orden.'}},
-  {n:'Mal-Wald',topic:'mal',learn:'Das Einmaleins',icon:'🌲',deco:[['🍂',6,'fall'],['🌲',4,'sway']],c1:'#cfe8cf',c2:'#4a9160',lv:[11,14],wild:['eulo','fuchsli','baerli','blatti'],
+  {n:'Mal-Wald',topic:'mal',learn:'Das Einmaleins',icon:'🌲',deco:[['🍂',6,'fall'],['🌲',4,'sway']],c1:'#cfe8cf',c2:'#4a9160',lv:[11,14],wild:['eulo','fuchsli','baerli','blatti','hirschi','wildschwi','pandi','waschbi','zischi','grilli'],
    leader:{n:'Mira Mal',e:'🧝‍♀️',badge:'Eichel-Orden',be:'🌰',team:[['eulo',15],['fuchsli',15],['baerli',16]],
      hi:'Psst, {N}! Im Mal-Wald flüstern die Bäume das Einmaleins. Ich bin Mira. Kannst du es auch?',
      lose:'Du kennst das Einmaleins richtig gut! Der Eichel-Orden gehört dir.'}},
-  {n:'Geteilt-See',topic:'div',learn:'Geteilt rechnen',icon:'🌊',deco:[['bubble',9,'rise'],['🐟',2,'drift']],c1:'#cfe9f7',c2:'#4c9fd6',lv:[14,17],wild:['quaki','oktopi','krabbi','tropfi'],
+  {n:'Geteilt-See',topic:'div',learn:'Geteilt rechnen',icon:'🌊',deco:[['bubble',9,'rise'],['🐟',2,'drift']],c1:'#cfe9f7',c2:'#4c9fd6',lv:[14,17],wild:['quaki','oktopi','krabbi','tropfi','fischli','kugli','schildi','hummi','kalmi','otti','flamingi'],rare:['delfi'],
    leader:{n:'Tim Teiler',e:'🏊',badge:'Muschel-Orden',be:'🐚',team:[['quaki',18],['krabbi',18],['oktopi',19]],
      hi:'Ahoi {N}! Ich bin Tim. Am Geteilt-See teilen wir alles gerecht auf. Zeig mir, was du kannst!',
      lose:'Gerecht geteilt und gewonnen! Hier ist der Muschel-Orden.'}},
-  {n:'Markt-Stadt',topic:'markt',learn:'Franken, Meter, Minuten und die Uhr',icon:'🏘️',deco:[['🎈',3,'rise'],['☁️',2,'drift']],c1:'#f8e7c8',c2:'#e0a45a',lv:[17,20],wild:['miezi','papagi','schnecki','flammi'],
+  {n:'Markt-Stadt',topic:'markt',learn:'Franken, Meter, Minuten und die Uhr',icon:'🏘️',deco:[['🎈',3,'rise'],['☁️',2,'drift']],c1:'#f8e7c8',c2:'#e0a45a',lv:[17,20],wild:['miezi','papagi','schnecki','flammi','hundi','pferdi','tauby','schweini','robo','dromi'],rare:['pfaui'],
    leader:{n:'Greta Geld',e:'👩‍💼',badge:'Münz-Orden',be:'🪙',team:[['papagi',21],['schnecki',21],['tigrano',22]],
      hi:'Grüezi {N}! Ich bin Greta. In der Markt-Stadt geht es um Franken, Meter und Minuten. Bereit?',
      lose:'Du rechnest wie ein echter Marktprofi! Der Münz-Orden ist deiner.'}},
-  {n:'Drachen-Gipfel',topic:'mix',learn:'Alles gemischt',icon:'🌋',deco:[['ember',12,'rise'],['☁️',2,'drift']],c1:'#f5dcd8',c2:'#b5584c',lv:[21,25],wild:['wolfi','drakonix','sturmi','felsor'],rare:'einhorni',
+  {n:'Drachen-Gipfel',topic:'mix',learn:'Alles gemischt',icon:'🌋',deco:[['ember',12,'rise'],['☁️',2,'drift']],c1:'#f5dcd8',c2:'#b5584c',lv:[21,25],wild:['wolfi','drakonix','sturmi','felsor','loewix','leopardo','elefo','gorillo','brontix','giraffi'],rare:['einhorni','pixlo'],
    leader:{n:'Meister Kalkulus',e:'🧙‍♂️',badge:'Drachen-Orden',be:'🐉',team:[['wolfi',25],['sturmi',25],['drakonix',26],['felsor',26]],
      hi:'Du hast es bis zum Drachen-Gipfel geschafft, {N}. Ich bin Kalkulus. Hier kommt alles gemischt. Zeig mir alles, was du gelernt hast!',
      lose:'Unglaublich … du hast mich besiegt! Ab heute bist du Zahlimon-Champion.'}}
@@ -574,21 +632,35 @@ const CHAMP=[
   {...PROF,text:'Und denk dran: Alle Arenen kannst du jederzeit wieder herausfordern, um weiter zu trainieren.'}
 ];
 const STARTERS=[['flammi','Mutig und heiss wie ein Grillfeuer.'],['tropfi','Ruhig und schlau. Liebt kaltes Wasser.'],['blatti','Fröhlich und zäh. Wächst mit jeder Aufgabe.']];
-const SHOP=[['ball','Zahlenball','Damit fängst du wilde Zahlimon.',5],['trank','Trank','Gibt einem Zahlimon 30 Kraft zurück.',8],['bonbon','Level-Bonbon','Ein Zahlimon steigt sofort ein Level auf.',30]];
+const BALLS=[{k:'ball',n:'Zahlenball',m:1,c:'#2a66cc'},{k:'b10',n:'Zehnerball',m:1.6,c:'#2e9254'},{k:'b100',n:'Hunderterball',m:2.4,c:'#e0a010'},{k:'b1000',n:'Tausenderball',m:99,c:'#8a3fc0'}];
+const ballOf=k=>BALLS.find(b=>b.k===k)||BALLS[0];
+const ballIc=k=>`<span class="zball" style="--bc:${ballOf(k).c}"></span>`;
+const ballsTotal=()=>BALLS.reduce((a,b)=>a+(S.items[b.k]||0),0);
+const SHOP=[['ball','Zahlenball','Damit fängst du wilde Zahlimon.',5],['b10','Zehnerball','Fängt besser als der Zahlenball.',12],['b100','Hunderterball','Fängt sehr gut.',25],['trank','Trank','Gibt einem Zahlimon 30 Kraft zurück.',8],['bonbon','Level-Bonbon','Ein Zahlimon steigt sofort ein Level auf.',30]];
 
 /* ---------- Spielstand ---------- */
 const KEY='zahlimon_v1';
-const DEFSET={speech:true,sound:true,rate:1,fix:{},goalMin:30,goalDays:[1,1,1,1,1,1,1],conseq:'back',holiday:false};
+const DEFSET={speech:false,sound:true,rate:1,fix:{},goalMin:30,goalDays:[1,1,1,1,1,1,1],conseq:'back',holiday:false};
 let S=null,B=null,EVO_NEXT=null;
-function fresh(name){return {v:1,name,team:[],box:[],badges:0,stars:10,items:{ball:5,trank:3,bonbon:0},seen:{},caught:{},stats:{},retry:{},log:[],days:{},settings:{...DEFSET,fix:{},goalDays:DEFSET.goalDays.slice()},flags:{},champ:false,uid:1,time:{},goalHit:{},plan:null,lastDay:null,streak:0,best:0,lost:[],news:[],rq:[],eggs:[],sad:false,starterUid:null}}
-function migrate(){const d=fresh(S.name);for(const k in d)if(S[k]===undefined)S[k]=d[k];S.settings={...DEFSET,...S.settings};S.settings.fix=S.settings.fix||{};S.items={ball:0,trank:0,bonbon:0,...S.items};S.settings.goalDays=(S.settings.goalDays||DEFSET.goalDays).slice();if(S.starterUid==null){const u=S.team.concat(S.box).map(m=>m.uid);if(u.length)S.starterUid=Math.min(...u)}}
-function save(){if(!S)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function load(){try{const t=localStorage.getItem(KEY);return t?JSON.parse(t):null}catch(e){return null}}
+function fresh(name){return {v:1,name,team:[],box:[],badges:0,stars:10,items:{ball:10,trank:3,bonbon:0,b10:2,b100:0,b1000:0},seen:{},caught:{},stats:{},retry:{},log:[],days:{},settings:{...DEFSET,fix:{},goalDays:DEFSET.goalDays.slice()},flags:{v4:1},champ:false,uid:1,shiny:{},time:{},goalHit:{},plan:null,lastDay:null,streak:0,best:0,lost:[],news:[],rq:[],eggs:[],sad:false,starterUid:null}}
+function migrate(){const d=fresh(S.name);for(const k in d)if(S[k]===undefined)S[k]=d[k];S.settings={...DEFSET,...S.settings};S.settings.fix=S.settings.fix||{};S.items={ball:0,trank:0,bonbon:0,b10:0,b100:0,b1000:0,...S.items};if(!S.flags.v4){S.flags.v4=1;S.settings.speech=false;S.items.ball+=5;S.items.b10+=3;S.news.push({face:'🎁',text:'Geschenk für dich: 5 Zahlenbälle und 3 Zehnerbälle! Neu gibt es auch Hunderterbälle und Tausenderbälle.'},{face:'🧮',text:'Neu: Für dein Tagesziel zählt nur noch die Zeit, in der du wirklich rechnest. Und es gibt über 50 neue Zahlimon zu entdecken!'})}S.settings.goalDays=(S.settings.goalDays||DEFSET.goalDays).slice();if(S.starterUid==null){const u=S.team.concat(S.box).map(m=>m.uid);if(u.length)S.starterUid=Math.min(...u)}}
+const BAK='zahlimon_v1_bak';
+let IDBSAVE=null,saveN=0,idbT=null,STORE_OK=true;
+function idb(){return new Promise((res,rej)=>{try{const r=indexedDB.open('zahlimon',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}})}
+function idbPut(j){clearTimeout(idbT);idbT=setTimeout(()=>{idb().then(db=>{db.transaction('kv','readwrite').objectStore('kv').put(j,KEY)}).catch(()=>{})},400)}
+function idbGet(){return idb().then(db=>new Promise(res=>{const r=db.transaction('kv').objectStore('kv').get(KEY);r.onsuccess=()=>res(r.result||null);r.onerror=()=>res(null)})).catch(()=>null)}
+function save(){if(!S)return;S.savedAt=Date.now();let j;try{j=JSON.stringify(S)}catch(e){return}
+  try{localStorage.setItem(KEY,j);if(saveN++%20===0)localStorage.setItem(BAK,j);STORE_OK=true}catch(e){STORE_OK=false}idbPut(j)}
+const validSave=o=>!!(o&&o.name&&Array.isArray(o.team)&&o.team.length);
+function load(){const c=[];for(const k of [KEY,BAK]){try{const o=JSON.parse(localStorage.getItem(k)||'null');if(validSave(o))c.push(o)}catch(e){}}
+  if(validSave(IDBSAVE))c.push(IDBSAVE);c.sort((a,b)=>(b.savedAt||0)-(a.savedAt||0));return c[0]||null}
+function wipeSave(){try{localStorage.removeItem(KEY);localStorage.removeItem(BAK)}catch(e){}IDBSAVE=null;clearTimeout(idbT);idb().then(db=>{db.transaction('kv','readwrite').objectStore('kv').delete(KEY)}).catch(()=>{})}
+addEventListener('pagehide',()=>save());document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
 const maxHp=m=>30+m.lvl*4;
 const need=l=>l*10;
 const nm=m=>SP[m.id].n;
 function mkMon(id,lvl){const m={id,lvl,xp:0,uid:S.uid++};m.hp=maxHp(m);return m}
-function mkFoe(id,lvl,leader){const max=30+lvl*(leader?4:3);return {id,lvl,max,hp:max}}
+function mkFoe(id,lvl,leader){const max=30+lvl*(leader?4:3);return {id,lvl,max,hp:max,sh:!leader&&Math.random()<1/30?1:0}}
 function healAll(){S.team.concat(S.box).forEach(m=>m.hp=maxHp(m))}
 const firstAlive=()=>S.team.findIndex(m=>m.hp>0);
 function stat(t){return S.stats[t]=S.stats[t]||{r:0,f:0,s:1,run:0,miss:0}}
@@ -801,7 +873,7 @@ let tT;function toast(t){toastEl.textContent=t;toastEl.hidden=false;toastEl.clas
 const chip=t=>`<span class="chip" style="--c:${TYPES[t].c}">${TYPES[t].n}</span>`;
 const dots=n=>`<span class="dots" aria-label="Stufe ${n} von 3">${[1,2,3].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>`;
 function bar(key,cur,max){const p=Math.round(cur/max*100);const prev=B&&B.prev[key]!=null?B.prev[key]:p;if(B)B.prev[key]=p;return `<div class="hp"><i class="${p>50?'':p>20?'mid':'low'}" data-to="${p}" style="width:${prev}%"></i></div>`}
-function hud(){return `<header class="hud"><div class="hud-n"><span class="hud-l">Trainer</span><b>${esc(S.name)}</b></div>${S.lastDay?`<div class="hud-t" aria-label="Minuten heute">⏱ <b data-tmin>${minOf(dayKey())}</b>/${goalMin()}</div>`:'<span></span>'}<div class="hud-s" aria-label="Sterne">⭐ ${S.stars}</div><div class="hud-b" aria-label="Orden: ${S.badges} von 7">${RG.map((r,i)=>`<span class="${i<S.badges?'got':''}">${i<S.badges?r.leader.be:''}</span>`).join('')}</div></header>`}
+function hud(){return `<header class="hud"><div class="hud-n"><span class="hud-l">Trainer</span><b>${esc(S.name)}</b></div>${S.lastDay?`<div class="hud-t" aria-label="Rechenminuten heute">🧮 <b data-tmin>${minOf(dayKey())}</b>/${goalMin()}</div>`:'<span></span>'}<div class="hud-s" aria-label="Sterne">⭐ ${S.stars}</div><div class="hud-b" aria-label="Orden: ${S.badges} von 7">${RG.map((r,i)=>`<span class="${i<S.badges?'got':''}">${i<S.badges?r.leader.be:''}</span>`).join('')}</div></header>`}
 function nav(){return `<nav class="nav"><div class="in">${[['map','🗺️','Karte'],['team','🎒','Team'],['dex','📖','Zahlidex'],['shop','🛒','Laden'],['center','❤️','Center']].map(([a,i,l])=>`<button data-act="${a}"><b>${i}</b>${l}</button>`).join('')}</div></nav>`}
 
 app.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;unlockAudio();const f=ACT[b.dataset.act];if(f)f(b.dataset.arg,b)});
@@ -828,13 +900,15 @@ function titleScreen(){B=null;S=null;const sv=load();
   show(`<div class="title"><div class="scene numsky" aria-hidden="true">${RM?'':Array.from({length:14},()=>`<span class="d-rise num" style="left:${R(2,90)}%;animation-duration:${R(10,18)}s;animation-delay:-${R(0,17)}s">${P(['1','2','3','4','5','6','7','8','9','+','−','·','='])}</span>`).join('')}</div><p class="eyebrow">Das Rechen-Abenteuer · 3. Klasse</p><h1 class="logo">Zahli<span>mon</span></h1>
   <div class="parade" aria-hidden="true"><span>🦎</span><span>🐧</span><span>🐛</span></div>
   <div class="stack">${sv&&sv.name?`<button class="btn green big" data-act="cont">▶ Weiterspielen: ${esc(sv.name)}</button>`:''}
-  <button class="btn ${sv?'ghost':'green big'}" data-act="newgame">Neues Spiel</button></div>
-  <p class="fine center">🔊 Ton einschalten: Das Spiel liest dir alles vor.</p></div>`)}
+  ${sv?'<button class="linkish" data-act="newgame">Neues Spiel beginnen (für Erwachsene)</button>':'<button class="btn green big" data-act="newgame">Neues Spiel</button>'}</div>
+  <p class="fine center">Dein Spielstand wird automatisch gespeichert.</p>${STORE_OK?'':'<p class="warn center">⚠️ Dieser Browser speichert den Spielstand nicht (privater Modus?). Bitte im normalen Modus öffnen.</p>'}</div>`)}
 ACT.title=titleScreen;
 ACT.cont=()=>{S=load();migrate();dayCheck();save();if(!S.news.length)say(`Willkommen zurück, ${S.name}!`);startDay()};
 ACT.newgame=()=>{const sv=load();if(!sv)return nameScreen();
-  show(`<div class="title"><h2 class="h2 center">Neues Spiel?</h2><p class="center">Es gibt schon einen Spielstand von <b>${esc(sv.name)}</b>. Wenn du neu beginnst, wird er gelöscht.</p>
-  <div class="stack"><button class="btn red" data-act="newgame2">Ja, neu beginnen</button><button class="btn ghost" data-act="title">Zurück</button></div></div>`)};
+  show(`<div class="title"><h2 class="h2 center">Neues Spiel?</h2><p class="center">Es gibt schon einen Spielstand von <b>${esc(sv.name)}</b>. Ein neues Spiel löscht ihn für immer.</p>
+  <form id="gateForm" class="stack"><label for="gateIn" class="lbl">Frage für Erwachsene: Wie viel ist 23 · 17?</label><input id="gateIn" class="inp" inputmode="numeric" autocomplete="off">
+  <button class="btn red" type="submit">Löschen und neu beginnen</button><button type="button" class="btn green" data-act="cont">▶ Lieber weiterspielen</button></form></div>`);
+  $('#gateForm').addEventListener('submit',e=>{e.preventDefault();if($('#gateIn').value.trim()==='391'){wipeSave();nameScreen()}else toast('Das stimmt nicht. Frag einen Erwachsenen.')})};
 ACT.newgame2=()=>nameScreen();
 function nameScreen(){show(`<div class="title"><h2 class="h2 center">Wie heisst du?</h2><form id="nameForm" class="stack"><label for="playerName" class="lbl">Dein Name</label>
   <input id="playerName" class="inp" maxlength="14" autocomplete="off" autocapitalize="words" enterkeyhint="go" placeholder="Dein Vorname">
@@ -849,7 +923,7 @@ ACT.takeStarter=id=>{S.team=[mkMon(id,5)];S.starterUid=S.team[0].uid;S.seen[id]=
   talk([{...PROF,text:`Super Wahl! ${SP[id].n} freut sich schon auf dich.`},{...PROF,text:'Hier hast du 5 Zahlenbälle und 3 Tränke. Mit einem Zahlenball kannst du wilde Zahlimon fangen.'},{...PROF,text:'Deine Reise beginnt auf der Plus-Wiese. Viel Glück, {N}!'}],planScreen)};
 
 function mapScreen(){B=null;clearTimers();
-  show(`${hud()}${todayCard(false)}<h2 class="h2">Karte von Zahlonien</h2><p class="fine">Tippe auf ein Gebiet. Ein neues Gebiet öffnet sich, wenn du einen Orden gewinnst.</p>
+  show(`${hud()}${STORE_OK?'':'<p class="warn center">⚠️ Dieser Browser speichert den Spielstand nicht (privater Modus?). Bitte im normalen Modus öffnen.</p>'}${todayCard(false)}<h2 class="h2">Karte von Zahlonien</h2><p class="fine">Tippe auf ein Gebiet. Ein neues Gebiet öffnet sich, wenn du einen Orden gewinnst.</p>
   <div class="map">${RG.map((r,i)=>{const open=i<=S.badges,done=i<S.badges;return `<button class="node ${open?'':'locked'} ${i===S.badges?'now':''}" style="--g1:${r.c1};--g2:${r.c2}" data-act="${open?'region':'locked'}" data-arg="${i}">${i===Math.min(S.badges,RG.length-1)?'<span class="me-av" aria-hidden="true">🧒</span>':''}<span class="ic">${open?r.icon:'🔒'}</span><span class="tx"><b>${r.n}</b><small>${open?r.learn:'Noch verschlossen'}</small></span><span class="st">${done?r.leader.be:''}</span></button>`}).join('')}</div>
   <button class="linkish" data-act="parents">Bereich für Eltern</button>${nav()}`)}
 ACT.map=mapScreen;
@@ -861,7 +935,7 @@ function regionScreen(i){B=null;clearTimers();const r=RG[i],L=r.leader,alive=fir
   <div class="lead card"><span class="le">${SP[m.id].e}</span><div class="li"><div class="pn"><b>${nm(m)}</b><span class="lv">Lv ${m.lvl}</span></div>${bar('r'+m.uid,m.hp,maxHp(m))}<div class="pk">Kraft ${m.hp}/${maxHp(m)}</div></div></div>
   <div class="stack">${alive?`<button class="btn green big" data-act="wild" data-arg="${i}">🌿 Im hohen Gras suchen</button>`:`<p class="warn">Deine Zahlimon sind erschöpft.</p><button class="btn" data-act="center">❤️ Ins Zahlencenter</button>`}
   <button class="btn gold" data-act="arena" data-arg="${i}" ${alive?'':'disabled'}>🏟️ ${beaten?'Revanche':'Arena'}: ${L.n} ${beaten?L.be:''}</button>${r.topic!=='mix'?`<button class="btn ghost" data-act="learn" data-arg="${i}">📺 So geht's: ${TOPICS[r.topic].n}</button>`:''}</div>
-  <h3 class="h3">Zahlimon in diesem Gebiet</h3><div class="mini-dex">${r.wild.concat(r.rare?[r.rare]:[]).map(id=>S.caught[id]?`<span title="${SP[id].n}">${SP[id].e}</span>`:S.seen[id]?`<span class="seen" title="${SP[id].n}">${SP[id].e}</span>`:'<span class="unk">?</span>').join('')}</div>${nav()}`)}
+  <h3 class="h3">Zahlimon in diesem Gebiet</h3><div class="mini-dex">${r.wild.concat(r.rare||[]).map(id=>S.caught[id]?`<span title="${SP[id].n}">${SP[id].e}</span>`:S.seen[id]?`<span class="seen" title="${SP[id].n}">${SP[id].e}</span>`:'<span class="unk">?</span>').join('')}</div>${nav()}`)}
 
 /* ---------- Kampf ---------- */
 const foe=()=>B.foes[B.fi];
@@ -872,22 +946,22 @@ const effTxt=m=>m>1?' Das ist sehr effektiv!':m<1?' Das ist nicht sehr effektiv 
 
 ACT.wild=i=>{i=+i;const r=RG[i];let id;
   if(i===RG.length-1&&S.champ&&!S.caught.zahlodrak&&Math.random()<.25)id='zahlodrak';
-  else if(r.rare&&Math.random()<.06)id=r.rare;else id=P(r.wild);
+  else if(r.rare&&Math.random()<.07)id=P([].concat(r.rare));else id=P(r.wild);
   const f=mkFoe(id,id==='zahlodrak'?30:R(r.lv[0],r.lv[1]),false);S.seen[id]=1;save();
-  B={kind:'wild',ri:i,foes:[f],fi:0,mi:firstAlive(),streak:0,phase:'anim',fx:'appear',prev:{},msg:id==='zahlodrak'?'Der Boden bebt … Das legendäre Zahlodrak erscheint!':`Ein wildes ${SP[id].n} erscheint!`};
-  wipe('grass',null,null,()=>{renderBattle();say(B.msg);later(()=>{if(!S.flags.tut){S.flags.tut=1;save();talk(TUT,toMenu)}else toMenu()},1400)})};
+  B={kind:'wild',ri:i,foes:[f],fi:0,mi:firstAlive(),streak:0,phase:'anim',fx:'appear',prev:{},msg:id==='zahlodrak'?'Der Boden bebt … Das legendäre Zahlodrak erscheint!':f.sh?`Wow! Ein schillerndes ${SP[id].n} erscheint! ✨`:`Ein wildes ${SP[id].n} erscheint!`};
+  wipe('grass',null,null,()=>{renderBattle();say(B.msg);if(f.sh)later(()=>{const e=$('.mon.foe');if(e){const c=ctr(e);sparkle(c.x,c.y,30)}},500);later(()=>{if(!S.flags.tut){S.flags.tut=1;save();talk(TUT,toMenu)}else toMenu()},1400)})};
 ACT.arena=i=>{i=+i;const L=RG[i].leader;
   talk([{who:L.n,face:L.e,text:L.hi}],()=>{const foes=L.team.map(([id,l])=>mkFoe(id,l,true));S.seen[foes[0].id]=1;save();const me=S.team[firstAlive()];
     B={kind:'leader',ri:i,leader:L,foes,fi:0,mi:firstAlive(),streak:0,phase:'anim',fx:'appear',prev:{},msg:`${L.n} schickt ${nm(foes[0])} in den Kampf!`};
     wipe('vs',{e:SP[me.id].e,n:S.name},{e:L.e,n:L.n},()=>{renderBattle();say(B.msg);later(toMenu,1500)})})};
 
 function plate(m,isFoe){const sp=SP[m.id],max=isFoe?m.max:maxHp(m);
-  return `<div class="plate"><div class="pn"><span>${sp.n}</span><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar(isFoe?'f'+B.fi:'m'+m.uid,m.hp,max)}
+  return `<div class="plate"><div class="pn"><span>${m.sh?'✨ ':''}${sp.n}</span><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar(isFoe?'f'+B.fi:'m'+m.uid,m.hp,max)}
   ${isFoe?(B.kind==='leader'?`<span class="own">${B.leader.e} ${esc(B.leader.n)} · ${B.fi+1}/${B.foes.length}</span>`:''):`<div class="pk">Kraft ${m.hp}/${max}</div><div class="xp"><i style="width:${Math.min(100,Math.round(m.xp/need(m.lvl)*100))}%"></i></div>`}</div>`}
-const monHTML=(m,side,cls,inner)=>`<div class="mon ${side} ${cls}" data-t="${SP[m.id].t}">${inner||`<span class="b"><span class="e">${SP[m.id].e}</span></span>`}</div>`;
-function battleFrame(){const r=RG[B.ri];SCR='battle';show(`<div class="bt" id="bt" style="--g1:${r.c1};--g2:${r.c2}">${scene(r.deco)}<div id="btIn"></div></div><div class="bmsg"><span id="bmsgT" aria-live="polite"></span><span class="bstar">⭐ <b id="bstars"></b></span></div><div class="bctl" id="bctl"></div>`)}
+const monHTML=(m,side,cls,inner)=>`<div class="mon ${side} ${cls}" data-t="${SP[m.id].t}">${inner||`<span class="b"><span class="e${m.sh?' shiny':''}">${SP[m.id].e}</span></span>`}</div>`;
+function battleFrame(){const r=RG[B.ri];SCR='battle';show(`<div class="bt" id="bt" style="--g1:${r.c1};--g2:${r.c2}">${scene(r.deco)}<div id="btIn"></div></div><div class="bmsg"><span id="bmsgT" aria-live="polite"></span><span class="bpills"><span class="bstar" aria-label="Rechenminuten heute">🧮 <b data-tmin>${minOf(dayKey())}</b>/${goalMin()}</span><span class="bstar">⭐ <b id="bstars"></b></span></span></div><div class="bctl" id="bctl"></div>`)}
 function renderBattle(){if(!$('#btIn'))battleFrame();const f=foe(),m=myMon(),fx=B.fx||'';
-  let foeInner='';if(fx==='ball')foeInner='<span class="zball throw"></span>';if(fx==='caught')foeInner='<span class="zball done"></span>';
+  let foeInner='';const bc=ballOf(B.ballK).c;if(fx==='ball')foeInner=`<span class="zball throw" style="--bc:${bc}"></span>`;if(fx==='caught')foeInner=`<span class="zball done" style="--bc:${bc}"></span>`;
   const foeCls={hitFoe:'hit',appear:'appear',faintFoe:'faint',escape:'appear',hitMe:'lunge'}[fx]||'';
   const meCls={hitMe:'hit',faintMe:'faint',appearMe:'appear',hitFoe:'lunge'}[fx]||'';
   $('#bt').classList.toggle('compact',['q','wrong','switch'].includes(B.phase));
@@ -896,26 +970,28 @@ function renderBattle(){if(!$('#btIn'))battleFrame();const f=foe(),m=myMon(),fx=
 function ctl(){
   switch(B.phase){
     case 'menu':return `<div class="menu"><button class="btn green big" data-act="atk">⚔️ Angreifen</button><div class="menu2">
-      <button class="btn ghost" data-act="ball" ${B.kind!=='wild'?'disabled':''}><span class="zball"></span> Fangen (${S.items.ball})</button>
+      <button class="btn ghost" data-act="ball" ${B.kind!=='wild'?'disabled':''}><span class="zball"></span> Fangen (${ballsTotal()})</button>
       <button class="btn ghost" data-act="potion">🧪 Trank (${S.items.trank})</button>
       <button class="btn ghost" data-act="switch" ${S.team.length<2?'disabled':''}>🔄 Wechseln</button>
       <button class="btn ghost" data-act="run" ${B.kind!=='wild'?'disabled':''}>🏃 Flucht</button></div></div>`;
+    case 'pickball':return `<div class="ballpick">${BALLS.map(b=>`<button class="btn ghost" data-act="useBall" data-arg="${b.k}" ${S.items[b.k]?'':'disabled'}>${ballIc(b.k)} ${b.n} (${S.items[b.k]||0})</button>`).join('')}<button class="btn ghost" data-act="backMenu">Zurück</button></div>`;
     case 'q':return qCard();
     case 'wrong':{const q=B.q;return `<div class="fb card"><p class="fb-h">Nicht ganz!</p><p>${esc(q.text)}</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}${aidHTML(q.aid,true)}<p>Deine Antwort: <b>${esc(B.given)}</b><br>Richtig ist: <span class="bigans">${esc(String(q.ans))}</span></p><p class="hint">💡 ${esc(q.hint||'')}</p><button class="btn" data-act="goon">Verstanden</button></div>`}
     case 'switch':return `<div class="swl">${S.team.map((t,i)=>`<button class="swb" data-act="swapTo" data-arg="${i}" ${t.hp<=0||i===B.mi?'disabled':''}><span class="e">${SP[t.id].e}</span><span class="i"><span class="pn"><b>${nm(t)}</b><span class="lv">Lv ${t.lvl}</span></span>${bar('s'+t.uid,t.hp,maxHp(t))}<span class="pk">${t.hp<=0?'erschöpft':i===B.mi?'kämpft gerade':`Kraft ${t.hp}/${maxHp(t)}`}</span></span></button>`).join('')}
       ${B.forced?'':'<button class="btn ghost" data-act="backMenu">Zurück</button>'}</div>`;
     default:return '<div class="wait"></div>'}}
 function qCard(){const q=B.q,long=q.text.length>22;
-  const lab=B.purpose==='catch'?'Richtig rechnen = Zahlenball werfen':'Richtig rechnen = Angriff';
-  return `<div class="qc card"><div class="qhead"><span class="qlab">${lab}${q.again?' · Nochmals üben':''}</span><span class="qbtns">${q.aid&&!B.tip?'<button class="tipb" data-act="tip">💡 Tipp</button>':''}<button class="spk" data-act="speak" aria-label="Aufgabe vorlesen">🔊</button></span></div>
+  const lab=B.purpose==='catch'?'Richtig rechnen = Ball werfen':'Richtig rechnen = Angriff';
+  return `<div class="qc card"><div class="qhead"><span class="qlab">${lab}${q.again?' · Nochmals üben':''}</span><span class="qbtns">${q.aid&&!B.tip?'<button class="tipb" data-act="tip">💡 Tipp</button>':''}${S.settings.speech?'<button class="spk" data-act="speak" aria-label="Aufgabe vorlesen">🔊</button>':''}</span></div>
   ${q.vis?`<div class="qvis">${q.vis}</div>`:''}${B.tip?aidHTML(q.aid,false):''}<p class="qt ${long?'long':''}">${esc(q.text)}</p>
   ${q.kind==='choice'?`<div class="ch ${q.choices.length===3?'c3':''}">${q.choices.map(c=>`<button class="chb" data-act="choose" data-arg="${esc(c)}">${esc(c)}</button>`).join('')}</div>`
   :`<div class="entry" id="entry" aria-live="polite">${entryHTML()}</div><div class="kp">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-act="k" data-arg="${n}">${n}</button>`).join('')}<button data-act="del" aria-label="Löschen">⌫</button><button data-act="k" data-arg="0">0</button><button class="ok" data-act="submit">OK</button></div>`}</div>`}
 function entryHTML(){return B.input?B.input.split('').map(d=>`<span>${d}</span>`).join(''):'<span class="cur"></span>'}
 function toMenu(){if(!B)return;B.phase='menu';B.msg=`Was soll ${nm(myMon())} tun?`;renderBattle()}
-function newQ(){B.q=nextQ(RG[B.ri].topic);B.input='';B.tip=false;B.phase='q';B.msg=B.purpose==='catch'?'Der Zahlenball ist bereit!':`${nm(myMon())} wartet auf deine Antwort …`;renderBattle();say(B.q.say)}
+function newQ(){B.q=nextQ(RG[B.ri].topic);B.input='';B.tip=false;B.qT=Date.now();B.phase='q';B.msg=B.purpose==='catch'?`Dein ${ballOf(B.ballK).n} ist bereit!`:`${nm(myMon())} wartet auf deine Antwort …`;renderBattle();say(B.q.say)}
 ACT.atk=()=>{if(B.phase!=='menu')return;B.purpose='atk';newQ()};
-ACT.ball=()=>{if(B.phase!=='menu')return;if(S.items.ball<=0){toast('Du hast keine Zahlenbälle mehr. Im Laden gibt es neue.');return}B.purpose='catch';newQ()};
+ACT.ball=()=>{if(B.phase!=='menu')return;if(!ballsTotal()){toast('Du hast keine Bälle mehr. Im Laden gibt es neue.');return}B.phase='pickball';B.msg='Welchen Ball willst du werfen?';renderBattle()};
+ACT.useBall=k=>{if(!B||B.phase!=='pickball'||!S.items[k])return;B.ballK=k;B.purpose='catch';newQ()};
 ACT.potion=()=>{if(B.phase!=='menu')return;const m=myMon(),max=maxHp(m);if(S.items.trank<=0){toast('Du hast keinen Trank mehr.');return}if(m.hp>=max){toast(`${nm(m)} hat schon volle Kraft.`);return}
   S.items.trank--;const h=Math.min(30,max-m.hp);m.hp+=h;save();B.msg=`${nm(m)} trinkt den Trank und bekommt ${h} Kraft zurück.`;B.phase='anim';sfx('lvl');renderBattle();say(B.msg);later(toMenu,1400)};
 ACT.switch=()=>{if(B.phase!=='menu')return;B.phase='switch';B.forced=false;B.msg='Welches Zahlimon soll kämpfen?';renderBattle()};
@@ -928,7 +1004,7 @@ ACT.k=d=>{if(!B||B.phase!=='q'||B.input.length>=4)return;if(B.input==='0')B.inpu
 ACT.del=()=>{if(!B||B.phase!=='q')return;B.input=B.input.slice(0,-1);const el=$('#entry');if(el)el.innerHTML=entryHTML()};
 ACT.submit=()=>{if(!B||B.phase!=='q')return;if(!B.input){toast('Tippe zuerst deine Antwort ein.');return}answer(B.input)};
 ACT.choose=v=>answer(v);
-function answer(v){if(B.phase!=='q')return;const q=B.q;const ok=q.kind==='choice'?v===q.ans:parseInt(v,10)===q.ans;record(q,ok,v);
+function answer(v){if(B.phase!=='q')return;const q=B.q;addTime(Math.min(60,(Date.now()-(B.qT||Date.now()))/1000));const ok=q.kind==='choice'?v===q.ans:parseInt(v,10)===q.ans;record(q,ok,v);
   if(ok){ev('correct',{ri:B.ri});return onCorrect()}B.phase='anim';sfx('bad');const qc=$('.qc');if(qc){qc.classList.remove('shake');void qc.offsetWidth;qc.classList.add('shake')}later(()=>onWrong(v),480)}
 function onCorrect(){const m=myMon(),f=foe(),qc=$('.qc'),ap=qc?ctr(qc):{x:innerWidth/2,y:innerHeight*.7};B.streak++;S.stars++;m.xp+=m.uid===(S.plan&&S.plan.partner)?6:3;sfx('ok');sparkle(ap.x,ap.y,12);flyStar(ap);
   const praise=P(['Richtig!','Super!','Toll gemacht!','Genau!','Stark!','Bravo!']);
@@ -937,20 +1013,20 @@ function onCorrect(){const m=myMon(),f=foe(),qc=$('.qc'),ap=qc?ctr(qc):{x:innerW
   B.phase='anim';B.fx='hitFoe';B.msg=(sup?`${praise} ${B.streak} richtig in Folge: Superangriff von ${nm(m)}!`:`${praise} ${nm(m)} greift an!`)+effTxt(mult);
   renderBattle();stamp(sup?'Superangriff!':praise);say(B.msg);attackFx(true,SP[m.id].t,d,sup);save();
   later(()=>f.hp<=0?foeFainted():toMenu(),1900)}
-function onWrong(v){if(!B)return;B.streak=0;B.err=true;B.given=v;B.phase='wrong';B.msg='Schau dir den Rechenweg an.';renderBattle();say(`Nicht ganz. Richtig ist ${B.q.ans}. ${B.q.hint||''}`)}
-ACT.goon=()=>{if(B.phase!=='wrong')return;foeAttacks(B.purpose==='catch'?'Der Zahlenball fliegt daneben! ':'')};
+function onWrong(v){if(!B)return;B.streak=0;B.err=true;B.wT=Date.now();B.given=v;B.phase='wrong';B.msg='Schau dir den Rechenweg an.';renderBattle();say(`Nicht ganz. Richtig ist ${B.q.ans}. ${B.q.hint||''}`)}
+ACT.goon=()=>{if(B.phase!=='wrong')return;addTime(Math.min(30,(Date.now()-(B.wT||Date.now()))/1000));foeAttacks(B.purpose==='catch'?'Der Ball fliegt daneben! ':'')};
 function attackFx(mine,type,d,sup){const a=$(mine?'.mon.me':'.mon.foe'),t=$(mine?'.mon.foe':'.mon.me');if(!a||!t)return;const pa=ctr(a),pt=ctr(t);
   later(()=>projectile((TFX[type]||TFX.normal).ch[0],pa,pt,380,()=>{burst(type,pt.x,pt.y,sup?26:14);if(sup)confetti(pt.x,pt.y,40);sfx('hit');floatText('−'+d,pt.x,pt.y-40,'dmg');
     const bt=$('#bt');if(bt){bt.classList.remove('quake');void bt.offsetWidth;bt.classList.add('quake')}}),120)}
 function foeAttacks(pre){const m=myMon(),f=foe(),mult=eff(SP[f.id].t,SP[m.id].t),d=foeDmg(f,m,mult);m.hp=Math.max(0,m.hp-d);save();
   B.phase='anim';B.fx='hitMe';B.msg=`${pre}${nm(f)} greift an!${effTxt(mult)}`;renderBattle();say(B.msg);attackFx(false,SP[f.id].t,d,false);
   later(()=>m.hp<=0?meFainted():toMenu(),1700)}
-function doCatch(praise){S.items.ball--;const f=foe();let ch=.45+.55*(1-f.hp/f.max);if(SP[f.id].rare)ch*=.6;const ok=Math.random()<ch;
-  B.phase='anim';B.fx='ball';B.msg=`${praise} Du wirfst einen Zahlenball …`;renderBattle();say(B.msg);save();
+function doCatch(praise){const bk=B.ballK||'ball',bb=ballOf(bk);S.items[bk]=Math.max(0,(S.items[bk]||0)-1);const f=foe();let ch=(.45+.55*(1-f.hp/f.max))*bb.m;if(SP[f.id].rare)ch*=.6;const ok=bk==='b1000'||Math.random()<ch;
+  B.phase='anim';B.fx='ball';B.msg=`${praise} Du wirfst einen ${bb.n} …`;renderBattle();say(B.msg);save();
   later(()=>{const fe=()=>{const e=$('.mon.foe');return e?ctr(e):null};
     if(ok){B.fx='caught';B.msg=`Hurra! ${nm(f)} wurde gefangen!`;sfx('win');B.boxed=addCaught(f);renderBattle();const c=fe();if(c)sparkle(c.x,c.y,22);say(B.msg);later(()=>endBattle('caught'),1600)}
     else{B.fx='escape';B.msg=`Oh nein! ${nm(f)} ist wieder ausgebrochen. Schwäche es noch etwas mehr!`;renderBattle();const c=fe();if(c)burst('normal',c.x,c.y,8);say(B.msg);later(toMenu,1900)}},2200)}
-function addCaught(f){const m={id:f.id,lvl:f.lvl,xp:0,uid:S.uid++};m.hp=maxHp(m);S.caught[f.id]=S.seen[f.id]=1;if(S.team.length<6){S.team.push(m);save();return false}S.box.push(m);save();return true}
+function addCaught(f){const m={id:f.id,lvl:f.lvl,xp:0,uid:S.uid++,sh:f.sh||0};if(f.sh)S.shiny[f.id]=1;m.hp=maxHp(m);S.caught[f.id]=S.seen[f.id]=1;if(S.team.length<6){S.team.push(m);save();return false}S.box.push(m);save();return true}
 function foeFainted(){const f=foe(),m=myMon(),xg=f.lvl*5*(m.uid===(S.plan&&S.plan.partner)?2:1);m.xp+=xg;S.stars+=2;save();B.phase='anim';B.fx='faintFoe';B.msg=`${nm(f)} ist besiegt! ${nm(m)} bekommt ${xg} Erfahrung${xg>f.lvl*5?' (doppelt als Tagespartner)':''}.`;sfx('win');renderBattle();say(B.msg);
   {const fe=$('.mon.foe');if(fe){const c=ctr(fe);later(()=>{sparkle(c.x,c.y,18);floatText('+'+xg+' EP',c.x,c.y-30,'heal')},450)}}
   later(()=>{if(B.fi<B.foes.length-1){B.fi++;const n=foe();S.seen[n.id]=1;save();B.fx='appear';B.msg=`${B.leader.n} schickt ${nm(n)} in den Kampf!`;renderBattle();say(B.msg);later(toMenu,1500)}else endBattle('win')},2000)}
@@ -982,8 +1058,8 @@ function monRow(m,i,where){const sp=SP[m.id],max=maxHp(m);
   const btns=where==='team'?[i>0?`<button class="mini" data-act="lead" data-arg="${i}">Nach vorne</button>`:'<span class="pill">kämpft zuerst</span>',m.hp<max&&S.items.trank?`<button class="mini" data-act="potionT" data-arg="${i}">🧪 Trank</button>`:'',S.items.bonbon?`<button class="mini" data-act="bonbon" data-arg="${i}">🍬 Bonbon</button>`:'',S.team.length>1?`<button class="mini" data-act="toBox" data-arg="${i}">In die Box</button>`:'']
     :[S.team.length<6?`<button class="mini" data-act="fromBox" data-arg="${i}">Ins Team</button>`:'<span class="fine">Das Team ist voll.</span>'];
   const e=sp.evo?`Entwickelt sich mit Level ${sp.evo[1]}`:'';
-  return `<div class="tm card"><div class="tm-e" style="--c:${TYPES[sp.t].c}"><span>${sp.e}</span></div><div class="tm-i"><div class="pn"><b>${sp.n}</b><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar('t'+m.uid,m.hp,max)}<div class="pk">Kraft ${m.hp}/${max} · Erfahrung ${m.xp}/${need(m.lvl)}${e?'<br>'+e:''}</div><div class="tm-b">${btns.join('')}</div></div></div>`}
-function teamScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Dein Team</h2><p class="fine">Das oberste Zahlimon kämpft zuerst. Nur wer kämpft, sammelt Erfahrung. Tränke: ${S.items.trank} · Bonbons: ${S.items.bonbon}</p>
+  return `<div class="tm card"><div class="tm-e" style="--c:${TYPES[sp.t].c}"><span class="${m.sh?'shiny':''}">${sp.e}</span></div><div class="tm-i"><div class="pn"><b>${m.sh?'✨ ':''}${sp.n}</b><span class="lv">Lv ${m.lvl}</span></div>${chip(sp.t)}${bar('t'+m.uid,m.hp,max)}<div class="pk">Kraft ${m.hp}/${max} · Erfahrung ${m.xp}/${need(m.lvl)}${e?'<br>'+e:''}</div><div class="tm-b">${btns.join('')}</div></div></div>`}
+function teamScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Dein Team</h2><p class="fine">Das oberste Zahlimon kämpft zuerst. Nur wer kämpft, sammelt Erfahrung. Tränke: ${S.items.trank} · Bonbons: ${S.items.bonbon}<br>Bälle: ${BALLS.map(b=>`${ballIc(b.k)} ${S.items[b.k]||0}`).join(' · ')}</p>
   <div class="list">${S.team.map((m,i)=>monRow(m,i,'team')).join('')}</div>${S.box.length?`<h3 class="h3">Zahlimon-Box (${S.box.length})</h3><div class="list">${S.box.map((m,i)=>monRow(m,i,'box')).join('')}</div>`:''}${nav()}`)}
 ACT.team=teamScreen;
 ACT.lead=i=>{const m=S.team.splice(+i,1)[0];S.team.unshift(m);save();teamScreen()};
@@ -992,11 +1068,11 @@ ACT.bonbon=i=>{const m=S.team[+i];if(!m||!S.items.bonbon)return;S.items.bonbon--
 ACT.toBox=i=>{if(S.team.length<2)return;S.box.push(S.team.splice(+i,1)[0]);save();teamScreen()};
 ACT.fromBox=i=>{if(S.team.length>=6)return;S.team.push(S.box.splice(+i,1)[0]);save();teamScreen()};
 function dexScreen(){B=null;clearTimers();const ids=Object.keys(SP),c=ids.filter(i=>S.caught[i]).length;
-  show(`${hud()}<h2 class="h2">Zahlidex</h2><p class="fine">Gefangen: <b>${c}</b> von ${ids.length}. Graue Zahlimon hast du schon gesehen, aber noch nicht gefangen.</p>
-  <div class="dex">${ids.map((id,i)=>{const sp=SP[id],st=S.caught[id]?'c':S.seen[id]?'s':'u';return `<div class="dx ${st}"><span class="no">Nr. ${pad2(i+1)}</span><span class="de">${st==='u'?'?':sp.e}</span><span class="dn">${st==='u'?'???':sp.n}</span>${st!=='u'?chip(sp.t):''}</div>`}).join('')}</div>${nav()}`)}
+  show(`${hud()}<h2 class="h2">Zahlidex</h2><p class="fine">Gefangen: <b>${c}</b> von ${ids.length}. Graue Zahlimon hast du schon gesehen, aber noch nicht gefangen. Schillernde ✨: <b>${Object.keys(S.shiny||{}).length}</b></p>
+  <div class="dex">${ids.map((id,i)=>{const sp=SP[id],st=S.caught[id]?'c':S.seen[id]?'s':'u';return `<div class="dx ${st}"><span class="no">Nr. ${pad2(i+1)}</span><span class="de">${st==='u'?'?':sp.e}</span><span class="dn">${st==='u'?'???':sp.n}${S.shiny&&S.shiny[id]?' ✨':''}</span>${st!=='u'?chip(sp.t):''}</div>`}).join('')}</div>${nav()}`)}
 ACT.dex=dexScreen;
 function shopScreen(){B=null;clearTimers();show(`${hud()}<h2 class="h2">Laden</h2><p class="fine">Für jede richtige Antwort bekommst du einen Stern.</p>
-  <div class="list">${SHOP.map(([k,n,d,p])=>`<div class="card shop"><div class="shop-ic">${k==='ball'?'<span class="zball"></span>':k==='bonbon'?'🍬':'🧪'}</div><div class="shop-t"><b>${n}</b><small>${d}</small><small>Im Rucksack: ${S.items[k]}</small></div><button class="btn gold sm" data-act="buy" data-arg="${k}" ${S.stars<p?'disabled':''}>⭐ ${p}</button></div>`).join('')}</div>${nav()}`)}
+  <div class="list">${SHOP.map(([k,n,d,p])=>`<div class="card shop"><div class="shop-ic">${BALLS.some(b=>b.k===k)?ballIc(k):k==='bonbon'?'🍬':'🧪'}</div><div class="shop-t"><b>${n}</b><small>${d}</small><small>Im Rucksack: ${S.items[k]}</small></div><button class="btn gold sm" data-act="buy" data-arg="${k}" ${S.stars<p?'disabled':''}>⭐ ${p}</button></div>`).join('')}</div>${nav()}`)}
 ACT.shop=shopScreen;
 ACT.buy=k=>{const it=SHOP.find(s=>s[0]===k);if(S.stars<it[3])return;S.stars-=it[3];S.items[k]++;save();sfx('ok');toast(`${it[1]} gekauft!`);shopScreen()};
 function centerScreen(){B=null;clearTimers();show(`${hud()}<section class="card pad center"><div class="nurse">👩‍⚕️</div><h2 class="h2">Zahlencenter</h2><p>Pflegerin Nina macht deine Zahlimon wieder gesund. Das kostet nichts.</p><button class="btn green" data-act="heal">❤️ Alle gesund pflegen</button></section>
@@ -1040,7 +1116,7 @@ ACT.testVoice=()=>say(`Hallo ${S.name}! Wie viel ist 7 · 8?`);
 ACT.copyCode=()=>{const ta=$('#exportCode');const fb=()=>{ta.focus();ta.select();toast('Code markiert. Jetzt kopieren.')};try{navigator.clipboard.writeText(ta.value).then(()=>toast('Code kopiert.'),fb)}catch(e){fb()}};
 ACT.importCode=()=>{const v=$('#importCode').value.trim();try{const o=JSON.parse(decodeURIComponent(escape(atob(v))));if(!o||!o.name||!Array.isArray(o.team)||!o.team.length)throw 0;S=o;migrate();save();toast(`Spielstand von ${S.name} geladen.`);dayCheck();save();startDay()}catch(e){toast('Dieser Code funktioniert nicht. Bitte vollständig einfügen.')}};
 ACT.reset1=()=>parentsScreen(true);
-ACT.reset2=()=>{try{localStorage.removeItem(KEY)}catch(e){}titleScreen()};
+ACT.reset2=()=>{wipeSave();titleScreen()};
 
 /* ---------- Tagesziel, Missionen, Schatztruhen, Eier ---------- */
 const WD=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
@@ -1079,13 +1155,14 @@ function runAway(k){const y=new Date();y.setDate(y.getDate()-1);const when=k===d
 function onGoal(){const k=dayKey();if(S.goalHit[k])return;S.goalHit[k]=1;S.streak++;S.best=Math.max(S.best,S.streak);S.sad=false;
   S.rq.push({icon:'🏆',title:'Tagesziel geschafft!',sub:`${goalMin()} Minuten gerechnet. ${S.streak} ${S.streak===1?'Tag':'Tage'} in Folge! Wähle eine Schatztruhe.`,chest:'big'});
   S.lost.splice(0).forEach(m=>{m.hp=maxHp(m);(S.team.length<6?S.team:S.box).push(m);S.rq.push({icon:SP[m.id].e,title:`${nm(m)} ist zurück!`,sub:'Es hat dich vermisst und freut sich riesig.'})});
+  if([7,14,30,50,100].includes(S.streak)){S.items.b1000++;S.rq.push({icon:ballIc('b1000'),title:'Tausenderball!',sub:'Für deine lange Serie. Ein Tausenderball fängt jedes Zahlimon sicher.'})}
   if([3,7,14,21,30,50,100].includes(S.streak))S.rq.push({icon:'🥚',title:`${S.streak} Tage in Folge!`,sub:'Dafür bekommst du ein seltenes Zahlimon-Ei.',egg:'rare'});
   save();toast('🏆 Tagesziel geschafft!');maybeRewards()}
 function addEgg(rare){S.eggs.push({rare:!!rare,p:0,need:rare?30:20})}
-function hatchId(rare){const pool=rare?['einhorni','drakonix','tigrano','sturmi','felsor','blitzhahn']:[...new Set(RG.slice(0,Math.min(S.badges,RG.length-1)+1).flatMap(r=>r.wild))];const nu=pool.filter(id=>!S.caught[id]);return P(nu.length?nu:pool)}
+function hatchId(rare){const pool=rare?['einhorni','kristalli','delfi','pfaui','pixlo','drakonix','tigrano','haiko','loewix']:[...new Set(RG.slice(0,Math.min(S.badges,RG.length-1)+1).flatMap(r=>r.wild))];const nu=pool.filter(id=>!S.caught[id]);return P(nu.length?nu:pool)}
 function ev(kind,data){if(!S)return;
   if(kind==='correct'){S.eggs.forEach(e=>e.p++);S.eggs=S.eggs.filter(e=>{if(e.p<e.need)return true;const id=hatchId(e.rare),avg=S.team.reduce((a,m)=>a+m.lvl,0)/Math.max(1,S.team.length);
-    const m=mkMon(id,Math.max(3,Math.round(avg)-2));S.seen[id]=S.caught[id]=1;(S.team.length<6?S.team:S.box).push(m);S.rq.push({icon:SP[id].e,title:'Das Ei schlüpft!',sub:`Es ist ein ${SP[id].n}! Es gehört jetzt zu deinem Team.`});toast('🐣 Dein Ei schlüpft!');return false})}
+    const m=mkMon(id,Math.max(3,Math.round(avg)-2));if(Math.random()<1/20){m.sh=1;S.shiny[id]=1}S.seen[id]=S.caught[id]=1;(S.team.length<6?S.team:S.box).push(m);S.rq.push({icon:SP[id].e,title:'Das Ei schlüpft!',sub:`Es ist ein ${SP[id].n}! Es gehört jetzt zu deinem Team.`});toast('🐣 Dein Ei schlüpft!');return false})}
   if(S.plan&&S.plan.chosen)for(const m of S.plan.missions){if(m.done)continue;
     const hit=m.k==='region'?kind==='correct'&&data&&data.ri===m.r:m.k===kind;if(!hit)continue;
     if(++m.p>=m.n){m.done=true;S.rq.push({icon:MT[m.k].ic,title:'Mission geschafft!',sub:misText(m),chest:'small'});toast('✅ Mission geschafft!')}}
@@ -1095,15 +1172,14 @@ function refresh(){if(CUR)CUR.f.apply(null,CUR.a)}
 function maybeRewards(){if(!S||B||!dlg.hidden||!celEl.hidden||!wipeEl.hidden||!S.rq.length)return;if(/^(plan|title|name|starter|evo)/.test(String(SCR)))return;runRewards(refresh)}
 function runRewards(done){if(!S.rq.length){save();return done()}const r=S.rq.shift();if(r.egg)addEgg(r.egg==='rare');save();
   celebrate(r,()=>r.chest?chestPick(r.chest==='big',()=>runRewards(done)):runRewards(done))}
-const LOOT=[{ic:'⭐',t:'25 Sterne',f:()=>{S.stars+=25}},{ic:'🌟',t:'40 Sterne',f:()=>{S.stars+=40}},{ic:'<span class="zball"></span>',t:'3 Zahlenbälle',f:()=>{S.items.ball+=3}},{ic:'🧪',t:'2 Tränke',f:()=>{S.items.trank+=2}},{ic:'🍬',t:'Level-Bonbon',f:()=>{S.items.bonbon++}},{ic:'🥚',t:'Zahlimon-Ei',f:()=>addEgg(false)}];
+const LOOT=[{ic:'⭐',t:'25 Sterne',f:()=>{S.stars+=25}},{ic:'🌟',t:'40 Sterne',f:()=>{S.stars+=40}},{ic:'<span class="zball"></span>',t:'3 Zahlenbälle',f:()=>{S.items.ball+=3}},{ic:'🧪',t:'2 Tränke',f:()=>{S.items.trank+=2}},{ic:'🍬',t:'Level-Bonbon',f:()=>{S.items.bonbon++}},{ic:'🥚',t:'Zahlimon-Ei',f:()=>addEgg(false)},{ic:ballIc('b10'),t:'2 Zehnerbälle',f:()=>{S.items.b10+=2}},{ic:ballIc('b100'),t:'1 Hunderterball',f:()=>{S.items.b100++}}];
 function chestPick(big,done){const l=shuffle(LOOT.slice()).slice(0,3);if(big&&!l.includes(LOOT[5]))l[R(0,2)]=LOOT[5];CH={l,done,picked:false,ready:false};
   celEl.innerHTML=`<div class="rays"></div><h2>Wähle eine Schatztruhe!</h2><div class="chests">${l.map((x,i)=>`<button class="chest" data-i="${i}" aria-label="Truhe ${i+1}">🎁</button>`).join('')}</div><p id="chestMsg">Tippe auf eine Truhe. Du darfst eine behalten.</p>`;
   celEl.hidden=false;say('Wähle eine Schatztruhe!')}
-let lastAct=Date.now();['pointerdown','keydown'].forEach(t=>addEventListener(t,()=>{lastAct=Date.now()},{passive:true,capture:true}));
 function updTime(){if(!S)return;const m=minOf(dayKey()),g=goalMin();document.querySelectorAll('[data-tmin]').forEach(el=>el.textContent=m);document.querySelectorAll('[data-tbar]').forEach(el=>el.style.width=Math.min(100,m/g*100)+'%')}
-setInterval(()=>{if(!S||!S.lastDay||document.hidden||Date.now()-lastAct>90000)return;const k=dayKey();
-  if(S.lastDay!==k){if(B||!dlg.hidden||!celEl.hidden)return;dayCheck();save();startDay();return}
-  S.time[k]=(S.time[k]||0)+5;if(!S.goalHit[k]&&S.time[k]>=goalMin()*60)onGoal();else save();updTime()},5000);
+function addTime(sec){if(!S||!S.lastDay||!(sec>0))return;const k=dayKey();S.time[k]=(S.time[k]||0)+sec;if(!S.goalHit[k]&&S.time[k]>=goalMin()*60)onGoal();else save();updTime()}
+let LT=0;
+setInterval(()=>{if(!S||!S.lastDay||document.hidden)return;if(S.lastDay!==dayKey()&&!B&&dlg.hidden&&celEl.hidden){dayCheck();save();startDay()}},15000);
 function startDay(){const news=S.news.splice(0);save();const go=()=>{if(!S.plan||!S.plan.chosen)planScreen();else mapScreen()};if(news.length)talk(news,go);else go()}
 function todayCard(planMode){const k=dayKey(),m=minOf(k),g=goalMin(),rm=riskMon(),p=S.plan;let st='';
   if(S.settings.holiday)st='<div class="risk good"><span class="re">🏖️</span><span>Ferienmodus: Heute gibt es kein Pflichtziel.</span></div>';
@@ -1115,11 +1191,11 @@ function todayCard(planMode){const k=dayKey(),m=minOf(k),g=goalMin(),rm=riskMon(
   const mis=!planMode&&p&&p.chosen?p.missions.map(x=>`<div class="mrow ${x.done?'done':''}"><span class="mi">${x.done?'✅':MT[x.k].ic}</span><span>${esc(misText(x))}</span><span class="mp">${Math.min(x.p,x.n)}/${x.n}</span>${bar(x.p,x.n)}</div>`).join(''):'';
   const eggs=S.eggs.map(e=>`<div class="mrow"><span class="mi">🥚</span><span>${e.rare?'Seltenes Ei':'Zahlimon-Ei'} schlüpft nach ${e.need} richtigen Aufgaben</span><span class="mp">${Math.min(e.p,e.need)}/${e.need}</span>${bar(e.p,e.need)}</div>`).join('');
   return `<section class="card today"><div class="today-h"><span>Heute</span><span class="streak" title="Tage in Folge mit erreichtem Ziel">🔥 ${S.streak} ${S.streak===1?'Tag':'Tage'}</span></div>
-  <div class="tbar"><i data-tbar style="width:${Math.min(100,m/g*100)}%"></i><span>⏱ <b data-tmin>${m}</b> von ${g} Minuten</span></div>${st}${lost}${mis}${eggs}
+  <div class="tbar"><i data-tbar style="width:${Math.min(100,m/g*100)}%"></i><span>🧮 <b data-tmin>${m}</b> von ${g} Rechenminuten</span></div>${st}${lost}${mis}${eggs}
   ${!planMode&&p&&!p.chosen?'<button class="btn gold" data-act="plan">📋 Tagesplan wählen</button>':''}</section>`}
 function planScreen(){B=null;clearTimers();SCR='plan';const p=S.plan;
   if(!S.flags.tutDay){S.flags.tutDay=1;save();const c=S.settings.conseq;
-    talk([{...PROF,text:`Ab jetzt hast du jeden Tag ein Ziel, {N}: ${goalMin()} Minuten rechnen.`},{...PROF,text:'Schaffst du es, darfst du eine Schatztruhe öffnen, und deine Serie wächst.'},
+    talk([{...PROF,text:`Ab jetzt hast du jeden Tag ein Ziel, {N}: ${goalMin()} Minuten rechnen. Es zählt nur die Zeit, in der du wirklich rechnest.`},{...PROF,text:'Schaffst du es, darfst du eine Schatztruhe öffnen, und deine Serie wächst.'},
       ...(c==='none'?[]:[{...PROF,text:c==='forever'?'Aber Achtung: Schaffst du es nicht, läuft eines deiner Zahlimon für immer weg!':'Aber Achtung: Schaffst du es nicht, läuft eines deiner Zahlimon weg! Es kommt erst zurück, wenn du dein nächstes Tagesziel schaffst.'}]),
       {...PROF,text:'Und du entscheidest selbst: Wähle jeden Tag zwei Missionen und deinen Tagespartner.'}],planScreen);return}
   const ready=p.sel.length===2&&p.partner!=null;
@@ -1135,17 +1211,17 @@ ACT.startPlan=()=>{const p=S.plan;if(p.sel.length!==2||p.partner==null)return;p.
 function goalSection(){const st=S.settings,rows=[];for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()-i);const k=dkOf(d);
     rows.push(`<li><span>${i===0?'Heute':WD[d.getDay()]}, ${d.getDate()}.${d.getMonth()+1}.</span><span>${minOf(k)} Min. · ${S.goalHit[k]?'✓ Ziel erreicht':!isGoalDay(k)?'kein Ziel':i===0?'läuft noch':'✗ verpasst'}</span></li>`)}
   return `<section class="card pad"><h3 class="h3">Tagesziel und Motivation</h3>
-  <div class="kpis"><div><b>${minOf(dayKey())}</b><span>Minuten heute</span></div><div><b>${S.streak}</b><span>Tage in Folge</span></div><div><b>${S.best}</b><span>beste Serie</span></div></div>
+  <div class="kpis"><div><b>${minOf(dayKey())}</b><span>Rechenminuten heute</span></div><div><b>${S.streak}</b><span>Tage in Folge</span></div><div><b>${S.best}</b><span>beste Serie</span></div></div>
   <label class="row" for="optGoal"><span>Minuten pro Tag</span><select id="optGoal">${[10,15,20,30,45,60].map(v=>`<option value="${v}" ${st.goalMin===v?'selected':''}>${v} Minuten</option>`).join('')}</select></label>
   <div class="row"><span>Tage mit Ziel</span><span class="days">${[1,2,3,4,5,6,0].map(d=>`<label for="gd${d}"><input type="checkbox" id="gd${d}" class="gday" data-day="${d}" ${st.goalDays[d]?'checked':''}>${WD[d].slice(0,2)}</label>`).join('')}</span></div>
   <label class="row" for="optConseq"><span>Ziel verpasst</span><select id="optConseq"><option value="back" ${st.conseq==='back'?'selected':''}>Zahlimon läuft weg, kommt zurück</option><option value="forever" ${st.conseq==='forever'?'selected':''}>Zahlimon läuft für immer weg</option><option value="none" ${st.conseq==='none'?'selected':''}>Keine Folge</option></select></label>
   <label class="row" for="optHoliday"><span>Ferienmodus (kein Pflichtziel, Serie bleibt)</span><input type="checkbox" id="optHoliday" ${st.holiday?'checked':''}></label>
-  <p class="fine">«Läuft weg, kommt zurück»: Für jeden verpassten Zieltag läuft ein Zahlimon weg, höchstens zwei auf einmal. Es kommt zurück, sobald das nächste Tagesziel erreicht ist. Das Start-Zahlimon läuft nie weg. Gezählt wird nur aktive Zeit: Das Spiel ist offen, und in den letzten 90 Sekunden wurde getippt.</p>
+  <p class="fine">«Läuft weg, kommt zurück»: Für jeden verpassten Zieltag läuft ein Zahlimon weg, höchstens zwei auf einmal. Es kommt zurück, sobald das nächste Tagesziel erreicht ist. Das Start-Zahlimon läuft nie weg. Gezählt wird nur echte Rechenzeit: die Zeit, in der eine Aufgabe offen ist (höchstens 60 Sekunden pro Aufgabe), das Lesen des Rechenwegs nach einem Fehler und die Erklärseiten «So geht's». Karte, Laden, Menüs und Kampfanimationen zählen nicht. Für 30 Rechenminuten braucht ein Kind darum etwa 40 bis 50 Minuten Spielzeit.</p>
   ${S.lost.length?`<p class="warn">Zurzeit weggelaufen: ${S.lost.map(m=>esc(nm(m))).join(', ')}</p>`:''}<ul class="log">${rows.join('')}</ul></section>`}
 
 /* ---------- Erklärung «So geht's» ---------- */
 let LQ=null;
-function learnScreen(i,again){const r=RG[i],t=r.topic;if(!again||!LQ){let q;for(let k=0;k<40;k++){q=GEN[t](getStufe(t));if(q.aid||q.vis)break}q.topic=t;q.say=q.say||q.text;LQ=q}
+function learnScreen(i,again){if(LT)addTime(Math.min(30,(Date.now()-LT)/1000));LT=Date.now();const r=RG[i],t=r.topic;if(!again||!LQ){let q;for(let k=0;k<40;k++){q=GEN[t](getStufe(t));if(q.aid||q.vis)break}q.topic=t;q.say=q.say||q.text;LQ=q}
   const q=LQ,dl=q.aid&&q.aid.t==='line'?q.aid.jumps.length*.7+.6:1.6;SCR='learn'+i;B=null;clearTimers();CUR={f:learnScreen,a:[i,true]};if(!again)ev('learn');later(maybeRewards,(dl+2)*1000);
   show(`${hud()}<h2 class="h2">So geht's: ${TOPICS[t].n}</h2><div class="card pad learn"><p class="qt ${q.text.length>22?'long':''}">${esc(q.text)}</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}${aidHTML(q.aid,true)}
   <p class="hint fi" style="animation-delay:${dl.toFixed(1)}s">💡 ${esc(q.hint)}</p><p class="fi" style="animation-delay:${(dl+.4).toFixed(1)}s">Lösung: <span class="bigans">${esc(String(q.ans))}</span></p></div>
@@ -1154,13 +1230,16 @@ function learnScreen(i,again){const r=RG[i],t=r.topic;if(!again||!LQ){let q;for(
   say(`Schau zu! ${q.say} ${q.hint}`)}
 ACT.learn=i=>learnScreen(+i,false);ACT.learnNew=i=>learnScreen(+i,false);ACT.learnAgain=i=>learnScreen(+i,true);
 
-const wrapS=(f,k)=>{const w=function(...a){SCR=typeof k==='function'?k(...a):k;CUR={f:w,a};const r=f.apply(this,a);setTimeout(maybeRewards,450);return r};return w};
+const wrapS=(f,k)=>{const w=function(...a){if(LT){addTime(Math.min(30,(Date.now()-LT)/1000));LT=0}SCR=typeof k==='function'?k(...a):k;CUR={f:w,a};const r=f.apply(this,a);setTimeout(maybeRewards,450);return r};return w};
 titleScreen=wrapS(titleScreen,'title');nameScreen=wrapS(nameScreen,'name');starterScreen=wrapS(starterScreen,'starter');mapScreen=wrapS(mapScreen,'map');regionScreen=wrapS(regionScreen,i=>'region'+i);
 teamScreen=wrapS(teamScreen,'team');dexScreen=wrapS(dexScreen,'dex');shopScreen=wrapS(shopScreen,'shop');centerScreen=wrapS(centerScreen,'center');parentsScreen=wrapS(parentsScreen,'parents');
 ACT.title=titleScreen;ACT.map=mapScreen;ACT.team=teamScreen;ACT.dex=dexScreen;ACT.shop=shopScreen;ACT.center=centerScreen;
 
-window.__zahlimon={GEN,MK,aidHTML,dayCheck,onGoal,startDay,get S(){return S},set S(v){S=v},get B(){return B},fresh};
-titleScreen();
+window.__zahlimon={GEN,MK,aidHTML,addTime,load,dayCheck,onGoal,startDay,get S(){return S},set S(v){S=v},get B(){return B},fresh};
+(async function boot(){try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
+  try{localStorage.setItem('zahlimon_test','1');localStorage.removeItem('zahlimon_test')}catch(e){STORE_OK=false}
+  try{const j=await idbGet();if(j)IDBSAVE=JSON.parse(j)}catch(e){}
+  const sv=load();if(sv){S=sv;migrate();dayCheck();save();startDay()}else titleScreen()})();
 })();
 </script>
 </body>
