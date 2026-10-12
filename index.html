@@ -640,7 +640,7 @@ const SHOP=[['ball','Zahlenball','Damit fängst du wilde Zahlimon.',5],['b10','Z
 
 /* ---------- Spielstand ---------- */
 const KEY='zahlimon_v1';
-const DEFSET={speech:false,sound:true,rate:1,fix:{},goalMin:30,goalDays:[1,1,1,1,1,1,1],conseq:'back',holiday:false};
+const DEFSET={speechMode:'off',speech:false,sound:true,rate:1,fix:{},goalMin:30,goalDays:[1,1,1,1,1,1,1],conseq:'back',holiday:false};
 let S=null,B=null,EVO_NEXT=null;
 function fresh(name){return {v:1,name,team:[],box:[],badges:0,stars:10,items:{ball:10,trank:3,bonbon:0,b10:2,b100:0,b1000:0},seen:{},caught:{},stats:{},retry:{},log:[],days:{},settings:{...DEFSET,fix:{},goalDays:DEFSET.goalDays.slice()},flags:{v4:1},champ:false,uid:1,shiny:{},time:{},goalHit:{},plan:null,lastDay:null,streak:0,best:0,lost:[],news:[],rq:[],eggs:[],sad:false,starterUid:null}}
 function migrate(){const d=fresh(S.name);for(const k in d)if(S[k]===undefined)S[k]=d[k];S.settings={...DEFSET,...S.settings};S.settings.fix=S.settings.fix||{};S.items={ball:0,trank:0,bonbon:0,b10:0,b100:0,b1000:0,...S.items};if(!S.flags.v4){S.flags.v4=1;S.settings.speech=false;S.items.ball+=5;S.items.b10+=3;S.news.push({face:'🎁',text:'Geschenk für dich: 5 Zahlenbälle und 3 Zehnerbälle! Neu gibt es auch Hunderterbälle und Tausenderbälle.'},{face:'🧮',text:'Neu: Für dein Tagesziel zählt nur noch die Zeit, in der du wirklich rechnest. Und es gibt über 50 neue Zahlimon zu entdecken!'})}S.settings.goalDays=(S.settings.goalDays||DEFSET.goalDays).slice();if(S.starterUid==null){const u=S.team.concat(S.box).map(m=>m.uid);if(u.length)S.starterUid=Math.min(...u)}}
@@ -678,7 +678,10 @@ function sayify(t){return String(t)
   .replace(/(^|\s)\?/g,'$1 wie viel ').replace(/Fr\./g,'Franken').replace(/Rp\./g,'Rappen').replace(/\bcm\b/g,'Zentimeter').replace(/(\d)\s*m\b/g,'$1 Meter')
   .replace(/[◯→«»]/g,' ').replace(/\s+/g,' ').trim()}
 let sayT;
-function say(t){const st=S?S.settings:DEFSET;if(!st.speech||!('speechSynthesis' in window)||!t)return;
+const speechMode=()=>{const st=S?S.settings:DEFSET;return st.speechMode||(st.speech?'all':'off')};
+function sayQ(q){const md=speechMode();if(!q||md==='off')return;if(md==='all')return say(q.say,true);
+  const bare=q.text.replace(/\b(H|Z|E|Fr|Rp|cm|m)\b\.?/g,'');if(/[a-zäöüA-ZÄÖÜ]{2,}/.test(bare))return;say(q.text,true)}
+function say(t,isQ){if(speechMode()==='off'||(speechMode()==='numbers'&&!isQ))return;const st=S?S.settings:DEFSET;if(!('speechSynthesis' in window)||!t)return;
   try{speechSynthesis.cancel();clearTimeout(sayT);sayT=setTimeout(()=>{const u=new SpeechSynthesisUtterance(sayify(t));u.lang='de-DE';if(SPK.voice)u.voice=SPK.voice;u.rate=st.rate||1;u.pitch=1.05;speechSynthesis.speak(u)},40)}catch(e){}}
 function stopSpeech(){try{clearTimeout(sayT);speechSynthesis.cancel()}catch(e){}}
 let AC=null,unlocked=false;
@@ -982,13 +985,13 @@ function ctl(){
     default:return '<div class="wait"></div>'}}
 function qCard(){const q=B.q,long=q.text.length>22;
   const lab=B.purpose==='catch'?'Richtig rechnen = Ball werfen':'Richtig rechnen = Angriff';
-  return `<div class="qc card"><div class="qhead"><span class="qlab">${lab}${q.again?' · Nochmals üben':''}</span><span class="qbtns">${q.aid&&!B.tip?'<button class="tipb" data-act="tip">💡 Tipp</button>':''}${S.settings.speech?'<button class="spk" data-act="speak" aria-label="Aufgabe vorlesen">🔊</button>':''}</span></div>
+  return `<div class="qc card"><div class="qhead"><span class="qlab">${lab}${q.again?' · Nochmals üben':''}</span><span class="qbtns">${q.aid&&!B.tip?'<button class="tipb" data-act="tip">💡 Tipp</button>':''}${speechMode()!=='off'&&!/[a-zäöüA-ZÄÖÜ]{2,}/.test(q.text.replace(/\b(H|Z|E|Fr|Rp|cm|m)\b\.?/g,''))||speechMode()==='all'?'<button class="spk" data-act="speak" aria-label="Aufgabe vorlesen">🔊</button>':''}</span></div>
   ${q.vis?`<div class="qvis">${q.vis}</div>`:''}${B.tip?aidHTML(q.aid,false):''}<p class="qt ${long?'long':''}">${esc(q.text)}</p>
   ${q.kind==='choice'?`<div class="ch ${q.choices.length===3?'c3':''}">${q.choices.map(c=>`<button class="chb" data-act="choose" data-arg="${esc(c)}">${esc(c)}</button>`).join('')}</div>`
   :`<div class="entry" id="entry" aria-live="polite">${entryHTML()}</div><div class="kp">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-act="k" data-arg="${n}">${n}</button>`).join('')}<button data-act="del" aria-label="Löschen">⌫</button><button data-act="k" data-arg="0">0</button><button class="ok" data-act="submit">OK</button></div>`}</div>`}
 function entryHTML(){return B.input?B.input.split('').map(d=>`<span>${d}</span>`).join(''):'<span class="cur"></span>'}
 function toMenu(){if(!B)return;B.phase='menu';B.msg=`Was soll ${nm(myMon())} tun?`;renderBattle()}
-function newQ(){B.q=nextQ(RG[B.ri].topic);B.input='';B.tip=false;B.qT=Date.now();B.phase='q';B.msg=B.purpose==='catch'?`Dein ${ballOf(B.ballK).n} ist bereit!`:`${nm(myMon())} wartet auf deine Antwort …`;renderBattle();say(B.q.say)}
+function newQ(){B.q=nextQ(RG[B.ri].topic);B.input='';B.tip=false;B.qT=Date.now();B.phase='q';B.msg=B.purpose==='catch'?`Dein ${ballOf(B.ballK).n} ist bereit!`:`${nm(myMon())} wartet auf deine Antwort …`;renderBattle();sayQ(B.q)}
 ACT.atk=()=>{if(B.phase!=='menu')return;B.purpose='atk';newQ()};
 ACT.ball=()=>{if(B.phase!=='menu')return;if(!ballsTotal()){toast('Du hast keine Bälle mehr. Im Laden gibt es neue.');return}B.phase='pickball';B.msg='Welchen Ball willst du werfen?';renderBattle()};
 ACT.useBall=k=>{if(!B||B.phase!=='pickball'||!S.items[k])return;B.ballK=k;B.purpose='catch';newQ()};
@@ -998,7 +1001,7 @@ ACT.switch=()=>{if(B.phase!=='menu')return;B.phase='switch';B.forced=false;B.msg
 ACT.backMenu=()=>toMenu();
 ACT.swapTo=i=>{B.mi=+i;B.forced=false;B.phase='anim';B.fx='appearMe';B.msg=`Los, ${nm(myMon())}!`;renderBattle();say(B.msg);later(toMenu,1000)};
 ACT.run=()=>{if(B.phase!=='menu'||B.kind!=='wild')return;endBattle('run')};
-ACT.speak=()=>{if(B&&B.q)say(B.q.say)};
+ACT.speak=()=>{if(B&&B.q)sayQ(B.q)};
 ACT.tip=()=>{if(!B||B.phase!=='q'||!B.q.aid)return;B.tip=true;$('#bctl').innerHTML=ctl();say('Schau genau hin. So kannst du rechnen.')};
 ACT.k=d=>{if(!B||B.phase!=='q'||B.input.length>=4)return;if(B.input==='0')B.input='';B.input+=d;const el=$('#entry');if(el)el.innerHTML=entryHTML();sfx('tap')};
 ACT.del=()=>{if(!B||B.phase!=='q')return;B.input=B.input.slice(0,-1);const el=$('#entry');if(el)el.innerHTML=entryHTML()};
@@ -1094,7 +1097,7 @@ function parentsScreen(confirmReset){B=null;clearTimers();const d=S.days[dayKey(
   <section class="card pad"><h3 class="h3">Zuletzt falsch gelöst</h3>${S.log.length?`<ul class="log">${S.log.slice(0,15).map(l=>`<li><span>${esc(l.t)}</span><span>Antwort: <b>${esc(l.g)}</b> · richtig: <b>${esc(String(l.a))}</b></span></li>`).join('')}</ul>`:'<p class="fine">Noch keine Fehler.</p>'}
   <p class="fine">Falsch gelöste Aufgaben kommen später noch einmal, bis sie sitzen.</p></section>
   <section class="card pad"><h3 class="h3">Einstellungen</h3>
-  <label class="row" for="optSpeech"><span>Vorlesen (Hochdeutsch)</span><input type="checkbox" id="optSpeech" ${S.settings.speech?'checked':''}></label>
+  <label class="row" for="optSpeech"><span>Vorlesen</span><select id="optSpeech"><option value="off" ${speechMode()==='off'?'selected':''}>Aus</option><option value="numbers" ${speechMode()==='numbers'?'selected':''}>Nur Rechnungen (Zahlen)</option><option value="all" ${speechMode()==='all'?'selected':''}>Alles</option></select></label>
   <label class="row" for="optRate"><span>Sprechtempo</span><input type="range" id="optRate" min="0.7" max="1.2" step="0.05" value="${S.settings.rate}"></label>
   <label class="row" for="optSound"><span>Töne</span><input type="checkbox" id="optSound" ${S.settings.sound?'checked':''}></label>
   <button class="btn ghost" data-act="testVoice">🔊 Stimme testen</button><p class="fine">${voiceInfo()}</p></section>
@@ -1103,7 +1106,7 @@ function parentsScreen(confirmReset){B=null;clearTimers();const d=S.days[dayKey(
   <label for="importCode" class="lbl" style="display:block;margin-top:14px">Code einfügen</label><textarea id="importCode" class="inp code" rows="3"></textarea><button class="btn ghost" data-act="importCode">Spielstand laden</button></section>
   <section class="card pad"><h3 class="h3">Neu beginnen</h3>${confirmReset?`<p class="warn">Wirklich alles löschen? Das lässt sich nicht rückgängig machen.</p><div class="row2"><button class="btn red" data-act="reset2">Ja, löschen</button><button class="btn ghost" data-act="parents">Abbrechen</button></div>`:'<button class="btn ghost" data-act="reset1">Spielstand löschen</button>'}</section>
   <button class="btn" data-act="map">⬅ Zurück zum Spiel</button>`);
-  $('#optSpeech').addEventListener('change',e=>{S.settings.speech=e.target.checked;save();if(!e.target.checked)stopSpeech()});
+  $('#optSpeech').addEventListener('change',e=>{S.settings.speechMode=e.target.value;S.settings.speech=e.target.value!=='off';save();stopSpeech();if(e.target.value==='numbers')say('47 + 8 = ?',true)});
   $('#optRate').addEventListener('change',e=>{S.settings.rate=+e.target.value;save();say('So schnell spreche ich jetzt.')});
   $('#optSound').addEventListener('change',e=>{S.settings.sound=e.target.checked;save()});
   $('#optGoal').addEventListener('change',e=>{S.settings.goalMin=+e.target.value;save();const k=dayKey();if(!S.goalHit[k]&&(S.time[k]||0)>=goalMin()*60)onGoal()});
