@@ -676,10 +676,10 @@ function sayify(t){return String(t)
   .replace(/(\d+)\s*H\b/g,'$1 Hunderter').replace(/(\d+)\s*Z\b/g,'$1 Zehner').replace(/(\d+)\s*E\b/g,'$1 Einer')
   .replace(/·/g,' mal ').replace(/\s:\s/g,' geteilt durch ').replace(/[−–]/g,' minus ').replace(/\+/g,' plus ').replace(/=/g,' gleich ')
   .replace(/(^|\s)\?/g,'$1 wie viel ').replace(/Fr\./g,'Franken').replace(/Rp\./g,'Rappen').replace(/\bcm\b/g,'Zentimeter').replace(/(\d)\s*m\b/g,'$1 Meter')
-  .replace(/[◯→«»]/g,' ').replace(/\s+/g,' ').trim()}
+  .replace(/□/g,' wie viel ').replace(/[◯→«»]/g,' ').replace(/\s+/g,' ').trim()}
 let sayT;
 const speechMode=()=>{const st=S?S.settings:DEFSET;return st.speechMode||(st.speech?'all':'off')};
-function sayQ(q){const md=speechMode();if(!q||md==='off')return;if(md==='all')return say(q.say,true);
+function sayQ(q){const md=speechMode();if(!q||md==='off')return;if(md==='all')return say(q.say,true);if(q.kind==='choice')return;
   const bare=q.text.replace(/\b(H|Z|E|Fr|Rp|cm|m)\b\.?/g,'');if(/[a-zäöüA-ZÄÖÜ]{2,}/.test(bare))return;say(q.text,true)}
 function say(t,isQ){if(speechMode()==='off'||(speechMode()==='numbers'&&!isQ))return;const st=S?S.settings:DEFSET;if(!('speechSynthesis' in window)||!t)return;
   try{speechSynthesis.cancel();clearTimeout(sayT);sayT=setTimeout(()=>{const u=new SpeechSynthesisUtterance(sayify(t));u.lang='de-DE';if(SPK.voice)u.voice=SPK.voice;u.rate=st.rate||1;u.pitch=1.05;speechSynthesis.speak(u)},40)}catch(e){}}
@@ -701,12 +701,12 @@ function hintMal(f,b){
   if(f===1)return `1 · ${b} = ${b}`;
   if(f===10)return `10 · ${b} = ${10*b} (eine Null anhängen)`;
   if(f===2)return `Verdoppeln: ${b} + ${b} = ${2*b}`;
-  if(f===5)return `Die Hälfte von 10 · ${b}: ${10*b} : 2 = ${5*b}`;
+  if(f===5)return `10 · ${b} = ${10*b}. Die Hälfte davon ist ${5*b}.`;
   if(f===9)return `10 · ${b} = ${10*b}, dann einmal ${b} weg: ${10*b} − ${b} = ${9*b}`;
   if(f>5)return `5 · ${b} = ${5*b} und ${f-5} · ${b} = ${(f-5)*b}  →  ${5*b} + ${(f-5)*b} = ${f*b}`;
   return `In ${b}er-Schritten: `+Array.from({length:f},(_,i)=>(i+1)*b).join(', ')}
 function halbHint(a){const t=Math.floor(a/10)*10,e=a-t;return e?`Die Hälfte von ${t} ist ${t/2}, die Hälfte von ${e} ist ${e/2}  →  ${a/2}`:`${a} : 2 = ${a/2}`}
-function cmpQ(a,b){const s=a<b?'<':a>b?'>':'=';return {text:`${a} ◯ ${b}`,say:`Was passt? ${a} ist kleiner, grösser oder gleich ${b}?`,kind:'choice',choices:['<','=','>'],ans:s,hint:`${a} ${s} ${b}. Vergleiche zuerst die grösste Stelle, dann die nächste.`}}
+function cmpQ(a,b){const s=a<b?'<':a>b?'>':'=';return {text:`${a} □ ${b}`,say:`Was passt? ${a} ist kleiner, grösser oder gleich ${b}?`,kind:'choice',choices:['<','=','>'],ans:s,hint:`${a} ${s} ${b}. Vergleiche zuerst die grösste Stelle, dann die nächste.`}}
 const fmtCHF=rp=>{const f=Math.floor(rp/100),r=rp%100;return f&&r?`${f} Fr. ${r} Rp.`:f?`${f} Fr.`:`${r} Rp.`};
 const fmtT=(h,m)=>`${h}.${pad2(m)} Uhr`;
 function clockSVG(h,m){const rad=d=>d*Math.PI/180,X=(r,a)=>(60+r*Math.sin(rad(a))).toFixed(1),Y=(r,a)=>(60-r*Math.cos(rad(a))).toFixed(1);
@@ -777,7 +777,7 @@ const GEN={
   sub(s){
     if(s>1&&Math.random()<.3){const c=s===2?100:P([1000,R(3,9)*100]);const a=s===2?R(11,89):R(Math.max(11,c-390),c-11);const e=(10-a%10)%10;
       const h=e?`${a} + ${e} = ${a+e}  →  ${a+e} + ${c-a-e} = ${c}  →  zusammen ${c-a}`:`${a} + ${c-a} = ${c}`;
-      return {text:`${a} + ? = ${c}`,say:`${a} plus wie viel gleich ${c}?`,ans:c-a,hint:h,aid:{t:'line',start:a,jumps:e?[e,c-a-e]:[c-a]}}}
+      return {text:`${a} + □ = ${c}`,say:`${a} plus wie viel gleich ${c}?`,ans:c-a,hint:h,aid:{t:'line',start:a,jumps:e?[e,c-a-e]:[c-a]}}}
     let a,b;
     if(s===1){if(Math.random()<.3){a=R(2,10)*10;b=R(1,a/10-1)*10}else{a=R(11,100);b=R(2,9)}}
     else if(s===2){if(Math.random()<.25){a=R(2,10)*100;b=R(1,a/100-1)*100}else{a=R(30,99);b=R(11,a-5)}}
@@ -786,7 +786,7 @@ const GEN={
   mal(s){const b=P(RE[s]);
     if(s===3&&Math.random()<.2){const f=R(2,9),t=R(2,9);return {text:`${f} · ${t*10} = ?`,ans:f*t*10,hint:`${f} · ${t} = ${f*t}  →  ${f} · ${t*10} = ${f*t*10}`}}
     const f=R(1,10);
-    if(s===3&&Math.random()<.3)return {text:`? · ${b} = ${f*b}`,say:`Wie viel mal ${b} gleich ${f*b}?`,ans:f,hint:`${f} · ${b} = ${f*b}`,aid:{t:'dots',r:f,c:b}};
+    if(s===3&&Math.random()<.3)return {text:`□ · ${b} = ${f*b}`,say:`Wie viel mal ${b} gleich ${f*b}?`,ans:f,hint:`${f} · ${b} = ${f*b}`,aid:{t:'dots',r:f,c:b}};
     return {text:`${f} · ${b} = ?`,ans:f*b,hint:hintMal(f,b),aid:{t:'dots',r:f,c:b}}},
   div(s){const d=P(RE[s]),q=R(1,10),n=d*q;
     if(s===3&&Math.random()<.25)return {text:`${S.name} verteilt ${n} Beeren gerecht an ${d} Zahlimon. Wie viele Beeren bekommt jedes?`,ans:q,hint:`${q} · ${d} = ${n}, also ${n} : ${d} = ${q}`,aid:{t:'share',n,d}};
@@ -803,9 +803,9 @@ const GEN={
       case 'halb3':a=R(51,500)*2;return {text:`Wie viel ist die Hälfte von ${a}?`,ans:a/2,hint:halbHint(a)};
       case 'cmp2':a=R(10,99);b=Math.random()<.1?a:R(10,99);return cmpQ(a,b);
       case 'cmp3':a=R(100,999);b=Math.random()<.5?Number(String(a).split('').reverse().join('')):R(100,999);if(b<100)b+=100;if(Math.random()<.1)b=a;return cmpQ(a,b);
-      case 'stw':{const h=R(1,9),z=R(0,9),e=R(0,9),n=h*100+z*10+e;return {text:`${h} H + ${z} Z + ${e} E = ?`,say:`${h} Hunderter, ${z} Zehner und ${e} Einer. Welche Zahl ist das?`,ans:n,hint:`${h} Hunderter = ${h*100}, ${z} Zehner = ${z*10}, ${e} Einer = ${e}  →  ${n}`,aid:{t:'blocks',n}}}
-      case 'stw0':{const h=R(1,9),x=R(1,9);if(Math.random()<.5)return {text:`${x} E + ${h} H = ?`,say:`${x} Einer und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x,hint:`${h} Hunderter, 0 Zehner, ${x} Einer  →  ${h*100+x}`,aid:{t:'blocks',n:h*100+x}};
-        return {text:`${x} Z + ${h} H = ?`,say:`${x} Zehner und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x*10,hint:`${h} Hunderter, ${x} Zehner, 0 Einer  →  ${h*100+x*10}`,aid:{t:'blocks',n:h*100+x*10}}}
+      case 'stw':{const h=R(1,9),z=R(0,9),e=R(0,9),n=h*100+z*10+e;return {text:`${h} Hunderter, ${z} Zehner und ${e} Einer. Welche Zahl ist das?`,say:`${h} Hunderter, ${z} Zehner und ${e} Einer. Welche Zahl ist das?`,ans:n,hint:`${h} Hunderter = ${h*100}, ${z} Zehner = ${z*10}, ${e} Einer = ${e}  →  ${n}`,aid:{t:'blocks',n}}}
+      case 'stw0':{const h=R(1,9),x=R(1,9);if(Math.random()<.5)return {text:`${x} Einer und ${h} Hunderter. Welche Zahl ist das?`,say:`${x} Einer und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x,hint:`${h} Hunderter, 0 Zehner, ${x} Einer  →  ${h*100+x}`,aid:{t:'blocks',n:h*100+x}};
+        return {text:`${x} Zehner und ${h} Hunderter. Welche Zahl ist das?`,say:`${x} Zehner und ${h} Hunderter. Welche Zahl ist das?`,ans:h*100+x*10,hint:`${h} Hunderter, ${x} Zehner, 0 Einer  →  ${h*100+x*10}`,aid:{t:'blocks',n:h*100+x*10}}}
       case 'ziff':{a=R(100,999);const pos=P([['Hunderter',0],['Zehner',1],['Einer',2]]),str=String(a);return {text:`Welche Ziffer steht bei ${a} an der ${pos[0]}stelle?`,ans:+str[pos[1]],hint:`${a}: ${str[0]} Hunderter, ${str[1]} Zehner, ${str[2]} Einer`,aid:{t:'blocks',n:a}}}
       case 'zehner':{a=R(101,989);if(a%10===0)a++;const n=Math.ceil(a/10)*10;return {text:`Welche Zehnerzahl kommt nach ${a}?`,ans:n,hint:`${a} liegt zwischen ${n-10} und ${n}.`}}
       case 'hunderter':{a=R(101,989);if(a%100===0)a++;const n=Math.ceil(a/100)*100;return {text:`Welche Hunderterzahl kommt nach ${a}?`,ans:n,hint:`${a} liegt zwischen ${n-100} und ${n}.`}}
@@ -820,9 +820,9 @@ const MK={
   geld(s){
     if(s===1){const f=R(1,9);return {text:`${f} Fr. = ? Rp.`,say:`Wie viele Rappen sind ${f} Franken?`,ans:f*100,hint:`1 Fr. = 100 Rp.  →  ${f} Fr. = ${f*100} Rp.`}}
     if(s===2){if(Math.random()<.5){const f=R(1,9),r=R(1,19)*5;return {text:`${f} Fr. ${r} Rp. = ? Rp.`,say:`Wie viele Rappen sind ${f} Franken ${r} Rappen?`,ans:f*100+r,hint:`${f} Fr. = ${f*100} Rp., dazu ${r} Rp.  →  ${f*100+r} Rp.`}}
-      const p1=R(1,4)*100+R(0,19)*5,p2=R(0,3)*100+R(2,19)*5;return {text:`Ein Glace kostet ${fmtCHF(p1)}, ein Brötli ${fmtCHF(p2)}. Wie viele Rappen kostet beides zusammen?`,ans:p1+p2,hint:`${p1} Rp. + ${p2} Rp. = ${p1+p2} Rp.`}}
+      const p1=R(1,4)*100+R(0,19)*5,p2=R(0,3)*100+R(2,19)*5;return {text:`Ein Glace kostet ${fmtCHF(p1)}, ein Brötli ${fmtCHF(p2).replace(/\.$/,'')}. Wie viele Rappen kostet beides zusammen?`,ans:p1+p2,hint:`${p1} Rp. + ${p2} Rp. = ${p1+p2} Rp.`}}
     const pay=P([500,1000]),price=R(10,pay/10-2)*10;
-    return {text:`Du bezahlst mit ${pay/100} Fr. Ein Heft kostet ${fmtCHF(price)}. Wie viele Rappen Rückgeld bekommst du?`,ans:pay-price,hint:`${pay/100} Fr. = ${pay} Rp.  →  ${pay} − ${price} = ${pay-price} Rp.`}},
+    return {text:`Du bezahlst mit ${pay/100} Fr. Ein Heft kostet ${fmtCHF(price).replace(/\.$/,'')}. Wie viele Rappen Rückgeld bekommst du?`,ans:pay-price,hint:`${pay/100} Fr. = ${pay} Rp.  →  ${pay} − ${price} = ${pay-price} Rp.`}},
   laenge(s){
     if(s===1){const m=R(1,9);return {text:`${m} m = ? cm`,ans:m*100,hint:`1 m = 100 cm  →  ${m} m = ${m*100} cm`}}
     if(s===2){const m=R(1,9),c=R(1,99);return {text:`${m} m ${c} cm = ? cm`,ans:m*100+c,hint:`${m} m = ${m*100} cm, dazu ${c} cm  →  ${m*100+c} cm`}}
@@ -831,7 +831,7 @@ const MK={
   zeit(s){
     if(s===1){const [t,a]=P([['1 Stunde = ? Minuten',60],['Eine halbe Stunde = ? Minuten',30],['1 Tag = ? Stunden',24],['1 Woche = ? Tage',7],['1 Minute = ? Sekunden',60]]);return {text:t,ans:a,hint:t.replace('?',a)}}
     if(s===2){if(Math.random()<.5){const [t,a]=P([['Eine Viertelstunde = ? Minuten',15],['Drei Viertelstunden = ? Minuten',45],['2 Stunden = ? Minuten',120]]);return {text:t,ans:a,hint:t.replace('?',a)}}
-      const h=R(7,17),m1=R(0,6)*5,d=R(2,5)*5;return {text:`Von ${fmtT(h,m1)} bis ${fmtT(h,m1+d)}. Wie viele Minuten sind das?`,ans:d,hint:`${m1+d} − ${m1} = ${d} Minuten`}}
+      const h=R(7,17),m1=R(0,6)*5,d=R(2,5)*5;return {text:`Von ${fmtT(h,m1)} bis ${fmtT(h,m1+d)}. Wie viele Minuten sind das?`,ans:d,hint:m1?`${m1+d} − ${m1} = ${d} Minuten`:`Der lange Zeiger geht von 0 bis ${d}: ${d} Minuten`}}
     if(Math.random()<.25)return {text:'3 Stunden = ? Minuten',ans:180,hint:'60 + 60 + 60 = 180'};
     const h=R(7,17),m1=R(8,11)*5,d=R(3,9)*5,end=m1+d;
     return {text:`Von ${fmtT(h,m1)} bis ${end>=60?fmtT(h+1,end-60):fmtT(h,end)}. Wie viele Minuten sind das?`,ans:d,hint:end>=60?`Bis ${fmtT(h+1,0)} sind es ${60-m1} Min., dann noch ${end-60} Min.  →  ${d} Minuten`:`${end} − ${m1} = ${d} Minuten`}},
@@ -873,6 +873,7 @@ let SCR='',LAST='';
 function show(html){app.innerHTML=html;if(SCR!==LAST){LAST=SCR;window.scrollTo(0,0);app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}animBars()}
 function animBars(){requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll('.hp i[data-to]').forEach(el=>el.style.width=el.dataset.to+'%')))}
 let tT;function toast(t){toastEl.textContent=t;toastEl.hidden=false;toastEl.classList.remove('in');void toastEl.offsetWidth;toastEl.classList.add('in');clearTimeout(tT);tT=setTimeout(()=>toastEl.hidden=true,2800)}
+const hintHTML=h=>esc(h||'').split(/\s+→\s+/).join('<br>');
 const chip=t=>`<span class="chip" style="--c:${TYPES[t].c}">${TYPES[t].n}</span>`;
 const dots=n=>`<span class="dots" aria-label="Stufe ${n} von 3">${[1,2,3].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>`;
 function bar(key,cur,max){const p=Math.round(cur/max*100);const prev=B&&B.prev[key]!=null?B.prev[key]:p;if(B)B.prev[key]=p;return `<div class="hp"><i class="${p>50?'':p>20?'mid':'low'}" data-to="${p}" style="width:${prev}%"></i></div>`}
@@ -979,12 +980,12 @@ function ctl(){
       <button class="btn ghost" data-act="run" ${B.kind!=='wild'?'disabled':''}>🏃 Flucht</button></div></div>`;
     case 'pickball':return `<div class="ballpick">${BALLS.map(b=>`<button class="btn ghost" data-act="useBall" data-arg="${b.k}" ${S.items[b.k]?'':'disabled'}>${ballIc(b.k)} ${b.n} (${S.items[b.k]||0})</button>`).join('')}<button class="btn ghost" data-act="backMenu">Zurück</button></div>`;
     case 'q':return qCard();
-    case 'wrong':{const q=B.q;return `<div class="fb card"><p class="fb-h">Nicht ganz!</p><p>${esc(q.text)}</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}${aidHTML(q.aid,true)}<p>Deine Antwort: <b>${esc(B.given)}</b><br>Richtig ist: <span class="bigans">${esc(String(q.ans))}</span></p><p class="hint">💡 ${esc(q.hint||'')}</p><button class="btn" data-act="goon">Verstanden</button></div>`}
+    case 'wrong':{const q=B.q;return `<div class="fb card"><p class="fb-h">Nicht ganz!</p><p>${esc(q.text)}</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}${aidHTML(q.aid,true)}<p>Deine Antwort: <b>${esc(B.given)}</b><br>Richtig ist: <span class="bigans">${esc(String(q.ans))}</span></p><p class="hint">💡 ${hintHTML(q.hint)}</p><button class="btn" data-act="goon">Verstanden</button></div>`}
     case 'switch':return `<div class="swl">${S.team.map((t,i)=>`<button class="swb" data-act="swapTo" data-arg="${i}" ${t.hp<=0||i===B.mi?'disabled':''}><span class="e">${SP[t.id].e}</span><span class="i"><span class="pn"><b>${nm(t)}</b><span class="lv">Lv ${t.lvl}</span></span>${bar('s'+t.uid,t.hp,maxHp(t))}<span class="pk">${t.hp<=0?'erschöpft':i===B.mi?'kämpft gerade':`Kraft ${t.hp}/${maxHp(t)}`}</span></span></button>`).join('')}
       ${B.forced?'':'<button class="btn ghost" data-act="backMenu">Zurück</button>'}</div>`;
     default:return '<div class="wait"></div>'}}
 function qCard(){const q=B.q,long=q.text.length>22;
-  const lab=B.purpose==='catch'?'Richtig rechnen = Ball werfen':'Richtig rechnen = Angriff';
+  const lab=B.purpose==='catch'?'Rechne richtig, dann wirfst du den Ball!':'Rechne richtig, dann greifst du an!';
   return `<div class="qc card"><div class="qhead"><span class="qlab">${lab}${q.again?' · Nochmals üben':''}</span><span class="qbtns">${q.aid&&!B.tip?'<button class="tipb" data-act="tip">💡 Tipp</button>':''}${speechMode()!=='off'&&!/[a-zäöüA-ZÄÖÜ]{2,}/.test(q.text.replace(/\b(H|Z|E|Fr|Rp|cm|m)\b\.?/g,''))||speechMode()==='all'?'<button class="spk" data-act="speak" aria-label="Aufgabe vorlesen">🔊</button>':''}</span></div>
   ${q.vis?`<div class="qvis">${q.vis}</div>`:''}${B.tip?aidHTML(q.aid,false):''}<p class="qt ${long?'long':''}">${esc(q.text)}</p>
   ${q.kind==='choice'?`<div class="ch ${q.choices.length===3?'c3':''}">${q.choices.map(c=>`<button class="chb" data-act="choose" data-arg="${esc(c)}">${esc(c)}</button>`).join('')}</div>`
@@ -1227,7 +1228,7 @@ let LQ=null;
 function learnScreen(i,again){if(LT)addTime(Math.min(30,(Date.now()-LT)/1000));LT=Date.now();const r=RG[i],t=r.topic;if(!again||!LQ){let q;for(let k=0;k<40;k++){q=GEN[t](getStufe(t));if(q.aid||q.vis)break}q.topic=t;q.say=q.say||q.text;LQ=q}
   const q=LQ,dl=q.aid&&q.aid.t==='line'?q.aid.jumps.length*.7+.6:1.6;SCR='learn'+i;B=null;clearTimers();CUR={f:learnScreen,a:[i,true]};if(!again)ev('learn');later(maybeRewards,(dl+2)*1000);
   show(`${hud()}<h2 class="h2">So geht's: ${TOPICS[t].n}</h2><div class="card pad learn"><p class="qt ${q.text.length>22?'long':''}">${esc(q.text)}</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}${aidHTML(q.aid,true)}
-  <p class="hint fi" style="animation-delay:${dl.toFixed(1)}s">💡 ${esc(q.hint)}</p><p class="fi" style="animation-delay:${(dl+.4).toFixed(1)}s">Lösung: <span class="bigans">${esc(String(q.ans))}</span></p></div>
+  <p class="hint fi" style="animation-delay:${dl.toFixed(1)}s">💡 ${hintHTML(q.hint)}</p><p class="fi" style="animation-delay:${(dl+.4).toFixed(1)}s">Lösung: <span class="bigans">${esc(String(q.ans))}</span></p></div>
   <div class="row2"><button class="btn ghost" data-act="learnAgain" data-arg="${i}">🔁 Nochmal</button><button class="btn" data-act="learnNew" data-arg="${i}">✨ Neues Beispiel</button></div>
   <button class="btn ghost" style="margin-top:12px" data-act="region" data-arg="${i}">⬅ Zurück</button>${nav()}`);
   say(`Schau zu! ${q.say} ${q.hint}`)}
