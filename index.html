@@ -678,7 +678,7 @@ function sayify(t){return String(t)
   .replace(/(^|\s)\?/g,'$1 wie viel ').replace(/Fr\./g,'Franken').replace(/Rp\./g,'Rappen').replace(/\bcm\b/g,'Zentimeter').replace(/(\d)\s*m\b/g,'$1 Meter')
   .replace(/□/g,' wie viel ').replace(/[◯→«»]/g,' ').replace(/\s+/g,' ').trim()}
 let sayT;
-const speechMode=()=>{const st=S?S.settings:DEFSET;return st.speechMode||(st.speech?'all':'off')};
+const speechMode=()=>'off'; // Die App spricht nicht.
 function sayQ(q){const md=speechMode();if(!q||md==='off')return;if(md==='all')return say(q.say,true);if(q.kind==='choice')return;
   const bare=q.text.replace(/\b(H|Z|E|Fr|Rp|cm|m)\b\.?/g,'');if(/[a-zäöüA-ZÄÖÜ]{2,}/.test(bare))return;say(q.text,true)}
 function say(t,isQ){if(speechMode()==='off'||(speechMode()==='numbers'&&!isQ))return;const st=S?S.settings:DEFSET;if(!('speechSynthesis' in window)||!t)return;
@@ -1098,17 +1098,13 @@ function parentsScreen(confirmReset){B=null;clearTimers();const d=S.days[dayKey(
   <section class="card pad"><h3 class="h3">Zuletzt falsch gelöst</h3>${S.log.length?`<ul class="log">${S.log.slice(0,15).map(l=>`<li><span>${esc(l.t)}</span><span>Antwort: <b>${esc(l.g)}</b> · richtig: <b>${esc(String(l.a))}</b></span></li>`).join('')}</ul>`:'<p class="fine">Noch keine Fehler.</p>'}
   <p class="fine">Falsch gelöste Aufgaben kommen später noch einmal, bis sie sitzen.</p></section>
   <section class="card pad"><h3 class="h3">Einstellungen</h3>
-  <label class="row" for="optSpeech"><span>Vorlesen</span><select id="optSpeech"><option value="off" ${speechMode()==='off'?'selected':''}>Aus</option><option value="numbers" ${speechMode()==='numbers'?'selected':''}>Nur Rechnungen (Zahlen)</option><option value="all" ${speechMode()==='all'?'selected':''}>Alles</option></select></label>
-  <label class="row" for="optRate"><span>Sprechtempo</span><input type="range" id="optRate" min="0.7" max="1.2" step="0.05" value="${S.settings.rate}"></label>
   <label class="row" for="optSound"><span>Töne</span><input type="checkbox" id="optSound" ${S.settings.sound?'checked':''}></label>
-  <button class="btn ghost" data-act="testVoice">🔊 Stimme testen</button><p class="fine">${voiceInfo()}</p></section>
+  </section>
   <section class="card pad"><h3 class="h3">Spielstand übertragen</h3><p class="fine">Der Spielstand ist nur in diesem Browser gespeichert. Für ein anderes Gerät: Code kopieren und dort hier einfügen.</p>
   <textarea id="exportCode" class="inp code" readonly rows="3">${exportCode()}</textarea><button class="btn ghost" data-act="copyCode">Code kopieren</button>
   <label for="importCode" class="lbl" style="display:block;margin-top:14px">Code einfügen</label><textarea id="importCode" class="inp code" rows="3"></textarea><button class="btn ghost" data-act="importCode">Spielstand laden</button></section>
   <section class="card pad"><h3 class="h3">Neu beginnen</h3>${confirmReset?`<p class="warn">Wirklich alles löschen? Das lässt sich nicht rückgängig machen.</p><div class="row2"><button class="btn red" data-act="reset2">Ja, löschen</button><button class="btn ghost" data-act="parents">Abbrechen</button></div>`:'<button class="btn ghost" data-act="reset1">Spielstand löschen</button>'}</section>
   <button class="btn" data-act="map">⬅ Zurück zum Spiel</button>`);
-  $('#optSpeech').addEventListener('change',e=>{S.settings.speechMode=e.target.value;S.settings.speech=e.target.value!=='off';save();stopSpeech();if(e.target.value==='numbers')say('47 + 8 = ?',true)});
-  $('#optRate').addEventListener('change',e=>{S.settings.rate=+e.target.value;save();say('So schnell spreche ich jetzt.')});
   $('#optSound').addEventListener('change',e=>{S.settings.sound=e.target.checked;save()});
   $('#optGoal').addEventListener('change',e=>{S.settings.goalMin=+e.target.value;save();const k=dayKey();if(!S.goalHit[k]&&(S.time[k]||0)>=goalMin()*60)onGoal()});
   $('#optConseq').addEventListener('change',e=>{S.settings.conseq=e.target.value;save()});

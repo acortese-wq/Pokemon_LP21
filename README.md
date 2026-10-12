@@ -14,7 +14,7 @@ Oder `index.html` herunterladen und im Browser öffnen. Mehr Dateien braucht es 
 - Wer drei Aufgaben in Folge richtig löst, macht einen Superangriff.
 - Mit Zahlenbällen fängt man wilde Zahlimon, auch dafür muss man richtig rechnen. Zahlimon steigen im Level auf und entwickeln sich weiter.
 - Es gibt 7 Gebiete mit je einer Arena und einem Orden. Mit jedem Orden öffnet sich das nächste Gebiet.
-- Vorlesen ist standardmässig aus. Im Bereich für Eltern wählbar: «Nur Rechnungen» (liest nur die Rechnung wie «47 plus 8 gleich wie viel») oder «Alles».
+- Die App spricht nicht. Es gibt nur kurze Töne, die sich im Bereich für Eltern ausschalten lassen.
 - Der Fortschritt wird automatisch im Browser gespeichert.
 
 | Gebiet | Thema |
