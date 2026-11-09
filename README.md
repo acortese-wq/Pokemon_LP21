@@ -8,6 +8,18 @@ Ein Lernspiel in einer Blockwelt (inspiriert von Minecraft) für die 3. Klasse, 
 
 Das alte Spiel «Zahlimon» gibt es weiterhin: https://acortese-wq.github.io/Pokemon_LP21/zahlimon/ (der Spielstand bleibt erhalten).
 
+Neu: **Zahlongus**, ein Rätsel-Spiel auf einem Raumschiff: https://acortese-wq.github.io/Pokemon_LP21/zahlongus/
+
+## Zahlongus
+- Man spielt allein mit 5 Computer-Figuren. Einer davon ist heimlich der **Verräter**. Manchmal ist man selbst der Verräter (einstellbar: Zufall, immer Crew, immer Verräter).
+- **Crew:** 5 Aufgaben an Stationen lösen, jede mit 3 Rechnungen (Plus, Minus, Zahlenraum 1000, Einmaleins, Geteilt, Grössen und Sachaufgaben).
+- **Verräter:** Er friert Figuren mit der Frostkanone ❄️ ein (kindgerecht, niemand wird verletzt). Jeder Schuss braucht eine richtige Rechnung. Mit «Licht aus» sieht die Crew fast nichts mehr.
+- **Besprechung:** Wer eine eingefrorene Figur findet, meldet sie. Alle sagen, wo sie waren. Wer schwindelt, kann ertappt werden. Danach wird abgestimmt, und die gewählte Figur fliegt mit der Rettungskapsel zur Erde. So üben die Kinder logisches Denken.
+- **Überwachung:** Nach 2 Rechnungen sieht man, wer in den letzten 30 Sekunden in welchem Raum war.
+- **Sterne ⭐** gibt es für richtige Rechnungen, Aufgaben und Siege. Damit kauft man Hüte in der Garderobe.
+- Die Rechenminuten zählen auch für das Tagesziel in Zahlcraft. Ein eigener Elternbereich zeigt Statistik und Stufen.
+
+
 ## Spielidee
 - Mit ◀ ▶ läuft man, mit ⤒ springt man. Tippt man auf einen Block in der Nähe, wird er abgebaut (⛏️) oder gesetzt (🧱).
 - **Erde, Holz und Laub** kosten Energie ⚡. Ist sie leer, lädt man sie mit einer Plus-Aufgabe wieder auf.
