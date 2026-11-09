@@ -1,19 +1,28 @@
-# Baut die Spielseite (GitHub Pages) nach jedem Upload auf main neu.
-name: Spielseite aktualisieren
+# Veröffentlicht die Spielseite nach jedem Upload auf main.
+# Voraussetzung (einmalig): Settings → Pages → Source: «GitHub Actions».
+name: Spielseite veröffentlichen
 on:
   push:
     branches: [main]
   workflow_dispatch:
 permissions:
-  pages: write
   contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
 jobs:
-  rebuild:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: GitHub Pages neu bauen
-        run: |
-          curl -sS -f -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages/builds"
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
