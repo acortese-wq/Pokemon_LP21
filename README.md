@@ -1,83 +1,61 @@
-# Zahlimon Abenteuer
+# Zahlcraft
 
-Ein Rechenspiel im Stil der Pokémon-Spiele für die 3. Klasse, abgestimmt auf den Lehrplan 21 (Mathematik, Zyklus 2). Nur für den privaten Gebrauch.
+Ein Lernspiel in einer Blockwelt (inspiriert von Minecraft) für die 3. Klasse, abgestimmt auf den Lehrplan 21, Mathematik, Zyklus 2. Nur für den privaten Gebrauch. Alle Grafiken sind selbst gezeichnet.
 
-**Spielen:** https://acortese-wq.github.io/Pokemon_LP21/ (funktioniert auf Handy und Tablet ohne Login)
-
-Oder `index.html` herunterladen und im Browser öffnen. Mehr Dateien braucht es nicht.
+**Spielen:** https://acortese-wq.github.io/Pokemon_LP21/ (auf Handy, Tablet und Computer, ohne Login)
 
 **Tipp:** Den Link im Browser öffnen und «Zum Home-Bildschirm hinzufügen» wählen. Dann startet das Spiel wie eine App.
 
+Das alte Spiel «Zahlimon» gibt es weiterhin: https://acortese-wq.github.io/Pokemon_LP21/zahlimon/ (der Spielstand bleibt erhalten).
+
 ## Spielidee
-- Das Kind gibt seinen Namen ein und wählt ein erstes Zahlimon: Flammi, Tropfi oder Blatti.
-- Jede richtige Antwort ist ein Angriff. Bei einer falschen Antwort zeigt das Spiel den Rechenweg, danach greift das Gegenüber an.
-- Wer drei Aufgaben in Folge richtig löst, macht einen Superangriff.
-- Mit Zahlenbällen fängt man wilde Zahlimon, auch dafür muss man richtig rechnen. Zahlimon steigen im Level auf und entwickeln sich weiter.
-- Es gibt 7 Gebiete mit je einer Arena und einem Orden. Mit jedem Orden öffnet sich das nächste Gebiet.
-- Die App spricht nicht. Es gibt nur kurze Töne, die sich im Bereich für Eltern ausschalten lassen.
-- Der Fortschritt wird automatisch im Browser gespeichert.
+- Mit ◀ ▶ läuft man, mit ⤒ springt man. Tippt man auf einen Block in der Nähe, wird er abgebaut (⛏️) oder gesetzt (🧱).
+- **Erde, Holz und Laub** kosten Energie ⚡. Ist sie leer, lädt man sie mit einer Plus-Aufgabe wieder auf.
+- **Stein und Erze** brauchen eine Rechenaufgabe. Die Schicht bestimmt das Thema:
 
-| Gebiet | Thema |
-|---|---|
-| Plus-Wiese | Addition bis 1000 |
-| Minus-Höhle | Subtraktion, Ergänzen |
-| Zahlen-Berg | Stellenwerte (H/Z/E), Nachbarzahlen, Vergleichen, Runden, Zahlenfolgen |
-| Mal-Wald | Einmaleins, Multiplizieren mit Zehnerzahlen |
-| Geteilt-See | Division |
-| Markt-Stadt | Franken/Rappen, m/cm, Zeitdauer, Uhr lesen, Textaufgaben |
-| Drachen-Gipfel | alles gemischt |
+| Block | Thema | Nötiges Werkzeug |
+|---|---|---|
+| Stein | Minus, Ergänzen | Holz-Spitzhacke |
+| Kohle | Zahlenraum bis 1000 | Holz-Spitzhacke |
+| Eisen | Einmaleins | Stein-Spitzhacke |
+| Gold | Geteilt | Eisen-Spitzhacke |
+| Diamant | Grössen, Uhr, Sachaufgaben | Eisen-Spitzhacke |
 
-Die Schwierigkeit passt sich pro Thema in drei Stufen an. Falsch gelöste Aufgaben kommen später noch einmal.
+- **Herstellen** (🛠️) mit Sachrechnen, zum Beispiel «Du hast 7 Stein und brauchst 3. Wie viele bleiben?». Dazu kommen Werkbank, Ofen (Erze schmelzen), Werkzeuge, Schwerter, Rüstungen, Fackeln, Leitern und ein Bett.
+- **Nachts** kommen Monster (Zombie, Spinne, Knallkopf). Man wehrt sie mit Rechnen ab oder baut sich ein Haus. Fackeln erhellen Höhlen. Im Bett schläft man durch die Nacht.
+- **Schafe** schert man für Wolle. **Schatztruhen** in Höhlen öffnet man mit einer Aufgabe.
 
-## Tagesziel und Motivation
-- **Selbst entscheiden:** Jeden Tag wählt das Kind 2 von 4 Missionen (z. B. «Gewinne 4 Kämpfe», «Mach 3 Superangriffe», «Löse 15 Aufgaben im Mal-Wald») und einen Tagespartner, der doppelte Erfahrung bekommt.
-- **Zeitziel:** standardmässig 30 Rechenminuten pro Tag (in den Elterneinstellungen anpassbar). Es zählt nur echte Rechenzeit: Zeit mit offener Aufgabe (max. 60 Sekunden pro Aufgabe), das Lesen des Rechenwegs und die Erklärseiten. Karte, Laden und Animationen zählen nicht. Die Anzeige 🧮 12/30 ist oben und im Kampf immer sichtbar.
-- **Belohnungen:** Für das Tagesziel und für jede Mission darf das Kind eine von drei Schatztruhen öffnen. Darin sind Sterne, Zahlenbälle, Tränke, ein Level-Bonbon oder ein Zahlimon-Ei.
-- **Eier und Serie:** Ein Ei schlüpft nach 20 richtigen Aufgaben. Die Serie 🔥 zählt die Tage in Folge mit erreichtem Ziel; nach 3, 7, 14, 21 und 30 Tagen gibt es ein seltenes Ei.
-- **Konsequenz:** Ein Zahlimon sagt jeden Tag, dass es weglaufen wird, wenn das Ziel nicht erreicht wird. Wird ein Zieltag verpasst, läuft es tatsächlich weg und kommt zurück, sobald das nächste Tagesziel geschafft ist. Die Eltern können stattdessen «für immer» oder «keine Folge» wählen und einen Ferienmodus einschalten. Das Start-Zahlimon läuft nie weg.
+## Was zum Weiterspielen motiviert
+- **Ziel-Reihe:** 22 Ziele vom ersten Baum bis zur Diamantrüstung, das nächste Ziel steht immer oben im Bild.
+- Level und Erfahrung, Combos 🔥 und Blitz-Bonus ⚡.
+- Ein **Sammelbuch** mit allen Gegenständen.
+- **Tagesplan:** Das Kind wählt selbst 2 Missionen und einen Tagesbonus.
+- **Schatztruhen-Wahl** bei Zielen, Missionen und dem Tagesziel.
+- Eine **Serie** für Tage in Folge mit erreichtem Ziel.
+- **Gesunde Grenzen:** Es gibt keine endlosen Belohnungsschleifen. Eltern können eine **Spielzeit-Grenze** festlegen. Danach erscheint ein freundlicher «Feierabend»-Bildschirm mit einer Vorschau auf das nächste Ziel.
 
-## Kämpfe
-- Jedes Zahlimon hat drei Attacken passend zu seinem Typ: ⭐ leicht (leichtere Rechnung, schwach), ⭐⭐ mittel und ⭐⭐⭐ schwer (schwierigere Rechnung, sehr stark, 3× pro Kampf).
-- **Blitz-Bonus ⚡:** Wer antwortet, solange der Balken läuft (10 bzw. 20 Sekunden), macht mehr Schaden. Das ist nur ein Bonus, ohne Strafe.
-- **Combo:** Ab 3 richtigen Antworten in Folge gibt es einen Superangriff, ab 5 eine Mega-Combo.
-- **Volltreffer 💥:** Zufälliger Zusatzschaden.
-- **Der Gegner greift an:** Er lädt seinen Angriff auf (⚡○○○). Ist die Anzeige voll, gibt es eine Abwehr-Aufgabe. Richtig gelöst heisst: ausweichen. Mit Blitz-Antwort gibt es einen Konter.
-- **Wütende Bosse 😠:** Das letzte Zahlimon einer Arena greift bei wenig Kraft öfter an.
+## Lernspiel-Grundsätze
+- Die Aufgaben sind Teil des Spielablaufs: Ohne Rechnen gibt es keine Erze.
+- Die Schwierigkeit passt sich pro Thema an (3 Stufen).
+- Nach einem Fehler gibt es sofort eine Rückmeldung mit bewegtem Rechenweg: Zahlenstrahl, Punktefeld, Verteilen, Hunderter/Zehner/Einer, Runden oder Uhr.
+- Falsch gelöste Aufgaben kommen später nochmals.
+- Unter «📺 So geht's» gibt es Erklärseiten zu jedem Thema.
+- Der Fortschritt ist immer sichtbar: Ziele, Level, Sammelbuch, Rechenminuten.
 
-## Zahlimon und Bälle
-- 88 verschiedene Zahlimon, 8 bis 11 pro Gebiet, dazu seltene in fast jedem Gebiet.
-- Selten (1 von 30) erscheint ein **schillerndes** Zahlimon ✨ in anderer Farbe.
-- Vier Bälle: Zahlenball, Zehnerball (fängt besser), Hunderterball (fängt sehr gut) und Tausenderball (fängt sicher; nur aus Truhen und für lange Serien).
-
-## Spielstand
-- Der Spielstand wird nach jeder Aktion doppelt gespeichert (Browser-Speicher und IndexedDB, dazu eine Sicherungskopie). Beim Öffnen geht es automatisch weiter.
-- «Neues Spiel» ist geschützt und nur mit einer Rechenfrage für Erwachsene möglich.
-- Wichtig: Jeder Browser und jedes Symbol auf dem Home-Bildschirm hat einen eigenen Speicher. Immer gleich starten, nicht im privaten Modus spielen.
-
-## Bewegte Bilder und Rechenhilfen
-- Die Zahlimon bewegen sich, je nach Typ atmen, schweben oder hüpfen sie.
-- Die Gebiete sind belebt: Wolken, Bienen, Blätter, Luftblasen, Glut.
-- Angriffe fliegen als Feuer, Wasser, Blätter oder Blitze zum Gegner, danach erscheinen Schadenszahlen.
-- Bei einer richtigen Antwort gibt es einen Stempel, und ein Stern fliegt zum Konto.
-- Konfetti gibt es bei Level-Aufstieg, beim Fangen, für Orden und bei einer Entwicklung.
-- Vor wilden Kämpfen raschelt das Gras, vor jedem Arenakampf erscheint ein «VS»-Bild.
-- Bewegte Rechenhilfen (Anschauung wie in der Schule):
-  - leerer Zahlenstrahl mit Sprüngen; das eigene Zahlimon hüpft mit
-  - Punktefeld mit Fünferlinie
-  - gerechtes Verteilen auf Teller
-  - Hunderterplatten, Zehnerstangen und Einerwürfel
-  - Runden am Zahlenstrahl
-  - Uhr mit drehenden Zeigern
-- Die Rechenhilfen erscheinen bei Fehlern und über den Knopf «💡 Tipp».
-- In jedem Gebiet erklärt die Seite «📺 So geht's» ein Beispiel Schritt für Schritt mit Sprachausgabe.
+## Tagesziel
+- Standardmässig 30 Rechenminuten. Es zählt nur echte Rechenzeit.
+- Wird ein Zieltag verpasst, stiehlt ein Dieb-Zombie wertvolle Sachen. Schafft das Kind das nächste Tagesziel, holt es sie zurück. Einstellbar sind auch «für immer» und «keine Folge», dazu ein Ferienmodus.
 
 ## Bereich für Eltern
-Den Link findest du unten auf der Karte. Dort gibt es:
-- Statistik pro Thema
-- die zuletzt falsch gelösten Aufgaben
-- die Stufe, fest oder automatisch
-- Einstellungen für Sprache und Töne
-- einen Code, mit dem sich der Spielstand auf ein anderes Gerät übertragen lässt
+Erreichbar über ☰ → Bereich für Eltern:
+- Rechen- und Spielminuten der letzten 7 Tage
+- Tagesziel, Zieltage, Folge bei verpasstem Ziel, Ferienmodus
+- Spielzeit-Grenze
+- Stufen pro Thema, Statistik, zuletzt falsch gelöste Aufgaben
+- Spielstand-Code für ein anderes Gerät
+- Neue Welt beginnen (geschützt durch eine Rechenfrage)
 
-## Hinweis
-Die Zahlimon sind eigene Fantasiewesen und werden mit Emojis dargestellt. Das Spiel enthält keine Pokémon-Bilder oder -Namen.
+## Technisches
+- Eine einzige Datei `index.html`, ohne Installation.
+- Der Spielstand wird doppelt gespeichert (Browser-Speicher und IndexedDB). Beim Öffnen prüft das Spiel automatisch, ob es eine neuere Version gibt.
+- Die App spricht nicht. Töne lassen sich ausschalten.
