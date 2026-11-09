@@ -23,7 +23,10 @@ Das alte Spiel «Zahlimon» gibt es weiterhin: https://acortese-wq.github.io/Pok
 
 - **Herstellen** (🛠️) mit Sachrechnen, zum Beispiel «Du hast 7 Stein und brauchst 3. Wie viele bleiben?». Dazu kommen Werkbank, Ofen (Erze schmelzen), Werkzeuge, Schwerter, Rüstungen, Fackeln, Leitern und ein Bett.
 - **Nachts** kommen Monster (Zombie, Spinne, Knallkopf). Man wehrt sie mit Rechnen ab oder baut sich ein Haus. Fackeln erhellen Höhlen. Im Bett schläft man durch die Nacht.
-- **Schafe** schert man für Wolle. **Schatztruhen** in Höhlen öffnet man mit einer Aufgabe.
+- **Schafe** schert man für Wolle, **Kühe** melkt man für Milch, beides mit einer Aufgabe. **Schatztruhen** in Höhlen öffnet man ebenfalls mit einer Aufgabe.
+- **Hunger 🍗** (sanft): Der Balken sinkt langsam, etwa alle 90 Sekunden Spielzeit um 1. Ist der Magen leer, gehen langsam Herzen verloren, aber nie das letzte. Herzen heilen nur, wenn man satt ist. Essen: Apfel, Milch, Goldener Apfel.
+- **Nachwachsende Bäume 🌱:** Aus Laub fallen Setzlinge. Gepflanzt auf Erde oder Gras, wachsen sie nach etwa 2 Minuten zu einem Baum.
+- **Nächte werden schwieriger:** Mit jeder überstandenen Nacht kommen etwas mehr Monster, die etwas mehr aushalten. Das steigt nur bis zu einer Obergrenze.
 
 ## Was zum Weiterspielen motiviert
 - **Ziel-Reihe:** 22 Ziele vom ersten Baum bis zur Diamantrüstung, das nächste Ziel steht immer oben im Bild.

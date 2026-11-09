@@ -253,7 +253,7 @@ const pad2=n=>String(n).padStart(2,'0');
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const hashStr=s=>{let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0};
-const APP_VERSION='2026-11-09a';
+const APP_VERSION='2026-11-09b';
 const KEY='zahlcraft_v1';
 let S=null;
 
@@ -449,6 +449,8 @@ mkTex('bed',(g,r)=>{px(g,'#b53a3a',0,4,16,6);px(g,'#d24a4a',0,4,16,1);px(g,'#f0f
 mkTex('torch',(g,r)=>{px(g,'#8a6a3d',7,6,2,10);px(g,'#6b4a26',7,13,2,3);px(g,'#ff8a1c',7,3,2,3);px(g,'#ffd34d',7,4,2,1);px(g,'#fff4b0',7,3,1,1)});
 mkTex('ladder',(g,r)=>{px(g,'#8a6a3d',2,0,2,16);px(g,'#8a6a3d',12,0,2,16);for(let y=2;y<16;y+=4)px(g,'#a88250',2,y,12,2)});
 mkTex('wool',(g,r)=>noise(g,r,['#ececec','#dcdcdc','#f5f5f5','#e4e4e4']));
+mkTex('sapling',(g,r)=>{px(g,'#6b4a26',7,9,2,7);[[7,3],[6,4],[8,4],[5,5],[9,5],[4,6],[10,6],[6,6],[8,6],[5,7],[9,7],[7,5],[7,6],[7,7],[6,8],[8,8]].forEach(([x,y])=>px(g,r()<.5?'#4b8f33':'#3f7d2a',x,y,1,1));px(g,'#5fae3a',7,2,2,1)});
+mkTex('milk',g=>{px(g,'#9a9a9a',5,2,6,2);px(g,'#ffffff',4,4,8,10);px(g,'#e8eef5',4,10,8,4);px(g,'#cfd8e3',4,13,8,1);px(g,'#6aa0d8',5,6,6,2)});
 mkTex('chest',(g,r)=>{px(g,'#4a2e14',0,1,16,15);px(g,'#9a6a35',1,2,14,4);px(g,'#8b5a2b',1,7,14,8);px(g,'#4a2e14',0,6,16,1);px(g,'#e3c75a',7,5,2,4);px(g,'#7a5a10',7,8,2,1)});
 const TOOLC={wood:['#a07a45','#7a5a32'],stone:['#9a9a9a','#6e6e6e'],iron:['#eeeeee','#b9b9b9'],diamond:['#6ff0e6','#2fb6ac'],gold:['#ffe25a','#d1a817']};
 function drawPick(g,c){for(let i=0;i<9;i++){px(g,'#6b4a26',3+i,13-i);px(g,'#8a6334',4+i,13-i)}
@@ -490,7 +492,8 @@ const BL=[null,
   {k:'torch',n:'Fackel',soft:1,drop:'torch',nonsolid:1,trans:1},
   {k:'ladder',n:'Leiter',soft:1,drop:'ladder',nonsolid:1,climb:1,trans:1},
   {k:'wool',n:'Wolle',soft:1,drop:'wool'},
-  {k:'chest',n:'Schatztruhe',use:'loot',unbreak:1,trans:1}
+  {k:'chest',n:'Schatztruhe',use:'loot',unbreak:1,trans:1},
+  {k:'sapling',n:'Setzling',soft:1,drop:'sapling',nonsolid:1,trans:1}
 ];
 const BID={};BL.forEach((b,i)=>{if(b)BID[b.k]=i});
 const IT={
@@ -499,7 +502,7 @@ const IT={
   glass:{n:'Glas',b:'glass'},bricks:{n:'Steinziegel',b:'bricks'},table:{n:'Werkbank',b:'table'},furnace:{n:'Ofen',b:'furnace'},bed:{n:'Bett',b:'bed'},
   torch:{n:'Fackel',b:'torch'},ladder:{n:'Leiter',b:'ladder'},wool:{n:'Wolle',b:'wool'},stick:{n:'Stock',tex:'stick'},
   iron_ingot:{n:'Eisenbarren',tex:'iron_ingot'},gold_ingot:{n:'Goldbarren',tex:'gold_ingot'},string:{n:'Faden',tex:'string'},
-  apple:{n:'Apfel',tex:'apple',food:3},golden_apple:{n:'Goldener Apfel',tex:'golden_apple',food:20},
+  apple:{n:'Apfel',tex:'apple',food:4,heal:1},golden_apple:{n:'Goldener Apfel',tex:'golden_apple',food:10,heal:20},milk:{n:'Milch',tex:'milk',food:6,heal:2},sapling:{n:'Setzling',b:'sapling'},
   pick_wood:{n:'Holz-Spitzhacke',tex:'pick_wood',pick:1},pick_stone:{n:'Stein-Spitzhacke',tex:'pick_stone',pick:2},pick_iron:{n:'Eisen-Spitzhacke',tex:'pick_iron',pick:3},pick_diamond:{n:'Diamant-Spitzhacke',tex:'pick_diamond',pick:4},
   sword_wood:{n:'Holzschwert',tex:'sword_wood',sword:2},sword_stone:{n:'Steinschwert',tex:'sword_stone',sword:3},sword_iron:{n:'Eisenschwert',tex:'sword_iron',sword:4},sword_diamond:{n:'Diamantschwert',tex:'sword_diamond',sword:6},
   armor_iron:{n:'Eisenrüstung',tex:'armor_iron',armor:.35},armor_diamond:{n:'Diamantrüstung',tex:'armor_diamond',armor:.6}
@@ -533,8 +536,8 @@ const SMELT=[{in:'iron_ore',out:'iron_ingot'},{in:'gold_ore',out:'gold_ingot'},{
 /* ---------- Spielstand ---------- */
 const BAK=KEY+'_bak';const DEFSET={sound:true,fix:{},goalMin:30,goalDays:[1,1,1,1,1,1,1],conseq:'back',holiday:false,maxMin:0};
 let IDBSAVE=null,saveN=0,idbT=null,STORE_OK=true,dirty=false;
-function fresh(name){return {v:1,name,seed:R(1,1e9),diff:{},px:0,py:0,spawn:null,hearts:10,energy:10,xp:0,lvl:1,inv:{apple:2},hot:['apple',null,null,null,null,null,null,null,null],sel:0,clock:.05,dayN:1,nights:0,quest:0,
-  got:{},made:{},placed:{},kills:0,chestsOpened:0,sheared:0,maxDepth:0,seenItems:{},stats:{},retry:{},log:[],days:{},settings:{...DEFSET,fix:{},goalDays:DEFSET.goalDays.slice()},flags:{},
+function fresh(name){return {v:1,name,seed:R(1,1e9),diff:{},px:0,py:0,spawn:null,hearts:10,food:10,sap:{},playT:0,energy:10,xp:0,lvl:1,inv:{apple:2},hot:['apple',null,null,null,null,null,null,null,null],sel:0,clock:.05,dayN:1,nights:0,quest:0,
+  got:{},made:{},placed:{},kills:0,chestsOpened:0,sheared:0,maxDepth:0,seenItems:{},stats:{},retry:{},log:[],days:{},settings:{...DEFSET,fix:{},goalDays:DEFSET.goalDays.slice()},flags:{v2:1},
   time:{},play:{},goalHit:{},plan:null,lastDay:null,streak:0,best:0,lost:[],news:[],rq:[],savedAt:0}}
 function migrate(){const d=fresh(S.name);for(const k in d)if(S[k]===undefined)S[k]=d[k];S.settings={...DEFSET,...S.settings};S.settings.fix=S.settings.fix||{};S.settings.goalDays=(S.settings.goalDays||DEFSET.goalDays).slice()}
 function idb(){return new Promise((res,rej)=>{try{const r=indexedDB.open('zahlcraft',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}})}
@@ -573,7 +576,7 @@ function genWorld(seed){const r=mulberry(seed);world.fill(0);const a=r()*9,b=r()
   for(const k in S.diff){const i=+k;if(i>=0&&i<W*H)world[i]=S.diff[k]}
   for(let x=0;x<W;x++)calcTop(x);torches=new Set();for(let i=0;i<W*H;i++)if(world[i]===18)torches.add(i)}
 function calcTop(x){let y=0;while(y<H&&(world[idx(x,y)]===0||BL[world[idx(x,y)]].trans))y++;top[x]=y}
-function setBlock(x,y,id){const i=idx(x,y);const old=world[i];world[i]=id;S.diff[i]=id;if(old===18)torches.delete(i);if(id===18)torches.add(i);calcTop(x);dirty=true}
+function setBlock(x,y,id){const i=idx(x,y);const old=world[i];if(old===22&&id!==22&&S.sap)delete S.sap[i];world[i]=id;S.diff[i]=id;if(old===18)torches.delete(i);if(id===18)torches.add(i);calcTop(x);dirty=true}
 
 /* ---------- Statistik und Aufgaben-Auswahl ---------- */
 function stat(t){return S.stats[t]=S.stats[t]||{r:0,f:0,s:1,run:0,miss:0}}
@@ -612,7 +615,7 @@ function confettiDOM(){if(RM)return;for(let i=0;i<40;i++){const d=document.creat
   const a=Math.random()*Math.PI*2,v=120+Math.random()*260;d.animate([{transform:'translate(0,0)'},{transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v+200}px) rotate(${R(90,720)}deg)`,opacity:0}],{duration:1400+Math.random()*700,easing:'cubic-bezier(.2,.7,.4,1)'}).onfinish=()=>d.remove()}}
 function celebrate(o,done){const ic=o.item?icon(o.item):`<span>${o.icon||'⭐'}</span>`;celEl.innerHTML=`<div class="rays"></div><div class="cel-ic">${ic}</div><h2>${esc((o.title||'').replace(/\{N\}/g,S?S.name:''))}</h2>${o.sub?`<p>${esc(o.sub.replace(/\{N\}/g,S?S.name:''))}</p>`:''}<span class="more">▼ tippen</span>`;
   celEl.hidden=false;CH=null;celDone=done;sfx('win');confettiDOM()}
-const LOOT=[{k:'diamond',n:1},{k:'diamond',n:2},{k:'iron_ingot',n:4},{k:'gold_ingot',n:3},{k:'torch',n:12},{k:'apple',n:4},{k:'coal',n:8},{k:'golden_apple',n:1},{k:'iron_ingot',n:2},{k:'string',n:3},{k:'wool',n:3}];
+const LOOT=[{k:'milk',n:3},{k:'sapling',n:3},{k:'diamond',n:1},{k:'diamond',n:2},{k:'iron_ingot',n:4},{k:'gold_ingot',n:3},{k:'torch',n:12},{k:'apple',n:4},{k:'coal',n:8},{k:'golden_apple',n:1},{k:'iron_ingot',n:2},{k:'string',n:3},{k:'wool',n:3}];
 function chestPick(big,done){const l=shuffle(LOOT.slice()).slice(0,3);if(big&&!l.some(x=>x.k==='diamond'))l[R(0,2)]=LOOT[1];CH={l,done,picked:false,ready:false};
   celEl.innerHTML=`<div class="rays"></div><h2>Wähle eine Truhe!</h2><div class="chests">${l.map((x,i)=>`<button class="chest" data-i="${i}" aria-label="Truhe ${i+1}">${icon('chest')}</button>`).join('')}</div><p id="chestMsg">Tippe auf eine Truhe. Eine darfst du behalten.</p>`;celEl.hidden=false}
 celEl.addEventListener('click',e=>{if(celEl.hidden)return;
@@ -666,6 +669,11 @@ const maxEnergy=()=>S.plan&&S.plan.bonus==='energy'?18:12;
 const maxHearts=()=>10+(S.plan&&S.plan.bonus==='hearts'?4:0);
 const xpNeed=l=>20+l*12;
 function gainXP(n){if(S.plan&&S.plan.bonus==='xp')n*=2;S.xp+=n;while(S.xp>=xpNeed(S.lvl)){S.xp-=xpNeed(S.lvl);S.lvl++;const L=S.lvl;S.rq.push(L%5===0?{icon:'⭐',title:`Level ${L}!`,sub:'Jedes 5. Level gibt es eine Schatztruhe.',chest:'small'}:{icon:'⭐',title:`Level ${L}!`,sub:'Du wirst immer stärker.'})}dirty=true}
+let hungerT=0,starveT=0,sapT=0,hungerWarned=false;
+function growTree(i){const x=i%W,y=(i/W)|0;if(world[i]!==22){delete S.sap[i];return}const h=4+(Math.random()<.4?1:0);
+  for(let yy=y-h-1;yy<y;yy++)if(yy<0||(world[idx(x,yy)]&&world[idx(x,yy)]!==6))return;
+  delete S.sap[i];for(let yy=y;yy>y-h;yy--)setBlock(x,yy,5);const ty=y-h+1;for(let dx=-2;dx<=2;dx++)for(let dy=-2;dy<=1;dy++){if(Math.abs(dx)+Math.abs(dy)>3)continue;const X=x+dx,Y=ty+dy;if(X>=0&&X<W&&Y>=0&&!world[idx(X,Y)])setBlock(X,Y,6)}
+  if(Math.hypot(x-P1.x,y-P1.y)<14){burst(x+.5,y-h/2,'#5fae3a',18);toast('🌳 Ein Baum ist gewachsen!')}}
 let P1=null,keys={L:0,R:0,J:0,D:0},mobs=[],animals=[],ptc=[],lastHurt=0,regenT=0,mode='mine';
 const G=30,JUMP=10.2,SPEED=4.6;
 function boxSolid(x,y,w,h){for(let tx=Math.floor(x);tx<=Math.floor(x+w-1e-4);tx++)for(let ty=Math.floor(y);ty<=Math.floor(y+h-1e-4);ty++)if(solid(tx,ty))return true;return false}
@@ -680,14 +688,14 @@ function heal(n){S.hearts=Math.min(maxHearts(),S.hearts+n);dirty=true}
 
 /* ---------- Monster und Tiere ---------- */
 const MOB={zombie:{n:'Zombie',w:.6,h:1.8,hp:8,sp:1.5,dmg:2,xp:6},spider:{n:'Spinne',w:1.2,h:.8,hp:6,sp:2.3,dmg:2,xp:6,drop:'string'},knall:{n:'Knallkopf',w:.7,h:1.5,hp:5,sp:1.4,dmg:4,xp:8,drop:'coal'}};
-function spawnMob(type,x,y){const d=MOB[type];mobs.push({type,x,y,w:d.w,h:d.h,vx:0,vy:0,hp:d.hp,max:d.hp,onG:false,cool:1.5,face:1,fuse:0,hurtT:0})}
+function spawnMob(type,x,y){const d=MOB[type],hp=Math.round(d.hp*(1+Math.min(1,S.nights*.1)));mobs.push({type,x,y,w:d.w,h:d.h,vx:0,vy:0,hp,max:hp,onG:false,cool:1.5,face:1,fuse:0,hurtT:0})}
 function spawnAnimal(type){for(let t=0;t<20;t++){const x=R(4,W-5);const y=top[x];if(blk(x,y)===1&&Math.abs(x-P1.x)>6&&!boxSolid(x+.1,y-1.05,1.2,1)){animals.push({type,x:x+.1,y:y-(type==='sheep'?.91:1.01),w:type==='sheep'?1.1:1.2,h:type==='sheep'?.9:1,vx:0,vy:0,onG:false,t:0,face:1,shorn:0});return}}}
 const near=(e,r)=>Math.hypot(e.x+e.w/2-(P1.x+P1.w/2),e.y+e.h/2-(P1.y+P1.h/2))<r;
 const touching=(a,b)=>a.x<b.x+b.w+.15&&a.x+a.w+.15>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
 function mobFight(m){if(Q||!modal.hidden)return;const d=MOB[m.type];m.cool=2.5;
   if(m.type==='knall'){ask(nextQ('mix',-1),{title:'💥 Ein Knallkopf zischt! Entschärfe ihn!',noCancel:true,onOk:()=>{killMob(m,'entschärft')},onFail:()=>{explode(m)}});return}
   ask(nextQ('mix',-1),{title:`🛡️ ${d.n} greift an! Wehre ab!`,noCancel:true,onOk:fast=>{m.vx=(m.x<P1.x?-1:1)*7;m.vy=-5;m.stun=1;if(fast){hitMob(m,Math.ceil(bestSword()/2),true)}else{const s=w2s(P1.x+.3,P1.y);floatAt('Abgewehrt!',s.x,s.y-20,'good')}},
-    onFail:()=>{hurt(d.dmg,d.n);P1.vx=(P1.x<m.x?-1:1)*6;P1.vy=-5;m.cool=3}})}
+    onFail:()=>{hurt(d.dmg+Math.min(2,Math.floor(S.nights/4)*.5),d.n);P1.vx=(P1.x<m.x?-1:1)*6;P1.vy=-5;m.cool=3}})}
 function attackMob(m){const d=MOB[m.type];ask(nextQ('mix'),{title:`⚔️ Angriff auf ${d.n}`,icon:Object.keys(S.inv).filter(k=>IT[k]&&IT[k].sword).sort((a,b)=>IT[b].sword-IT[a].sword)[0],
   onOk:fast=>{let dmg=bestSword()*(fast?1.5:1)*(combo>=3?1.5:1)*(S.plan&&S.plan.bonus==='strong'?1.5:1);if(Math.random()<.12){dmg*=1.5;const s=w2s(m.x,m.y);floatAt('💥 Volltreffer!',s.x,s.y-30,'gold')}hitMob(m,Math.round(dmg))},
   onFail:()=>{const s=w2s(m.x,m.y);floatAt('Daneben!',s.x,s.y-10,'dmg')}})}
@@ -697,7 +705,8 @@ function killMob(m,how){mobs=mobs.filter(x=>x!==m);const d=MOB[m.type];burst(m.x
 function explode(m){mobs=mobs.filter(x=>x!==m);sfx('boom');shakeT=.6;burst(m.x+.35,m.y+.75,'#555',40);const cx=Math.round(m.x+.35),cy=Math.round(m.y+1);
   for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){const x=cx+dx,y=cy+dy;const b=blk(x,y);if(b&&!BL[b].unbreak&&b!==21&&x>=0&&x<W&&y>=0&&y<H)setBlock(x,y,0)}hurt(4,'Knallkopf');P1.vy=-7}
 function updateMobs(dt){const night=isNight();
-  if(night&&mobs.length<4&&Math.random()<dt/7){const side=Math.random()<.5?-1:1;const x=Math.floor(clamp(P1.x+side*R(9,14),2,W-3));const y=top[x];if(lightAt(x,y-1)<.5)spawnMob(P(['zombie','zombie','spider','knall']),x+.2,y-MOB.zombie.h-.05)}
+  const nd=S.nights,maxMobs=Math.min(7,2+Math.floor(nd/2)),rate=Math.max(3,7-nd*.4);
+  if(night&&mobs.length<maxMobs&&Math.random()<dt/rate){const side=Math.random()<.5?-1:1;const x=Math.floor(clamp(P1.x+side*R(9,14),2,W-3));const y=top[x];if(lightAt(x,y-1)<.5)spawnMob(P(['zombie','zombie','spider','knall']),x+.2,y-MOB.zombie.h-.05)}
   const deep=P1.y>top[Math.floor(P1.x)]+6;if(deep&&mobs.length<3&&Math.random()<dt/28){for(let t=0;t<20;t++){const x=Math.floor(clamp(P1.x+(Math.random()<.5?-1:1)*R(7,12),2,W-3)),y=Math.floor(P1.y+R(-4,4));if(y>2&&y<H-2&&!solid(x,y)&&!solid(x,y-1)&&solid(x,y+1)&&lightAt(x,y)<.3){spawnMob(P(['zombie','spider']),x+.2,y-.82);break}}}
   for(const m of mobs){const d=MOB[m.type];m.cool=Math.max(0,m.cool-dt);m.hurtT=Math.max(0,m.hurtT-dt);if(m.stun>0){m.stun-=dt;m.vx*=.9}else{const dx=P1.x-m.x;m.face=dx<0?-1:1;m.vx=Math.abs(dx)<18?Math.sign(dx)*d.sp:0}
     moveEnt(m,dt);if(!night&&m.y<top[Math.floor(m.x)]+1&&Math.random()<dt/2){m.hp=0;burst(m.x+m.w/2,m.y+m.h/2,'#f80',14);mobs=mobs.filter(x=>x!==m);continue}
@@ -753,22 +762,26 @@ const paused=()=>!modal.hidden||!screenEl.hidden||!dlg.hidden||!celEl.hidden;
 function loop(t){const dt=Math.min(.05,(t-last)/1000);last=t;if(S&&P1){if(!paused())update(dt);draw();hudTick()}requestAnimationFrame(loop)}
 function update(dt){shakeT=Math.max(0,shakeT-dt);const up=keys.J;P1.vx=(keys.R?SPEED:0)-(keys.L?SPEED:0);if(P1.vx)P1.face=Math.sign(P1.vx);
   if(up&&P1.onG&&!onLadder(P1))P1.vy=-JUMP;moveEnt(P1,dt,up);P1.walk=P1.vx&&P1.onG?(P1.walk||0)+dt*12:0;
-  const prevNight=isNight();S.clock=(S.clock+dt/DAYLEN)%1;if(prevNight&&!isNight()){S.nights++;S.dayN++;ev('night');toast('☀️ Der Morgen ist da! Du hast die Nacht überstanden.');questCheck()}if(!prevNight&&isNight())toast('🌙 Es wird Nacht. Monster kommen! Baue dir ein Versteck oder kämpfe.');
+  const prevNight=isNight();S.clock=(S.clock+dt/DAYLEN)%1;if(prevNight&&!isNight()){S.nights++;S.dayN++;ev('night');toast('☀️ Der Morgen ist da! Du hast die Nacht überstanden.');questCheck()}if(!prevNight&&isNight())toast(S.nights>=2?`🌙 Nacht ${S.nights+1}: Die Monster werden stärker! Baue dir ein Versteck oder kämpfe.`:'🌙 Es wird Nacht. Monster kommen! Baue dir ein Versteck oder kämpfe.');
   updateMobs(dt);for(const p of ptc){p.vy+=20*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt}ptc=ptc.filter(p=>p.life>0);
-  regenT+=dt;if(regenT>12){regenT=0;if(Date.now()-lastHurt>8000&&S.hearts<maxHearts())heal(1)}
+  S.playT+=dt;hungerT+=dt;if(hungerT>90){hungerT=0;S.food=Math.max(0,S.food-1);dirty=true}
+  if(S.food<=3&&!hungerWarned){hungerWarned=true;toast('🍗 Du hast Hunger! Iss etwas: Apfel oder Milch.')}
+  starveT+=dt;if(S.food===0&&starveT>20){starveT=0;if(S.hearts>1){S.hearts=Math.max(1,S.hearts-1);lastHurt=Date.now();sfx('hurt');toast('🍗 Dein Magen knurrt! Iss schnell etwas.')}}
+  regenT+=dt;if(regenT>12){regenT=0;if(Date.now()-lastHurt>8000&&S.hearts<maxHearts()&&S.food>=6)heal(1)}
+  sapT+=dt;if(sapT>2){sapT=0;for(const k in S.sap){if(S.playT-S.sap[k]>110+Math.random()*40)growTree(+k)}}
   const depth=Math.floor(P1.y-top[Math.floor(P1.x+.3)]);if(depth>S.maxDepth){S.maxDepth=depth}}
 
 /* ---------- HUD ---------- */
 let hudCache='';
 function hudTick(){const k=dayKey(),m=minOf(k),g2=goalMin(),hh=maxHearts(),qq=QUESTS[S.quest];
   const html=`<div class="hrow"><span class="pill hearts">${Array.from({length:hh/2},(_,i)=>`<span class="${S.hearts>=(i+1)*2?'':S.hearts>i*2?'':'off'}">${S.hearts>=(i+1)*2?'❤️':S.hearts>i*2?'💔':'🖤'}</span>`).join('')}</span>
-  <span class="pill">⚡<span class="ebar"><i style="width:${S.energy/maxEnergy()*100}%"></i></span></span>${combo>=2?`<span class="pill">🔥 ${combo}</span>`:''}
+  <span class="pill">⚡<span class="ebar"><i style="width:${S.energy/maxEnergy()*100}%"></i></span></span><span class="pill">🍗<span class="ebar"><i style="width:${S.food*10}%;background:${S.food<=3?'#e74c3c':'linear-gradient(90deg,#d98a3a,#f2c230)'}"></i></span></span>${combo>=2?`<span class="pill">🔥 ${combo}</span>`:''}
   <span class="pill right">🧮 ${m}/${g2}</span><span class="pill">${isNight()?'🌙':'☀️'} Tag ${S.dayN}</span><span class="pill">⭐ ${S.lvl}<span class="xpbar"><i style="width:${S.xp/xpNeed(S.lvl)*100}%"></i></span></span></div>
   <div class="hrow"><span class="quest">${qq?`${icon(qq.ic)} ${esc(qq.t)} ${qq.prog?'<span style="opacity:.8">('+qq.prog()+')</span>':''}`:'🏆 Alle Ziele geschafft! Baue, was du willst.'}</span></div>`;
   if(html!==hudCache){hudCache=html;$('#hud').innerHTML=html}}
 function renderHot(){if(!S)return;$('#hotbar').innerHTML=S.hot.map((k,i)=>`<button class="hs ${i===S.sel?'on':''}" data-act="hot" data-arg="${i}" aria-label="Fach ${i+1}">${k&&inv(k)?icon(k)+`<b>${inv(k)}</b>`:''}</button>`).join('')}
 ACT.hot=i=>{i=+i;const k=S.hot[i];if(S.sel===i&&k&&IT[k]&&IT[k].food&&inv(k)){eat(k)}S.sel=i;renderHot();if(k&&IT[k]&&IT[k].b&&mode!=='build')toggleMode('build')};
-function eat(k){if(S.hearts>=maxHearts()){toast('Du bist schon ganz gesund.');return}addItem(k,-1);heal(IT[k].food);sfx('ok');toast(`Mmh, ${nameOf(k)}! +${IT[k].food} ❤`)}
+function eat(k){const it=IT[k];if(S.food>=10&&S.hearts>=maxHearts()){toast('Du bist satt und gesund.');return}addItem(k,-1);S.food=Math.min(10,S.food+it.food);heal(it.heal||0);hungerWarned=false;sfx('ok');toast(`Mmh, ${nameOf(k)}! 🍗 +${it.food}${it.heal?` · ❤ +${it.heal}`:''}`)}
 function toggleMode(m){mode=m||(mode==='mine'?'build':'mine');const b=$('#bMode');b.textContent=mode==='mine'?'⛏️':'🧱';b.classList.toggle('build',mode==='build');toast(mode==='mine'?'⛏️ Abbauen: Tippe auf einen Block.':'🧱 Bauen: Tippe auf einen freien Platz.')}
 $('#bMode').addEventListener('click',()=>toggleMode());
 
@@ -783,7 +796,7 @@ const REACH=4.6;
 /* ---------- Abbauen, Bauen, Benutzen ---------- */
 function tapWorld(sx,sy){const wx=sx/TS+camX,wy=sy/TS+camY;
   for(const m of mobs)if(wx>=m.x-.2&&wx<=m.x+m.w+.2&&wy>=m.y-.2&&wy<=m.y+m.h+.2){if(near(m,4.5))attackMob(m);else toast('Zu weit weg. Geh näher ran!');return}
-  for(const a of animals)if(wx>=a.x&&wx<=a.x+a.w&&wy>=a.y&&wy<=a.y+a.h){if(!near(a,4))return toast('Zu weit weg.');if(a.type==='sheep')return shear(a);burst(a.x+.5,a.y,'#ff8fb0',8);return toast('Muuh! 🐮')}
+  for(const a of animals)if(wx>=a.x&&wx<=a.x+a.w&&wy>=a.y&&wy<=a.y+a.h){if(!near(a,4))return toast('Zu weit weg.');if(a.type==='sheep')return shear(a);return milkCow(a)}
   const tx=Math.floor(wx),ty=Math.floor(wy);if(tx<0||tx>=W||ty<0||ty>=H)return;
   const dist=Math.hypot(tx+.5-(P1.x+.3),ty+.5-(P1.y+.9));if(dist>REACH){toast('Zu weit weg. Geh näher ran!');return}
   const b=world[idx(tx,ty)];
@@ -798,7 +811,7 @@ function mine(x,y){const b=world[idx(x,y)],d=BL[b];if(!d)return;if(d.unbreak)ret
     ask(nextQ('add'),{title:'⚡ Energie aufladen!',onOk:fast=>{S.energy=Math.min(maxEnergy(),S.energy+(fast?10:7)*(S.plan&&S.plan.bonus==='energy'?1.5:1));toast('⚡ Energie aufgeladen!');breakBlock(x,y,b)}});return}
   ask(nextQ(d.q,bestPick()>d.tool+1?-1:0),{title:`⛏️ ${d.n} abbauen`,icon:d.k==='stone'?'stone':IT[d.drop]?d.drop:d.k,onOk:fast=>{breakBlock(x,y,b,fast)}})}
 function breakBlock(x,y,b,fast){const d=BL[b];setBlock(x,y,0);sfx('dig');burst(x+.5,y+.5,P(TEXCOL[d.k]||['#888']),14);
-  let drop=d.drop;if(d.k==='leaves'){drop=Math.random()<.14?'apple':Math.random()<.2?'stick':null}
+  let drop=d.drop;if(d.k==='leaves'){const r=Math.random();drop=r<.22?'sapling':r<.34?'apple':r<.46?'stick':null}
   if(drop){let n=1;if(d.k==='coal')n=R(1,2);if(d.xp&&(fast||(S.plan&&S.plan.bonus==='luck'))&&Math.random()<.35)n++;addItem(drop,n);const s=w2s(x+.5,y);floatAt(`${icon(drop)}+${n}`,s.x,s.y,n>1?'gold':'');
     if(d.xp){gainXP(d.xp);ev('ore')}if(d.k==='stone')ev('stone')}
   questCheck();dirty=true}
@@ -806,11 +819,13 @@ const TEXCOL={grass:['#5b9a43','#866043'],dirt:['#866043','#6d4a32'],stone:['#7d
 function placeBlock(x,y){const k=S.hot[S.sel];if(!k||!inv(k))return toast('Wähle unten einen Block aus, den du setzen willst.');const it=IT[k];if(!it||!it.b)return toast(`${nameOf(k)} kann man nicht setzen.`);
   const id=BID[it.b];const box={x,y,w:1,h:1};if(!BL[id].nonsolid&&(touching(box,P1)&&x+1>P1.x+.05&&x<P1.x+P1.w-.05&&y+1>P1.y&&y<P1.y+P1.h))return toast('Hier stehst du gerade.');
   if(mobs.some(m=>x+1>m.x&&x<m.x+m.w&&y+1>m.y&&y<m.y+m.h))return toast('Da ist ein Monster im Weg.');
+  if(k==='sapling'){if(![1,2].includes(blk(x,y+1)))return toast('Setzlinge wachsen nur auf Erde oder Gras.');S.sap[idx(x,y)]=S.playT;ev('plant');toast('🌱 Gepflanzt! In etwa 2 Minuten wächst ein Baum.')}
   setBlock(x,y,id);addItem(k,-1);S.placed[k]=(S.placed[k]||0)+1;sfx('place');ev('build');if(k==='bed'){S.spawn=[x,y];toast('🛏️ Hier ist jetzt dein Schlafplatz.')}questCheck()}
 function useBlock(x,y,b){const d=BL[b];if(d.use==='craft')return openCraft(true);if(d.use==='furnace')return openFurnace();
   if(d.use==='bed'){S.spawn=[x,y];if(!isNight())return toast('🛏️ Schlafplatz gespeichert. Schlafen kannst du nur nachts.');if(mobs.some(m=>near(m,10)))return toast('Du kannst nicht schlafen, Monster sind in der Nähe!');
     mobs=[];S.clock=.0;S.nights++;S.dayN++;ev('night');save();celebrate({icon:'🛏️',title:'Gute Nacht!',sub:'Du schläfst bis zum Morgen. Die Nacht ist geschafft.'},()=>questCheck());return}
   if(d.use==='loot'){ask(nextQ('mix'),{title:'🗝️ Schatztruhe öffnen',icon:'chest',onOk:()=>{setBlock(x,y,0);S.chestsOpened++;ev('chest');gainXP(10);chestPick(false,()=>questCheck())}})}}
+function milkCow(a){if(a.shorn>0)return toast('Diese Kuh hat gerade keine Milch. Versuch es später nochmals.');ask(nextQ('mal'),{title:'🐮 Kuh melken',icon:'milk',onOk:fast=>{a.shorn=120;const n=1+(fast?1:0);addItem('milk',n);ev('milk');burst(a.x+.5,a.y,'#ffffff',10);const s=w2s(a.x+.5,a.y);floatAt(`${icon('milk')}+${n}`,s.x,s.y)}})}
 function shear(a){if(a.shorn>0)return toast('Dieses Schaf ist schon geschoren. Die Wolle wächst nach.');ask(nextQ('zahl'),{title:'🐑 Schaf scheren',icon:'wool',onOk:fast=>{a.shorn=120;const n=R(1,2)+(fast?1:0);addItem('wool',n);S.sheared++;ev('sheep');const s=w2s(a.x+.5,a.y);floatAt(`${icon('wool')}+${n}`,s.x,s.y)}})}
 
 /* ---------- Herstellen und Ofen ---------- */
@@ -839,7 +854,7 @@ ACT.inv=()=>{const ks=Object.keys(S.inv);openModal(`<h2>🎒 Inventar</h2><p cla
   <div class="grid">${ks.length?ks.map(k=>`<button class="it" data-act="toHot" data-arg="${k}" title="${esc(nameOf(k))}">${icon(k)}<b>${inv(k)}</b><small>${esc(nameOf(k))}</small></button>`).join(''):'<p class="fine">Noch leer. Baue Blöcke ab!</p>'}</div>
   <p class="fine">Spitzhacke: <b>${bestPick()?nameOf(Object.keys(IT).find(k=>IT[k].pick===bestPick())):'keine'}</b> · Schwert: <b>${bestSword()>1?nameOf(Object.keys(IT).find(k=>IT[k].sword===bestSword())):'keins'}</b> · Rüstung: <b>${armor()?(armor()>.5?'Diamant':'Eisen'):'keine'}</b></p>
   <div class="row2"><button class="mcbtn" data-act="book">📖 Sammelbuch</button><button class="mcbtn" data-act="close">Zurück</button></div>`)};
-ACT.toHot=k=>{S.hot[S.sel]=k;renderHot();closeModal();if(IT[k]&&IT[k].food)toast(`${nameOf(k)} liegt in Fach ${S.sel+1}. Tippe es nochmals an, um zu essen.`);else if(IT[k]&&IT[k].b&&mode!=='build')toggleMode('build')};
+ACT.toHot=k=>{if(IT[k]&&IT[k].food){closeModal();eat(k);return}S.hot[S.sel]=k;renderHot();closeModal();if(false)toast('');else if(IT[k]&&IT[k].b&&mode!=='build')toggleMode('build')};
 ACT.book=()=>{const all=Object.keys(IT),found=all.filter(k=>S.seenItems[k]).length;openModal(`<h2>📖 Sammelbuch</h2><p class="fine">Gefunden: <b>${found}</b> von ${all.length}. Graue Felder hast du noch nicht entdeckt.</p>
   <div class="grid">${all.map(k=>S.seenItems[k]?`<div class="it" title="${esc(nameOf(k))}">${icon(k)}<small>${esc(nameOf(k))}</small></div>`:`<div class="it unk"><b>?</b></div>`).join('')}</div><button class="mcbtn" data-act="inv">Zurück</button>`)};
 
@@ -893,7 +908,9 @@ const MT={
   build:{ic:'bricks',t:n=>`Setze ${n} Blöcke (baue etwas!)`,n:()=>P([20,30,40])},
   sheep:{ic:'wool',t:n=>`Schere ${n} Schafe`,n:()=>2},
   chest:{ic:'chest',t:()=>'Öffne eine Schatztruhe in einer Höhle',n:()=>1},
-  night:{ic:'bed',t:()=>'Überstehe eine Nacht',n:()=>1}
+  night:{ic:'bed',t:()=>'Überstehe eine Nacht',n:()=>1},
+  plant:{ic:'sapling',t:n=>`Pflanze ${n} Setzlinge`,n:()=>R(2,3)},
+  milk:{ic:'milk',t:n=>`Melke ${n} Kühe`,n:()=>2}
 };
 const BONUS={energy:{ic:'⚡',n:'Energie-Boost',d:'Mehr Energie zum Graben.'},luck:{ic:'💎',n:'Glückspilz',d:'Erze geben öfter doppelt.'},strong:{ic:'⚔️',n:'Kraftpaket',d:'Monster bekommen mehr Schaden.'},xp:{ic:'⭐',n:'Doppelte Erfahrung',d:'Du steigst schneller auf.'},hearts:{ic:'❤️',n:'Extra-Herzen',d:'Zwei Herzen mehr.'}};
 const misText=m=>MT[m.k].t(m.n);
@@ -936,7 +953,8 @@ function todayCard(planMode){const k=dayKey(),m=minOf(k),g2=goalMin(),p=S.plan;l
   const mis=!planMode&&p&&p.chosen?p.missions.map(x=>`<div class="mrow ${x.done?'done':''}">${icon(MT[x.k].ic)}<span>${x.done?'✔ ':''}${esc(misText(x))}</span><span class="mp">${Math.min(x.p,x.n)}/${x.n}</span><div class="mbar"><i style="width:${Math.min(100,x.p/x.n*100)}%"></i></div></div>`).join(''):'';
   return `<div class="today"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-family:var(--f-pix)">Heute</b><span class="streak">🔥 ${S.streak} ${S.streak===1?'Tag':'Tage'}</span></div>
   <div class="tbar"><i style="width:${Math.min(100,m/g2*100)}%"></i><span>🧮 ${m} von ${g2} Rechenminuten</span></div>${st}${lost}${mis}${!planMode&&p&&p.chosen&&p.bonus?`<div class="mrow"><span style="font-family:var(--f-emoji)">${BONUS[p.bonus].ic}</span><span>Bonus: ${BONUS[p.bonus].n}</span><span></span></div>`:''}</div>`}
-function startDay(){const news=S.news.splice(0);save();const go=()=>{if(!S.plan||!S.plan.chosen)planScreen()};if(news.length)talk(news,go);else go()}
+function startDay(){if(!S.flags.v2){S.flags.v2=1;S.news.push({face:'🧙',who:'Baumeister Ruedi',text:'Neu in Zahlcraft: Du bekommst Hunger 🍗! Iss Äpfel oder melke Kühe für Milch (mit einer Einmaleins-Aufgabe).'},{face:'🧙',who:'Baumeister Ruedi',text:'Aus Laub fallen jetzt Setzlinge 🌱. Pflanze sie auf Erde oder Gras, dann wächst nach etwa 2 Minuten ein neuer Baum.'},{face:'🧙',who:'Baumeister Ruedi',text:'Und Achtung: Jede Nacht, die du überstehst, werden die Monster ein bisschen stärker!'})}
+  const news=S.news.splice(0);save();const go=()=>{if(!S.plan||!S.plan.chosen)planScreen()};if(news.length)talk(news,go);else go()}
 
 /* ---------- Menü, Erklärungen, Eltern ---------- */
 ACT.menu=()=>{openScreen(`<div class="panel"><h2>☰ Menü</h2>${todayCard(false)}
@@ -955,6 +973,7 @@ const HELP=[
   {face:'🧙',who:'Baumeister Ruedi',text:'Erde, Holz und Laub kosten Energie ⚡. Ist sie leer, lädst du sie mit einer Plus-Aufgabe auf.'},
   {face:'🧙',who:'Baumeister Ruedi',text:'Stein und Erze brauchen eine Rechnung. Je tiefer, desto wertvoller: Kohle, Eisen (Einmaleins!), Gold (Geteilt) und ganz unten Diamanten.'},
   {face:'🧙',who:'Baumeister Ruedi',text:'Mit 🛠️ stellst du Werkzeuge her. Mit 🧱 setzt du Blöcke: Bau dir ein Haus! Nachts kommen Monster, du wehrst sie mit Rechnen ab.'},
+  {face:'🧙',who:'Baumeister Ruedi',text:'Achte auf deinen Hunger 🍗: Iss Äpfel oder trink Milch von Kühen. Aus Laub fallen Setzlinge, pflanze sie auf Erde, dann wachsen neue Bäume.'},
   {face:'🧙',who:'Baumeister Ruedi',text:'Oben siehst du immer dein nächstes Ziel. Viel Spass!'}];
 ACT.learnMenu=()=>{openScreen(`<div class="panel"><h2>📺 So geht's</h2><p class="fine">Wähle ein Thema. Du siehst ein Beispiel mit Rechenweg.</p><div class="topics">${Object.entries(TOPICS).map(([t,o])=>`<button class="mcbtn" data-act="learn" data-arg="${t}">${o.n}</button>`).join('')}</div><button class="mcbtn" data-act="menu">Zurück</button></div>`)};
 ACT.learn=t=>{if(LT)addTime(Math.min(30,(Date.now()-LT)/1000));LT=Date.now();let q;for(let k=0;k<40;k++){q=GEN[t](getStufe(t));if(q.aid||q.vis)break}
