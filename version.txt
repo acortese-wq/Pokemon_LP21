@@ -1,1 +1,1 @@
-Zahlcraft 2026-11-09a
+Zahlcraft 2026-11-09a (veröffentlicht per GitHub Actions)
