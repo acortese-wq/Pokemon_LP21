@@ -1,9 +1,10 @@
 # Veröffentlicht die Spielseite nach jedem Upload auf main.
 # Voraussetzung (einmalig): Settings → Pages → Source: «GitHub Actions».
+# Veröffentlicht wird vom Standard-Branch des Repositorys (nur dieser darf nach github-pages).
 name: Spielseite veröffentlichen
 on:
   push:
-    branches: [main]
+    branches: [claude/sleepy-allen-i14djz]
   workflow_dispatch:
 permissions:
   contents: read
