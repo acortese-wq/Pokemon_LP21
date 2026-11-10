@@ -162,7 +162,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const pad2=n=>String(n).padStart(2,'0');
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION='2026-11-09z2';
+const APP_VERSION='2026-11-10z3';
 const KEY='zahlongus_v1';
 let S=null;
 
@@ -439,10 +439,13 @@ function drawChar(g,x,y,sz,col,hat,o){o=o||{};const face=o.face||1,step=o.step||
   g.fillStyle=shade(col,-.35);g.fillRect(-w*.32,h*.25+lg,w*.24,h*.32);g.fillRect(w*.08,h*.25-lg,w*.24,h*.32);
   g.fillStyle=col;rr(g,-w*.45,-h*.05,w*.9,h*.5,w*.18);g.fill();g.fillStyle=shade(col,-.2);g.fillRect(face>0?-w*.55:w*.42,h*.02,w*.13,h*.32);
   g.fillStyle='rgba(255,255,255,.18)';g.fillRect(-w*.3,h*.05,w*.18,h*.25);
-  g.fillStyle='#f2c9a0';g.beginPath();g.arc(0,-h*.32,w*.3,0,7);g.fill();
-  g.fillStyle='#1b1f2e';g.fillRect(-w*.14+face*w*.06,-h*.36,w*.07,h*.09);g.fillRect(w*.06+face*w*.06,-h*.36,w*.07,h*.09);
-  g.fillStyle='rgba(160,225,255,.28)';g.strokeStyle='rgba(220,245,255,.9)';g.lineWidth=Math.max(1.5,sz*.035);g.beginPath();g.arc(0,-h*.32,w*.42,0,7);g.fill();g.stroke();
-  g.fillStyle='rgba(255,255,255,.7)';g.fillRect(-w*.25,-h*.58,w*.1,h*.08);
+  /* Helm in Spielerfarbe mit breitem, spiegelndem Visier (schaut in Laufrichtung) */
+  g.fillStyle=col;g.strokeStyle=shade(col,-.45);g.lineWidth=Math.max(1.5,sz*.035);g.beginPath();g.arc(0,-h*.32,w*.42,0,7);g.fill();g.stroke();
+  g.fillStyle='rgba(255,255,255,.16)';g.beginPath();g.arc(-w*.12,-h*.44,w*.2,0,7);g.fill();
+  {const vw=w*.68,vh=h*.32,vx=face*w*.09-vw/2,vy=-h*.35-vh/2,vg=g.createLinearGradient(0,vy,0,vy+vh);vg.addColorStop(0,'#d4f6ff');vg.addColorStop(.45,'#7cc8e6');vg.addColorStop(1,'#2d6b92');
+   g.fillStyle=vg;g.strokeStyle='#14263a';g.lineWidth=Math.max(1.5,sz*.03);rr(g,vx,vy,vw,vh,vh/2);g.fill();g.stroke();
+   g.fillStyle='rgba(255,255,255,.9)';rr(g,vx+vw*(face>0?.52:.14),vy+vh*.18,vw*.3,vh*.24,vh*.12);g.fill();
+   g.fillStyle='rgba(255,255,255,.55)';g.beginPath();g.arc(vx+vw*(face>0?.42:.5),vy+vh*.3,vh*.08,0,7);g.fill()}
   g.strokeStyle=shade(col,-.3);g.beginPath();g.moveTo(0,-h*.74);g.lineTo(0,-h*.9);g.stroke();g.fillStyle=col;g.beginPath();g.arc(0,-h*.92,sz*.04,0,7);g.fill();
   if(hat){g.font=`${sz*.42}px ${'Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif'}`;g.textAlign='center';g.textBaseline='middle';g.fillText(hat,0,-h*.86)}
   if(o.frozen){g.fillStyle='rgba(170,230,255,.55)';g.strokeStyle='#e6f8ff';g.lineWidth=2;rr(g,-w*.62,-h*1.0,w*1.24,h*1.62,6);g.fill();g.stroke();g.font=`${sz*.3}px sans-serif`;g.textAlign='center';g.fillText('❄️',w*.38,-h*.72)}

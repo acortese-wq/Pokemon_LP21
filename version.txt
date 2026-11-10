@@ -1,4 +1,4 @@
 Zahlcraft 2026-11-09c
-Zahlongus 2026-11-09z2 (/zahlongus/)
+Zahlongus 2026-11-10z3 (/zahlongus/)
 Zahlimon 2026-10-12d (/zahlimon/)
 Veröffentlicht per GitHub Actions.
