@@ -60,7 +60,8 @@ const put = (from, dir) => { const t = path.join(SITE, dir); fs.mkdirSync(t, { r
 
 (async () => {
   const srv = await serve(SITE), base = `http://127.0.0.1:${srv.address().port}/`;
-  const browser = await chromium.launch();
+  // Auf GitHub wird der vorinstallierte Chrome verwendet (CHROME_PATH), lokal der Playwright-Browser.
+  const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH, args: ['--no-sandbox'] } : {});
   let failed = 0;
   for (const g of GAMES) {
     const oldFile = path.join(OLD, g.dir, 'index.html'), newFile = path.join(ROOT, g.dir, 'index.html');

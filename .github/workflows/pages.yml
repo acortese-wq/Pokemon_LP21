@@ -33,10 +33,15 @@ jobs:
             curl -sfL "https://acortese-wq.github.io/Pokemon_LP21/${d}?nocache=${GITHUB_RUN_ID}" -o "alt/${d}index.html" || rm -f "alt/${d}index.html"
           done
           ls -la alt alt/*/
-      - name: Browser für den Test installieren
+      - name: Browser für den Test bereitstellen
+        # Nutzt den auf GitHub vorinstallierten Chrome (keine Systempakete nötig).
+        # Nur falls keiner da ist, wird Chromium ohne Systempakete heruntergeladen.
         run: |
           npm install --no-save --no-package-lock playwright@1.48.2
-          npx playwright install --with-deps chromium
+          CHROME=$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)
+          if [ -z "$CHROME" ]; then npx playwright install chromium; fi
+          echo "Browser: ${CHROME:-Playwright-Chromium}"
+          echo "CHROME_PATH=$CHROME" >> "$GITHUB_ENV"
       - name: Spielstand-Test (alte → neue Version)
         run: node tests/spielstand-test.cjs alt
   deploy:
