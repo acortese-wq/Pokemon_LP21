@@ -165,7 +165,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const pad2=n=>String(n).padStart(2,'0');
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION='2026-11-11z6';
+const APP_VERSION='2026-11-11z7';
 const KEY='zahlongus_v1';
 let S=null;
 
@@ -337,10 +337,20 @@ const TX={
 /* ---------- Profil speichern ---------- */
 const DEFSET={sound:true,fix:{},role:'random',tasksOpen:null};
 function fresh(name){return {v:1,name,stars:0,color:0,hat:'',owned:{'':1},stats:{},retry:{},log:[],days:{},time:{},games:0,wins:0,impGames:0,impWins:0,tasks:0,caught:0,settings:{...DEFSET,fix:{}},flags:{},savedAt:0}}
-function migrate(){const d=fresh(S.name);for(const k in d)if(S[k]===undefined)S[k]=d[k];S.settings={...DEFSET,...S.settings};S.settings.fix=S.settings.fix||{}}
-function save(){if(!S)return;S.savedAt=Date.now();try{const j=JSON.stringify(S);localStorage.setItem(KEY,j);localStorage.setItem(KEY+'_bak',j)}catch(e){}}
-function load(){for(const k of [KEY,KEY+'_bak']){try{const o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.name)return o}catch(e){}}return null}
-addEventListener('pagehide',()=>save());document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
+/* Spielstand: Neue Versionen ergänzen nur fehlende Felder. Nichts Vorhandenes wird gelöscht oder überschrieben. */
+function migrate(){const d=fresh(S.name);for(const k in d)if(S[k]===undefined||S[k]===null&&d[k]!==null)S[k]=d[k];
+  S.settings={...DEFSET,...S.settings};S.settings.fix=S.settings.fix||{};S.owned={'':1,...S.owned};
+  for(const k of ['stars','games','wins','impGames','impWins','tasks','caught'])S[k]=Math.max(0,+S[k]||0);
+  if(!(S.color>=0&&S.color<COLORS.length))S.color=0;if(typeof S.hat!=='string')S.hat=''}
+/* Dreifach gesichert: Browser-Speicher, Sicherungskopie und IndexedDB. Beim Laden gewinnt der neueste Stand. */
+let IDBSAVE=null,idbT=0;
+function idb(){return new Promise((res,rej)=>{try{const r=indexedDB.open('zahlongus',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}})}
+function idbPut(j,now){clearTimeout(idbT);const w=()=>idb().then(db=>{db.transaction('kv','readwrite').objectStore('kv').put(j,KEY)}).catch(()=>{});if(now)w();else idbT=setTimeout(w,400)}
+function idbGet(){return idb().then(db=>new Promise(res=>{const r=db.transaction('kv').objectStore('kv').get(KEY);r.onsuccess=()=>res(r.result||null);r.onerror=()=>res(null)})).catch(()=>null)}
+const validSave=o=>!!(o&&typeof o==='object'&&o.name);
+function save(now){if(!S)return;S.savedAt=Date.now();let j;try{j=JSON.stringify(S)}catch(e){return}try{localStorage.setItem(KEY,j);localStorage.setItem(KEY+'_bak',j)}catch(e){}idbPut(j,now)}
+function load(){const c=[];for(const k of [KEY,KEY+'_bak']){try{const o=JSON.parse(localStorage.getItem(k)||'null');if(validSave(o))c.push(o)}catch(e){}}if(validSave(IDBSAVE))c.push(IDBSAVE);c.sort((a,b)=>(b.savedAt||0)-(a.savedAt||0));return c[0]||null}
+addEventListener('pagehide',()=>save(true));document.addEventListener('visibilitychange',()=>{if(document.hidden)save(true)});
 function dayKey(){const d=new Date();return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`}
 /* Rechenminuten zählen auch fürs Tagesziel in Zahlcraft (gleiche Website, eigener Speicher) */
 function addTime(sec){if(!S||!(sec>0))return;const k=dayKey();S.time[k]=(S.time[k]||0)+sec;
@@ -711,19 +721,27 @@ ACT.wardrobe=()=>{openScreen(`<div class="wrap"><div class="panel"><h2>👕 Gard
 const keepScroll=f=>{const y=screenEl.scrollTop;f();screenEl.scrollTop=y};
 ACT.setColor=i=>{S.color=+i;save();keepScroll(ACT.wardrobe)};
 ACT.setHat=e=>{e=e||'';const h=HATS.find(x=>x[0]===e);if(!S.owned[e]){if(S.stars<h[1])return toast(`Dafür brauchst du ${h[1]} Sterne. Rechne weiter!`);S.stars-=h[1];S.owned[e]=1;sfx('win');toast(`${h[2]} gekauft!`)}S.hat=e;save();keepScroll(ACT.wardrobe)};
+function exportCode(){try{return btoa(unescape(encodeURIComponent(JSON.stringify(S))))}catch(e){return ''}}
+ACT.copyCode=()=>{const ta=$('#exportCode');const fb=()=>{ta.focus();ta.select();toast('Code markiert. Jetzt kopieren.')};try{navigator.clipboard.writeText(ta.value).then(()=>toast('Code kopiert.'),fb)}catch(e){fb()}};
+ACT.importCode=()=>{try{const o=JSON.parse(decodeURIComponent(escape(atob($('#importCode').value.trim()))));if(!validSave(o))throw 0;S=o;migrate();save(true);toast(`Spielstand von ${S.name} geladen.`);home()}catch(e){toast('Dieser Code funktioniert nicht.')}};
 const pct=(a,b)=>b?Math.round(a/b*100)+' %':'–';
 ACT.parents=()=>{const d=S.days[dayKey()]||[0,0];openScreen(`<div class="wrap"><div class="panel"><h2>Für Eltern</h2>
   <div class="kpis"><div><b>${minToday()}</b><span>Rechenminuten heute</span></div><div><b>${d[0]+d[1]}</b><span>Aufgaben heute (${pct(d[0],d[0]+d[1])} richtig)</span></div><div><b>${S.games}</b><span>Runden (${S.wins} gewonnen)</span></div></div>
   <p class="fine">Die Rechenminuten zählen zusätzlich für das Tagesziel in Zahlcraft. Gezählt wird nur die Zeit mit offener Aufgabe (max. 60 s pro Aufgabe) und das Lesen des Rechenwegs. Logisches Denken üben die Kinder in den Besprechungen: Aussagen vergleichen, Widersprüche erkennen.</p>
   <h3>Themen und Stufen</h3><table class="tbl"><thead><tr><th>Thema</th><th>Stufe</th><th>✓</th><th>✗</th></tr></thead><tbody>${Object.entries(TOPICS).map(([t,n])=>{const s=stat(t),fx=S.settings.fix[t]||'';return `<tr><td>${n}</td><td><select class="fixsel" data-topic="${t}"><option value="" ${!fx?'selected':''}>Auto (${s.s})</option>${[1,2,3].map(v=>`<option value="${v}" ${String(fx)===String(v)?'selected':''}>fix ${v}</option>`).join('')}</select></td><td>${s.r}</td><td>${s.f}</td></tr>`}).join('')}</tbody></table>
   <h3>Zuletzt falsch gelöst</h3>${S.log.length?S.log.slice(0,10).map(l=>`<div class="rowx"><span>${esc(l.t)}</span><span>${esc(l.g)} → <b>${esc(String(l.a))}</b></span></div>`).join(''):'<p class="fine">Noch keine Fehler.</p>'}
+  <h3>Spielstand übertragen oder sichern</h3><p class="fine">Mit diesem Code lässt sich der Spielstand auf ein anderes Gerät oder vom Browser in die Home-Bildschirm-App übertragen.</p>
+  <textarea id="exportCode" class="inp" readonly rows="3" style="font-size:.7rem">${exportCode()}</textarea><button class="btn" data-act="copyCode">Code kopieren</button>
+  <label for="importCode" class="fine" style="display:block;margin-top:10px">Code einfügen</label><textarea id="importCode" class="inp" rows="3" style="font-size:.7rem"></textarea><button class="btn" data-act="importCode">Spielstand laden</button>
   <label class="rowx" for="optSound"><span>Töne</span><input type="checkbox" id="optSound" ${S.settings.sound?'checked':''}></label>
   <button class="btn go" data-act="home">Zurück</button></div></div>`);
   screenEl.querySelectorAll('.fixsel').forEach(s=>s.addEventListener('change',e=>{const t=e.target.dataset.topic,v=e.target.value;if(v){S.settings.fix[t]=+v;stat(t).s=+v}else delete S.settings.fix[t];save()}));$('#optSound').addEventListener('change',e=>{S.settings.sound=e.target.checked;save()})};
 function nameScreen(){openScreen(`<div class="wrap"><h1 class="logo">ZAHLONGUS</h1><p class="sub">Rechnen · Rätseln · Verräter finden</p><div class="panel"><form id="nf"><label for="pn" class="fine">Wie heisst du?</label><input id="pn" class="inp" maxlength="12" autocomplete="off" placeholder="Dein Vorname"><button class="btn go" type="submit">Los geht's</button></form></div></div>`);
   $('#nf').addEventListener('submit',e=>{e.preventDefault();unlockAudio();const n=$('#pn').value.trim();if(!n)return toast('Bitte schreib zuerst deinen Namen.');let name=n;try{const zc=JSON.parse(localStorage.getItem('zahlcraft_v1')||'null');if(zc&&zc.name&&!n)name=zc.name}catch(_){}S=fresh(name);S.color=R(0,COLORS.length-1);save();home()})}
-(function boot(){const sv=load();if(sv){S=sv;migrate();home()}else{nameScreen();try{const zc=JSON.parse(localStorage.getItem('zahlcraft_v1')||'null');if(zc&&zc.name)$('#pn').value=zc.name}catch(_){}}
-  if(/^https?:/.test(location.protocol)&&!/claude\.ai|claudeusercontent/.test(location.host))setTimeout(()=>{fetch(location.pathname+'?check='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(t=>{const m=t.match(/APP_VERSION='([^']+)'/);if(m&&m[1]!==APP_VERSION&&sessionStorage.getItem('zl_upd')!==m[1]){sessionStorage.setItem('zl_upd',m[1]);save();location.replace(location.pathname+'?v='+encodeURIComponent(m[1]))}}).catch(()=>{})},1500)})();
+(async function boot(){try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
+  try{const j=await idbGet();if(j)IDBSAVE=JSON.parse(j)}catch(e){}
+  const sv=load();if(sv){S=sv;migrate();save(true);home()}else{nameScreen();try{const zc=JSON.parse(localStorage.getItem('zahlcraft_v1')||'null');if(zc&&zc.name)$('#pn').value=zc.name}catch(_){}}
+  if(/^https?:/.test(location.protocol)&&!/claude\.ai|claudeusercontent/.test(location.host))setTimeout(()=>{fetch(location.pathname+'?check='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(t=>{const m=t.match(/APP_VERSION='([^']+)'/);if(m&&m[1]!==APP_VERSION&&sessionStorage.getItem('zl_upd')!==m[1]){sessionStorage.setItem('zl_upd',m[1]);save(true);location.replace(location.pathname+'?v='+encodeURIComponent(m[1]))}}).catch(()=>{})},1500)})();
 window.__zl={get S(){return S},get G(){return G},ask:()=>Q,startMeeting,freeze,checkEnd,update};
 })();
 </script>

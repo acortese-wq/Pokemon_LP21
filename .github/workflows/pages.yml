@@ -1,6 +1,10 @@
-# Veröffentlicht die Spielseite nach jedem Upload auf main.
+# Veröffentlicht die Spielseite nach jedem Upload auf den Standard-Branch.
 # Voraussetzung (einmalig): Settings → Pages → Source: «GitHub Actions».
 # Veröffentlicht wird vom Standard-Branch des Repositorys (nur dieser darf nach github-pages).
+#
+# Sicherung: Vor jeder Veröffentlichung prüft der Spielstand-Test, dass ein Spielstand der
+# bisher veröffentlichten Version in der neuen Version vollständig erhalten bleibt.
+# Schlägt der Test fehl, wird NICHT veröffentlicht und die alte Version bleibt online.
 name: Spielseite veröffentlichen
 on:
   push:
@@ -12,9 +16,31 @@ permissions:
   id-token: write
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
+  spielstand:
+    name: Spielstand bleibt erhalten
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Bisher veröffentlichte Version laden
+        run: |
+          mkdir -p alt/zahlongus alt/zahlimon
+          for d in "" zahlongus/ zahlimon/; do
+            curl -sfL "https://acortese-wq.github.io/Pokemon_LP21/${d}?nocache=${GITHUB_RUN_ID}" -o "alt/${d}index.html" || rm -f "alt/${d}index.html"
+          done
+          ls -la alt alt/*/
+      - name: Browser für den Test installieren
+        run: |
+          npm install --no-save --no-package-lock playwright@1.48.2
+          npx playwright install --with-deps chromium
+      - name: Spielstand-Test (alte → neue Version)
+        run: node tests/spielstand-test.cjs alt
   deploy:
+    needs: spielstand
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

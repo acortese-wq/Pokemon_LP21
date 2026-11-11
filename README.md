@@ -75,3 +75,10 @@ Erreichbar über ☰ → Bereich für Eltern:
 - Eine einzige Datei `index.html`, ohne Installation.
 - Der Spielstand wird doppelt gespeichert (Browser-Speicher und IndexedDB). Beim Öffnen prüft das Spiel automatisch, ob es eine neuere Version gibt.
 - Die App spricht nicht. Töne lassen sich ausschalten.
+
+## Spielstand sicher bei jedem Update
+- Alle drei Spiele speichern dreifach: im Browser-Speicher, in einer Sicherungskopie und in IndexedDB. Beim Öffnen wird der neueste Stand genommen.
+- Neue Versionen ergänzen nur fehlende Felder. Vorhandene Sterne, Gegenstände, Hüte und Statistiken werden nie gelöscht.
+- **Automatischer Spielstand-Test** (`tests/spielstand-test.cjs`): Vor jeder Veröffentlichung legt GitHub in der bisher veröffentlichten Version einen Spielstand an, spielt die neue Version ein und prüft, dass alle Werte erhalten bleiben. Geht etwas verloren, wird nicht veröffentlicht und die alte Version bleibt online.
+- **Wichtig auf iPhone und iPad:** Safari und die App auf dem Home-Bildschirm haben getrennte Speicher. Immer auf dieselbe Art öffnen (am besten über das Symbol auf dem Home-Bildschirm). Zum Umziehen gibt es im Elternbereich jedes Spiels einen Spielstand-Code.
+
