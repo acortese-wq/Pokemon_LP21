@@ -17,7 +17,7 @@ Neu: **Zahlongus**, ein Rätsel-Spiel auf einem Raumschiff: https://acortese-wq.
 - **Besprechung:** Wer eine eingefrorene Figur findet, meldet sie. Alle sagen, wo sie waren. Wer schwindelt, kann ertappt werden. Danach wird abgestimmt, und die gewählte Figur fliegt mit der Rettungskapsel zur Erde. So üben die Kinder logisches Denken.
 - **Aufgabenfeld:** Mit einem Tipp (oder Taste T) ein- und ausklappen. Eingeklappt zeigt es nur den Fortschritt und die nächste Aufgabe. Die Einstellung bleibt gespeichert. Tippt man auf eine Aufgabe, zeigt ein gelber Pfeil den Weg dorthin.
 - **Überwachung:** Nach 2 Rechnungen sieht man, wer in den letzten 30 Sekunden in welchem Raum war.
-- **Sterne ⭐** gibt es für richtige Rechnungen, Aufgaben und Siege. Damit kauft man in der Garderobe über 50 Kopfbedeckungen (Tiere, Essen, Natur, Sport, Weltall, Legendär).
+- **Sterne ⭐** gibt es für richtige Rechnungen, Aufgaben und Siege. Die Garderobe hat 28 Farben (gratis) und über 50 Kopfbedeckungen zum Kaufen (Tiere, Essen, Natur, Sport, Weltall, Legendär).
 - Die Rechenminuten zählen auch für das Tagesziel in Zahlcraft. Ein eigener Elternbereich zeigt Statistik und Stufen.
 
 
