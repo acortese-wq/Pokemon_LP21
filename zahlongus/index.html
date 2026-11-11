@@ -131,7 +131,8 @@ button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
 .hats{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
 .hb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:12px;border:2px solid var(--line);background:var(--panel2);color:#fff;font-weight:700;font-size:.8rem}
 .hb .e{font-family:var(--f-emoji);font-size:1.8rem;line-height:1.1;min-height:2rem}
-.hb.on{border-color:var(--gold);background:#4a3b05}.hb.lock{opacity:.6}
+.hb.on{border-color:var(--gold);background:#4a3b05}.hb.lock{opacity:.6}.hb.can{opacity:1;border-color:#5cf09a;border-style:dashed}
+.hcat{font:700 .9rem var(--f-head);color:var(--ink2);margin:12px 0 6px}
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.kpis div{background:#0f1630;border-radius:10px;padding:6px 8px;display:flex;flex-direction:column}.kpis b{font:700 1.4rem var(--f-head)}.kpis span{font-size:.75rem;color:var(--ink2)}
 .tbl{width:100%;border-collapse:collapse;font-size:.85rem}.tbl th,.tbl td{padding:5px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
 .rowx{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}.rowx select{font:inherit;padding:4px;background:#0b1024;color:#fff;border:1px solid var(--line);border-radius:6px}
@@ -162,7 +163,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const pad2=n=>String(n).padStart(2,'0');
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION='2026-11-10z3';
+const APP_VERSION='2026-11-11z4';
 const KEY='zahlongus_v1';
 let S=null;
 
@@ -399,14 +400,18 @@ document.addEventListener('keydown',e=>{if(Q&&!Q.fb&&Q.q.kind!=='choice'){if(/^[
 document.addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(k==='a'||k==='arrowleft')keys.L=0;if(k==='d'||k==='arrowright')keys.R=0;if(k==='w'||k==='arrowup')keys.U=0;if(k==='s'||k==='arrowdown')keys.D=0});
 
 /* ---------- Raumschiff ---------- */
-const MW=60,MH=40;
+const MW=82,MH=50;
 const ROOMS=[
   {id:'bruecke',n:'Brücke',x:24,y:14,w:13,h:11,c:'#33406a'},{id:'maschine',n:'Maschinenraum',x:3,y:15,w:12,h:10,c:'#45385e'},
   {id:'reaktor',n:'Reaktor',x:3,y:3,w:12,h:9,c:'#5a3340'},{id:'labor',n:'Labor',x:24,y:2,w:12,h:8,c:'#255458'},
   {id:'navi',n:'Navigation',x:46,y:14,w:11,h:10,c:'#28466e'},{id:'funk',n:'Funkraum',x:45,y:3,w:11,h:8,c:'#4a4a2a'},
   {id:'lager',n:'Lager',x:23,y:29,w:13,h:8,c:'#55452f'},{id:'kranken',n:'Krankenstation',x:5,y:29,w:11,h:8,c:'#255440'},
-  {id:'kamera',n:'Überwachung',x:45,y:29,w:10,h:7,c:'#363655'}];
-const CORR=[[28,10,3,4],[28,25,3,4],[15,18,9,3],[37,18,9,3],[8,12,3,3],[50,11,3,3],[16,31,7,3],[36,31,9,3],[15,5,9,3],[36,5,9,3],[9,25,3,4],[50,24,3,5]];
+  {id:'kamera',n:'Überwachung',x:45,y:29,w:10,h:7,c:'#363655'},
+  {id:'garten',n:'Gewächshaus',x:64,y:3,w:13,h:9,c:'#2f5a2a'},{id:'kantine',n:'Kantine',x:63,y:15,w:13,h:10,c:'#5e4a28'},
+  {id:'schlaf',n:'Schlafkabinen',x:63,y:29,w:13,h:8,c:'#3d3466'},{id:'sport',n:'Sporthalle',x:4,y:41,w:13,h:7,c:'#2a4f63'},
+  {id:'hangar',n:'Hangar',x:24,y:41,w:16,h:7,c:'#454b55'},{id:'werk',n:'Werkstatt',x:46,y:41,w:12,h:7,c:'#5a3a2a'}];
+const CORR=[[28,10,3,4],[28,25,3,4],[15,18,9,3],[37,18,9,3],[8,12,3,3],[50,11,3,3],[16,31,7,3],[36,31,9,3],[15,5,9,3],[36,5,9,3],[9,25,3,4],[50,24,3,5],
+  [56,5,8,3],[57,18,6,3],[68,12,3,3],[55,31,8,3],[68,25,3,4],[9,37,3,4],[28,37,3,4],[17,43,7,3],[40,43,6,3],[49,36,3,5]];
 const grid=new Int8Array(MW*MH);// 0 Wand/Weltraum, >0 Raum-Index+1, 99 Gang
 ROOMS.forEach((r,i)=>{for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)grid[y*MW+x]=i+1});
 CORR.forEach(([x0,y0,w,h])=>{for(let y=y0;y<y0+h;y++)for(let x=x0;x<x0+w;x++)if(!grid[y*MW+x])grid[y*MW+x]=99});
@@ -423,7 +428,13 @@ const ST=[
   {id:'antenne',x:48,y:5,n:'Antenne ausrichten',ic:'📡',topic:'markt'},{id:'code',x:53,y:8,n:'Funkcode eingeben',ic:'🔢',topic:'mix'},
   {id:'kisten',x:26,y:31,n:'Kisten verteilen',ic:'📦',topic:'div'},{id:'muell',x:33,y:35,n:'Abfall entsorgen',ic:'🗑️',topic:'sub'},
   {id:'medizin',x:8,y:31,n:'Medizin abmessen',ic:'💊',topic:'markt'},{id:'scan',x:13,y:35,n:'Körper-Scan',ic:'🩺',topic:'div'},
-  {id:'kameras',x:49,y:31,n:'Kameras ansehen',ic:'📹',special:'cams'}];
+  {id:'kameras',x:49,y:31,n:'Kameras ansehen',ic:'📹',special:'cams'},
+  {id:'giessen',x:67,y:6,n:'Pflanzen giessen',ic:'💧',topic:'add'},{id:'ernte',x:73,y:9,n:'Gemüse ernten',ic:'🥕',topic:'mal'},
+  {id:'kochen',x:66,y:18,n:'Suppe kochen',ic:'🍲',topic:'markt'},{id:'teller',x:72,y:22,n:'Teller verteilen',ic:'🍽️',topic:'div'},
+  {id:'betten',x:66,y:31,n:'Betten machen',ic:'🛏️',topic:'zahl'},{id:'wecker',x:72,y:34,n:'Wecker stellen',ic:'⏰',topic:'markt'},
+  {id:'velo',x:7,y:43,n:'Velo-Generator',ic:'🚲',topic:'add'},{id:'gewichte',x:13,y:46,n:'Gewichte zählen',ic:'🏋️',topic:'mal'},
+  {id:'rakete',x:27,y:43,n:'Rakete betanken',ic:'🚀',topic:'sub'},{id:'landung',x:36,y:46,n:'Landung planen',ic:'🛬',topic:'mix'},
+  {id:'roboter',x:49,y:43,n:'Roboter bauen',ic:'🤖',topic:'mix'},{id:'schrauben',x:54,y:46,n:'Schrauben sortieren',ic:'🔩',topic:'div'}];
 const TASKST=ST.filter(s=>!s.special);
 const stById=id=>ST.find(s=>s.id===id);
 function bfs(sx,sy,tx,ty){sx|=0;sy|=0;tx|=0;ty|=0;const prev=new Int32Array(MW*MH).fill(-1),q=[sy*MW+sx];prev[sy*MW+sx]=sy*MW+sx;let h=0;
@@ -432,7 +443,16 @@ function bfs(sx,sy,tx,ty){sx|=0;sy|=0;tx|=0;ty|=0;const prev=new Int32Array(MW*M
 
 /* ---------- Figuren ---------- */
 const COLORS=[['Rot','#e53945'],['Blau','#2f6fe0'],['Grün','#21a35a'],['Gelb','#f2c230'],['Pink','#f06bb5'],['Orange','#f2862e'],['Lila','#8a55e0'],['Türkis','#22c1c3'],['Braun','#8a5a35'],['Weiss','#e8edf5']];
-const HATS=[['',0,'Keiner'],['🧢',10,'Mütze'],['🎀',10,'Schleife'],['🌼',10,'Blume'],['🎩',15,'Zylinder'],['🍕',20,'Pizza'],['🎓',25,'Doktorhut'],['⛑️',30,'Helm'],['👑',40,'Krone'],['⭐',50,'Stern'],['🦄',60,'Einhorn'],['🚀',80,'Rakete']];
+/* Kopfbedeckungen: [Emoji, Preis in Sternen, Name, Gruppe] */
+const HAT_CATS=[['klassik','🎩 Klassiker'],['tiere','🐾 Tiere'],['essen','🍓 Essen'],['natur','🌈 Natur und Wetter'],['spass','🎉 Spass und Sport'],['weltall','🪐 Weltall'],['legende','🏆 Legendär']];
+const HATS=[['',0,'Keiner','klassik'],
+  ['🧢',10,'Mütze','klassik'],['🎀',10,'Schleife','klassik'],['👒',14,'Sommerhut','klassik'],['🎩',15,'Zylinder','klassik'],['🎓',25,'Doktorhut','klassik'],['⛑️',30,'Helm','klassik'],['👑',40,'Krone','klassik'],
+  ['🐸',12,'Frosch','tiere'],['🐱',12,'Katze','tiere'],['🐶',12,'Hund','tiere'],['🐰',14,'Hase','tiere'],['🐧',18,'Pinguin','tiere'],['🦋',20,'Schmetterling','tiere'],['🦊',22,'Fuchs','tiere'],['🐼',26,'Panda','tiere'],['🐙',30,'Krake','tiere'],['🦖',35,'Dino','tiere'],['🦄',60,'Einhorn','tiere'],['🐉',70,'Drache','tiere'],
+  ['🍓',8,'Erdbeere','essen'],['🍉',12,'Melone','essen'],['🥨',12,'Brezel','essen'],['🧀',14,'Käse','essen'],['🍦',15,'Glace','essen'],['🧁',15,'Cupcake','essen'],['🍩',16,'Donut','essen'],['🍔',18,'Burger','essen'],['🍕',20,'Pizza','essen'],['🍫',22,'Schokolade','essen'],
+  ['🌼',10,'Blume','natur'],['🍄',12,'Pilz','natur'],['🌻',14,'Sonnenblume','natur'],['🎃',20,'Kürbis','natur'],['🎄',25,'Tannenbaum','natur'],['⛄',25,'Schneemann','natur'],['❄️',30,'Schneeflocke','natur'],['🌙',40,'Mond','natur'],['🌈',45,'Regenbogen','natur'],['🔥',50,'Feuer','natur'],
+  ['⚽',15,'Fussball','spass'],['🎈',15,'Ballon','spass'],['🎉',20,'Party','spass'],['🎧',25,'Kopfhörer','spass'],['🎸',30,'Gitarre','spass'],['🎮',35,'Spielkonsole','spass'],
+  ['⭐',50,'Stern','weltall'],['🪐',55,'Planet','weltall'],['☄️',65,'Komet','weltall'],['🛸',75,'Ufo','weltall'],['🚀',80,'Rakete','weltall'],
+  ['🏆',90,'Pokal','legende'],['💎',100,'Diamant','legende'],['🌟',120,'Superstern','legende']];
 function drawChar(g,x,y,sz,col,hat,o){o=o||{};const face=o.face||1,step=o.step||0;g.save();g.translate(x,y);if(o.alpha!=null)g.globalAlpha=o.alpha;
   const w=sz*.62,h=sz*.62;const lg=Math.sin(step)*sz*.06;
   g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.ellipse(0,h*.62,w*.55,h*.14,0,0,7);g.fill();
@@ -456,7 +476,7 @@ function avatar(ci,hat,frozen){const c=document.createElement('canvas');c.width=
 function avatarHTML(ci,hat,frozen){try{return `<img src="${avatar(ci,hat,frozen).toDataURL()}" width="40" height="40" alt="">`}catch(e){return ''}}
 
 /* ---------- Spielrunde ---------- */
-let G=null;const keys={L:0,R:0,U:0,D:0};let joy=null;
+const TASKS_PER=6;let G=null;const keys={L:0,R:0,U:0,D:0};let joy=null;
 const VIEW=6.2,REPORT_R=2.6,USE_R=1.5,FRZ_R=1.6;
 const BOT_NAMES=['Kiki','Bo','Mila','Tom','Nora','Leo','Ivy','Max'];
 function newRound(){const roleSet=S.settings.role,imp=roleSet==='imp'?true:roleSet==='crew'?false:Math.random()<.3;
@@ -464,11 +484,11 @@ function newRound(){const roleSet=S.settings.role,imp=roleSet==='imp'?true:roleS
   const chars=[{id:0,ci:S.color,hat:S.hat,name:S.name,player:true}].concat(free.map((ci,i)=>({id:i+1,ci,hat:Math.random()<.5?hatsFree[i]:'',name:COLORS[ci][0]})));
   const impId=imp?0:R(1,5);const bx=30.5,by=19.5;
   chars.forEach((c,i)=>{const a=i/chars.length*Math.PI*2;Object.assign(c,{x:bx+Math.cos(a)*2.6,y:by+Math.sin(a)*2.6,imp:c.id===impId,alive:true,ghost:false,path:[],state:'idle',workT:0,face:1,step:0,tasks:[],done:0,cool:22,emerg:1,claim:null});
-    if(!c.imp)c.tasks=shuffle(TASKST.slice()).slice(0,5).map(s=>({id:s.id,prog:0,done:false}))});
-  G={t:0,chars,impId,player:chars[0],bodies:[],hist:[],lights:false,lightsT:0,sabCool:40,meeting:false,over:false,earned:0,totalTasks:chars.filter(c=>!c.imp).length*5,doneTasks:0,lastHist:0,lastEvent:null};
+    if(!c.imp)c.tasks=shuffle(TASKST.slice()).slice(0,TASKS_PER).map(s=>({id:s.id,prog:0,done:false}))});
+  G={t:0,chars,impId,player:chars[0],bodies:[],hist:[],lights:false,lightsT:0,sabCool:40,meeting:false,over:false,earned:0,totalTasks:chars.filter(c=>!c.imp).length*TASKS_PER,doneTasks:0,lastHist:0,lastEvent:null};
   closeScreen();closeModal();sfx('alarm');
   openScreen(`<div class="wrap reveal"><p class="fine">Deine Rolle in dieser Runde:</p><h1 style="color:${imp?'var(--red)':'var(--cyan)'}">${imp?'VERRÄTER':'CREW'}</h1><div class="preview">${avatarHTML(S.color,S.hat)}</div>
-  <div class="panel" style="text-align:left">${imp?'<b>Du bist der Verräter!</b> Friere die Crew mit der Frostkanone ❄️ ein, ohne dass dich jemand sieht. Jeder Schuss braucht eine richtige Rechnung. Du kannst auch das Licht ausschalten. Gewinne, bevor die Crew alle Aufgaben erledigt!':'<b>Du bist in der Crew!</b> Löse deine 5 Aufgaben an den gelben Stationen (je 3 Rechnungen). Unter euch ist ein Verräter, der Leute einfriert. Findest du jemanden, melde es und stimme ab, wer es war!'}</div>
+  <div class="panel" style="text-align:left">${imp?'<b>Du bist der Verräter!</b> Friere die Crew mit der Frostkanone ❄️ ein, ohne dass dich jemand sieht. Jeder Schuss braucht eine richtige Rechnung. Du kannst auch das Licht ausschalten. Gewinne, bevor die Crew alle Aufgaben erledigt!':'<b>Du bist in der Crew!</b> Löse deine 6 Aufgaben an den gelben Stationen (je 3 Rechnungen). Unter euch ist ein Verräter, der Leute einfriert. Findest du jemanden, melde es und stimme ab, wer es war!'}</div>
   <button class="btn go" data-act="startRound">Los geht's!</button></div>`)}
 ACT.startRound=()=>{closeScreen();G.target=G.player.imp?null:nearestTask();toast(G.player.imp?'❄️ Friere heimlich die Crew ein!':'📋 Löse deine Aufgaben! Der gelbe Pfeil zeigt dir den Weg.')};
 ACT.play=()=>{newRound()};
@@ -610,7 +630,7 @@ function draw(){g.setTransform(DPR,0,0,DPR,0,0);g.fillStyle='#070b18';g.fillRect
     g.fillStyle='#ffd447';g.strokeStyle='#3a2a00';g.lineWidth=2;g.beginPath();g.moveTo(TS*.34,0);g.lineTo(-TS*.18,-TS*.24);g.lineTo(-TS*.06,0);g.lineTo(-TS*.18,TS*.24);g.closePath();g.fill();g.stroke();g.restore()}}
   if(!p.ghost){const s=w2s(p.x,p.y),r=vis*TS;const gr=g.createRadialGradient(s.x,s.y,r*.65,s.x,s.y,r*1.05);gr.addColorStop(0,'rgba(3,5,12,0)');gr.addColorStop(1,'rgba(3,5,12,.94)');g.fillStyle=gr;g.fillRect(0,0,VW,VH)}
   if(joy&&joy.active){g.globalAlpha=.35;g.fillStyle='#fff';g.beginPath();g.arc(joy.ox,joy.oy,48,0,7);g.fill();g.globalAlpha=.7;g.beginPath();g.arc(joy.ox+joy.dx*40,joy.oy+joy.dy*40,22,0,7);g.fill();g.globalAlpha=1}
-  const mm=Math.min(150,VW*.32)/MW,ox=VW-MW*mm-10,oy=VH*.5-MH*mm*.5-80;if(VW>360){g.globalAlpha=.85;g.fillStyle='rgba(10,15,35,.7)';g.fillRect(ox-4,oy-4,MW*mm+8,MH*mm+8);for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(grid[y*MW+x]){g.fillStyle=grid[y*MW+x]===99?'#39436a':'#5d6fae';g.fillRect(ox+x*mm,oy+y*mm,mm+.3,mm+.3)}
+  const mm=Math.min(180,VW*.34)/MW,ox=VW-MW*mm-10,oy=VH*.5-MH*mm*.5-80;if(VW>360){g.globalAlpha=.85;g.fillStyle='rgba(10,15,35,.7)';g.fillRect(ox-4,oy-4,MW*mm+8,MH*mm+8);for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(grid[y*MW+x]){g.fillStyle=grid[y*MW+x]===99?'#39436a':'#5d6fae';g.fillRect(ox+x*mm,oy+y*mm,mm+.3,mm+.3)}
     if(!p.imp)for(const t of p.tasks)if(!t.done){const st=stById(t.id),big=t.id===G.target;g.fillStyle='#ffd447';g.fillRect(ox+st.x*mm-(big?3:1),oy+st.y*mm-(big?3:1),big?8:4,big?8:4)}g.fillStyle='#fff';g.beginPath();g.arc(ox+p.x*mm,oy+p.y*mm,3,0,7);g.fill();g.globalAlpha=1}}
 
 /* ---------- HUD und Knöpfe ---------- */
@@ -674,10 +694,12 @@ ACT.howto=()=>openScreen(`<div class="wrap"><div class="panel"><h2>❓ So geht's
   <button class="btn go" data-act="home">Zurück</button></div></div>`);
 ACT.wardrobe=()=>{openScreen(`<div class="wrap"><div class="panel"><h2>👕 Garderobe</h2><div class="preview">${avatarHTML(S.color,S.hat).replace('width="40" height="40"','width="100" height="100"')}</div><p class="fine" style="text-align:center">⭐ ${S.stars} Sterne. Sterne gibt es für jede richtige Rechnung, für erledigte Aufgaben und für Siege.</p>
   <h3>Farbe</h3><div class="colors">${COLORS.map((c,i)=>`<button class="cs ${S.color===i?'on':''}" style="background:${c[1]}" data-act="setColor" data-arg="${i}" aria-label="${c[0]}"></button>`).join('')}</div>
-  <h3>Hut</h3><div class="hats">${HATS.map(([e,p,n])=>{const own=S.owned[e];return `<button class="hb ${S.hat===e?'on':''} ${own?'':'lock'}" data-act="setHat" data-arg="${e}"><span class="e">${e||'—'}</span>${n}<span>${own?(S.hat===e?'✓ an':'anziehen'):'⭐ '+p}</span></button>`}).join('')}</div>
+  <h3>Kopfbedeckung <span class="fine">(${HATS.filter(h=>h[0]&&S.owned[h[0]]).length} von ${HATS.length-1} gesammelt)</span></h3>${(()=>{const nx=HATS.filter(h=>!S.owned[h[0]]).sort((a,b)=>a[1]-b[1])[0];return nx?`<p class="fine">Nächstes Ziel: ${nx[0]} ${nx[2]} für ⭐ ${nx[1]}${S.stars<nx[1]?` (noch ${nx[1]-S.stars} Sterne)`:' – kannst du jetzt kaufen!'}</p>`:'<p class="fine">Du hast alle Kopfbedeckungen! 🏆</p>'})()}
+  ${HAT_CATS.map(([cat,label])=>`<h4 class="hcat">${label}</h4><div class="hats">${HATS.filter(h=>h[3]===cat).sort((a,b)=>a[1]-b[1]).map(([e,p,n])=>{const own=S.owned[e],can=!own&&S.stars>=p;return `<button class="hb ${S.hat===e?'on':''} ${own?'':'lock'} ${can?'can':''}" data-act="setHat" data-arg="${e}" aria-pressed="${S.hat===e}"><span class="e">${e||'—'}</span>${n}<span>${own?(S.hat===e?'✓ an':'anziehen'):'⭐ '+p}</span></button>`}).join('')}</div>`).join('')}
   <button class="btn go" data-act="home">Fertig</button></div></div>`)};
-ACT.setColor=i=>{S.color=+i;save();ACT.wardrobe()};
-ACT.setHat=e=>{e=e||'';const h=HATS.find(x=>x[0]===e);if(!S.owned[e]){if(S.stars<h[1])return toast(`Dafür brauchst du ${h[1]} Sterne. Rechne weiter!`);S.stars-=h[1];S.owned[e]=1;sfx('win');toast(`${h[2]} gekauft!`)}S.hat=e;save();ACT.wardrobe()};
+const keepScroll=f=>{const y=screenEl.scrollTop;f();screenEl.scrollTop=y};
+ACT.setColor=i=>{S.color=+i;save();keepScroll(ACT.wardrobe)};
+ACT.setHat=e=>{e=e||'';const h=HATS.find(x=>x[0]===e);if(!S.owned[e]){if(S.stars<h[1])return toast(`Dafür brauchst du ${h[1]} Sterne. Rechne weiter!`);S.stars-=h[1];S.owned[e]=1;sfx('win');toast(`${h[2]} gekauft!`)}S.hat=e;save();keepScroll(ACT.wardrobe)};
 const pct=(a,b)=>b?Math.round(a/b*100)+' %':'–';
 ACT.parents=()=>{const d=S.days[dayKey()]||[0,0];openScreen(`<div class="wrap"><div class="panel"><h2>Für Eltern</h2>
   <div class="kpis"><div><b>${minToday()}</b><span>Rechenminuten heute</span></div><div><b>${d[0]+d[1]}</b><span>Aufgaben heute (${pct(d[0],d[0]+d[1])} richtig)</span></div><div><b>${S.games}</b><span>Runden (${S.wins} gewonnen)</span></div></div>
