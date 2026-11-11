@@ -165,7 +165,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const pad2=n=>String(n).padStart(2,'0');
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION='2026-11-11z5';
+const APP_VERSION='2026-11-11z6';
 const KEY='zahlongus_v1';
 let S=null;
 
@@ -452,12 +452,15 @@ const COLORS=[['Rot','#e53945'],['Blau','#2f6fe0'],['Grün','#21a35a'],['Gelb','
 /* Textfarbe für Namen: dunkle Farben aufhellen, damit sie auf dem dunklen Hintergrund lesbar bleiben */
 function txtCol(ci){const h=COLORS[ci][1],n=parseInt(h.slice(1),16),l=(.299*(n>>16)+.587*(n>>8&255)+.114*(n&255))/255;return l<.45?shade(h,.5):h}
 /* Kopfbedeckungen: [Emoji, Preis in Sternen, Name, Gruppe] */
-const HAT_CATS=[['klassik','🎩 Klassiker'],['tiere','🐾 Tiere'],['essen','🍓 Essen'],['natur','🌈 Natur und Wetter'],['spass','🎉 Spass und Sport'],['weltall','🪐 Weltall'],['legende','🏆 Legendär']];
+const HAT_CATS=[['klassik','🎩 Klassiker'],['tiere','🐾 Tiere'],['essen','🍓 Essen'],['pflanzen','🌿 Pflanzen'],['natur','🌈 Natur und Wetter'],['spass','🎉 Spass und Sport'],['weltall','🪐 Weltall'],['legende','🏆 Legendär']];
 const HATS=[['',0,'Keiner','klassik'],
   ['🧢',10,'Mütze','klassik'],['🎀',10,'Schleife','klassik'],['👒',14,'Sommerhut','klassik'],['🎩',15,'Zylinder','klassik'],['🎓',25,'Doktorhut','klassik'],['⛑️',30,'Helm','klassik'],['👑',40,'Krone','klassik'],
   ['🐸',12,'Frosch','tiere'],['🐱',12,'Katze','tiere'],['🐶',12,'Hund','tiere'],['🐰',14,'Hase','tiere'],['🐧',18,'Pinguin','tiere'],['🦋',20,'Schmetterling','tiere'],['🦊',22,'Fuchs','tiere'],['🐼',26,'Panda','tiere'],['🐙',30,'Krake','tiere'],['🦖',35,'Dino','tiere'],['🦄',60,'Einhorn','tiere'],['🐉',70,'Drache','tiere'],
   ['🍓',8,'Erdbeere','essen'],['🍉',12,'Melone','essen'],['🥨',12,'Brezel','essen'],['🧀',14,'Käse','essen'],['🍦',15,'Glace','essen'],['🧁',15,'Cupcake','essen'],['🍩',16,'Donut','essen'],['🍔',18,'Burger','essen'],['🍕',20,'Pizza','essen'],['🍫',22,'Schokolade','essen'],
-  ['🌼',10,'Blume','natur'],['🍄',12,'Pilz','natur'],['🌻',14,'Sonnenblume','natur'],['🎃',20,'Kürbis','natur'],['🎄',25,'Tannenbaum','natur'],['⛄',25,'Schneemann','natur'],['❄️',30,'Schneeflocke','natur'],['🌙',40,'Mond','natur'],['🌈',45,'Regenbogen','natur'],['🔥',50,'Feuer','natur'],
+  ['🍄',12,'Pilz','natur'],['🎃',20,'Kürbis','natur'],['🎄',25,'Tannenbaum','natur'],['⛄',25,'Schneemann','natur'],['❄️',30,'Schneeflocke','natur'],['🌙',40,'Mond','natur'],['🌈',45,'Regenbogen','natur'],['🔥',50,'Feuer','natur'],
+  ['🌱',6,'Setzling','pflanzen'],['☘️',8,'Klee','pflanzen'],['🍃',8,'Blätter','pflanzen'],['🌼',10,'Blume','pflanzen'],['🍂',10,'Herbstlaub','pflanzen'],['🌾',10,'Ähre','pflanzen'],['🌿',10,'Zweig','pflanzen'],
+  ['🍁',12,'Ahornblatt','pflanzen'],['🌷',12,'Tulpe','pflanzen'],['🌻',14,'Sonnenblume','pflanzen'],['🌹',15,'Rose','pflanzen'],['🌸',15,'Kirschblüte','pflanzen'],['🌺',16,'Hibiskus','pflanzen'],
+  ['🌵',18,'Kaktus','pflanzen'],['🍀',20,'Glücksklee','pflanzen'],['🪴',20,'Topfpflanze','pflanzen'],['💐',22,'Blumenstrauss','pflanzen'],['🎋',24,'Bambus','pflanzen'],['🌴',28,'Palme','pflanzen'],
   ['⚽',15,'Fussball','spass'],['🎈',15,'Ballon','spass'],['🎉',20,'Party','spass'],['🎧',25,'Kopfhörer','spass'],['🎸',30,'Gitarre','spass'],['🎮',35,'Spielkonsole','spass'],
   ['⭐',50,'Stern','weltall'],['🪐',55,'Planet','weltall'],['☄️',65,'Komet','weltall'],['🛸',75,'Ufo','weltall'],['🚀',80,'Rakete','weltall'],
   ['🏆',90,'Pokal','legende'],['💎',100,'Diamant','legende'],['🌟',120,'Superstern','legende']];
