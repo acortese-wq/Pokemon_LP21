@@ -4,9 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Zahlimon Abenteuer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lilita+One&display=swap">
+<link rel="stylesheet" href="../fonts/fonts.css">
 <style>
 /* Layout: eine Spalte in Handybreite auf kariertem Rechenheft-Papier mit rotem Heftrand; der Kampf ist ein eingerahmtes Spielfeld */
 :root{
@@ -663,7 +661,7 @@ const ballsTotal=()=>BALLS.reduce((a,b)=>a+(S.items[b.k]||0),0);
 const SHOP=[['ball','Zahlenball','Damit fängst du wilde Zahlimon.',5],['b10','Zehnerball','Fängt besser als der Zahlenball.',12],['b100','Hunderterball','Fängt sehr gut.',25],['trank','Trank','Gibt einem Zahlimon 30 Kraft zurück.',8],['bonbon','Level-Bonbon','Ein Zahlimon steigt sofort ein Level auf.',30]];
 
 /* ---------- Spielstand ---------- */
-const APP_VERSION='2026-10-12d';
+const APP_VERSION='2026-11-12a';
 const KEY='zahlimon_v1';
 const DEFSET={speechMode:'off',speech:false,sound:true,rate:1,fix:{},goalMin:30,goalDays:[1,1,1,1,1,1,1],conseq:'back',holiday:false};
 let S=null,B=null,EVO_NEXT=null;
@@ -928,7 +926,7 @@ function titleScreen(){B=null;S=null;const sv=load();
   <div class="parade" aria-hidden="true"><span>🦎</span><span>🐧</span><span>🐛</span></div>
   <div class="stack">${sv&&sv.name?`<button class="btn green big" data-act="cont">▶ Weiterspielen: ${esc(sv.name)}</button>`:''}
   ${sv?'<button class="linkish" data-act="newgame">Neues Spiel beginnen (für Erwachsene)</button>':'<button class="btn green big" data-act="newgame">Neues Spiel</button>'}</div>
-  <p class="fine center">Dein Spielstand wird automatisch gespeichert.</p>${STORE_OK?'':'<p class="warn center">⚠️ Dieser Browser speichert den Spielstand nicht (privater Modus?). Bitte im normalen Modus öffnen.</p>'}</div>`)}
+  <p class="fine center">Dein Spielstand wird automatisch gespeichert. · <a href="../info.html">Impressum und Datenschutz</a></p>${STORE_OK?'':'<p class="warn center">⚠️ Dieser Browser speichert den Spielstand nicht (privater Modus?). Bitte im normalen Modus öffnen.</p>'}</div>`)}
 ACT.title=titleScreen;
 ACT.cont=()=>{S=load();migrate();dayCheck();save();if(!S.news.length)say(`Willkommen zurück, ${S.name}!`);startDay()};
 ACT.newgame=()=>{const sv=load();if(!sv)return nameScreen();

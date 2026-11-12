@@ -11,6 +11,19 @@ Das alte Spiel «Zahlimon» gibt es weiterhin: https://acortese-wq.github.io/Pok
 Neu: **Zahlongus**, ein Rätsel-Spiel auf einem Raumschiff: https://acortese-wq.github.io/Pokemon_LP21/zahlongus/
 
 ## Zahlongus
+**Mathematik nach Lehrplan 21, 1. bis 6. Klasse.** Beim Start wählt das Kind seine Klasse (später änderbar im Menü oder im Elternbereich). Die Aufgaben decken alle drei Kompetenzbereiche ab, jedes Thema passt sich in 3 Stufen an:
+
+| Bereich | Themen |
+|---|---|
+| MA.1 Zahl und Variable | Zahlen und Stellenwerte, Addieren, Subtrahieren und Ergänzen, Multiplizieren, Dividieren, Muster/Folgen/Platzhalter, Brüche und Prozente (ab 3. Kl.), Dezimalzahlen (ab 5. Kl.) |
+| MA.2 Form und Raum | Formen, Körper und Winkel, Umfang und Fläche (ab 3. Kl.), Lage, Raster und Koordinaten |
+| MA.3 Grössen, Funktionen, Daten und Zufall | Geld, Uhr und Zeit, Längen/Gewichte/Hohlmasse (ab 2. Kl.), Sachaufgaben und Proportionalität, Daten und Zufall |
+
+- Zahlenräume: 1. Kl. bis 20, 2. Kl. bis 100, 3. Kl. bis 1000, 4. Kl. bis 100 000 (bzw. 1 Million), 5. Kl. bis 10 Millionen, 6. Kl. bis 1 Milliarde.
+- Viele Aufgaben mit Bildern: Formen, Körper, Winkel, Uhr, Lineal, Häuschen, Brüche, Säulendiagramme, Raster und Koordinatensystem.
+- **Mitspieler:** 4 bis 12 Figuren, 1 oder 2 Verräter (2 ab 6 Figuren). Als Verräter hat man dann einen Partner (roter Name).
+- Der **Elternbereich** zeigt die Themen nach Kompetenzbereich mit Stufe und Statistik, dazu Klassenwahl und Spielstand-Code.
+
 - Man spielt allein mit 5 Computer-Figuren. Einer davon ist heimlich der **Verräter**. Manchmal ist man selbst der Verräter (einstellbar: Zufall, immer Crew, immer Verräter).
 - **Crew:** 6 Aufgaben an Stationen lösen (15 Räume, 26 verschiedene Aufgaben), jede mit 3 Rechnungen (Plus, Minus, Zahlenraum 1000, Einmaleins, Geteilt, Grössen und Sachaufgaben).
 - **Verräter:** Er friert Figuren mit der Frostkanone ❄️ ein (kindgerecht, niemand wird verletzt). Jeder Schuss braucht eine richtige Rechnung. Mit «Licht aus» sieht die Crew fast nichts mehr.
@@ -75,6 +88,12 @@ Erreichbar über ☰ → Bereich für Eltern:
 - Eine einzige Datei `index.html`, ohne Installation.
 - Der Spielstand wird doppelt gespeichert (Browser-Speicher und IndexedDB). Beim Öffnen prüft das Spiel automatisch, ob es eine neuere Version gibt.
 - Die App spricht nicht. Töne lassen sich ausschalten.
+
+## Veröffentlichung
+- Impressum und Datenschutz: `info.html` (verlinkt in allen drei Spielen).
+- Keine Cookies, kein Tracking, keine Werbung. Der Spielstand bleibt auf dem Gerät.
+- Schriften liegen in `fonts/` (SIL Open Font License), es wird nichts von fremden Servern geladen.
+- Zahlongus hat ein Symbol für den Home-Bildschirm (`manifest.webmanifest`) und ein Vorschaubild für geteilte Links (`vorschau.png`).
 
 ## Spielstand sicher bei jedem Update
 - Alle drei Spiele speichern dreifach: im Browser-Speicher, in einer Sicherungskopie und in IndexedDB. Beim Öffnen wird der neueste Stand genommen.
