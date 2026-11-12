@@ -132,6 +132,10 @@ button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
 .msg .b{background:#0f1630;border:1px solid var(--line);border-radius:10px;padding:6px 9px}
 .msg .b b{font-family:var(--f-head);font-size:.85rem}
 .msg.sys .b{background:#3a1520;border-color:#ff8090}
+.msg.gh .b{background:#241a46;border-color:#a07bff;font-style:italic}.msg.gh img{opacity:.55}
+.ab.wsp{background:#5b3fb8;animation:pulse 1.2s ease-in-out infinite}
+.pill.gh{border-color:#a07bff}
+.whc{display:grid;gap:8px;margin-top:8px}
 .votes{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:8px}
 .vb{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:12px;border:2px solid var(--line);background:var(--panel2);color:#fff;font:700 .95rem var(--f-head);text-align:left;min-height:56px}
 .vb canvas{width:40px;height:40px;flex:none}
@@ -182,7 +186,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const pad2=n=>String(n).padStart(2,'0');
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION='2026-11-12z8';
+const APP_VERSION='2026-11-12z9';
 const KEY='zahlongus_v1';
 let S=null;
 
@@ -664,7 +668,7 @@ ACT.qch=v=>{if(Q&&!Q.fb)qAnswer(v)};
 ACT.qtip=()=>{if(Q&&Q.q.aid){Q.tip=true;renderQ()}};
 ACT.qcancel=()=>{const o=Q&&Q.o;closeModal();o&&o.onCancel&&o.onCancel()};
 function qAnswer(v){const q=Q.q,o=Q.o,ok=q.kind==='choice'?v===q.ans:parseInt(v,10)===q.ans,secs=(Date.now()-Q.t0)/1000;addTime(Math.min(60,secs));record(q,ok,v);
-  if(ok){const fast=!Q.tip&&secs<=Q.blitzT;combo++;S.stars++;sfx('ok');save();const el=$('.qt'),r=el?el.getBoundingClientRect():{left:innerWidth/2,top:innerHeight/2,width:0};closeModal();floatAt(fast?'⚡ Blitz! +1 ⭐':'Richtig! +1 ⭐',r.left+r.width/2,r.top);o.onOk&&o.onOk(fast)}
+  if(ok){const fast=!Q.tip&&secs<=Q.blitzT;combo++;S.stars++;sfx('ok');ghostCharge();save();const el=$('.qt'),r=el?el.getBoundingClientRect():{left:innerWidth/2,top:innerHeight/2,width:0};closeModal();floatAt(fast?'⚡ Blitz! +1 ⭐':'Richtig! +1 ⭐',r.left+r.width/2,r.top);o.onOk&&o.onOk(fast)}
   else{combo=0;sfx('bad');const pnl=$('.panel');if(pnl){pnl.classList.remove('shake');void pnl.offsetWidth;pnl.classList.add('shake')}Q.fb=true;Q.wt=Date.now();
     setTimeout(()=>{if(!Q)return;openModal(`<p class="fbh">Nicht ganz!</p><p style="font-weight:700">${esc(q.text)}</p>${q.vis?`<div class="qvis">${q.vis}</div>`:''}${aidHTML(q.aid,true)}<p>Deine Antwort: <b>${esc(v)}</b><br>Richtig ist: <span class="bigans">${esc(String(q.ans))}</span></p><p class="hint">💡 ${hintHTML(q.hint)}</p><button class="btn go" data-act="qfb">Verstanden</button>`)},420)}}
 ACT.qfb=()=>{if(!Q)return;const o=Q.o;addTime(Math.min(30,(Date.now()-Q.wt)/1000));closeModal();o.onFail&&o.onFail()};
@@ -805,7 +809,7 @@ function impostorBot(c,dt,speed){
   if(c.state==='walk'){followPath(c,dt,speed+.2);if(c.hunt&&c.hunt.alive&&Math.random()<dt*1.2){goTo(c,c.hunt.x,c.hunt.y)}}
   else{c.workT-=dt;if(c.workT<=0){if(c.cool<6&&Math.random()<.7){const prey=P(G.chars.filter(o=>o.alive&&!o.imp));c.hunt=prey;if(prey)goTo(c,prey.x,prey.y)}else{c.hunt=null;const st=P(ST);goTo(c,st.x+.5,st.y+.5)}c.workT=R(2,5)}}}
 function freeze(by,v){v.alive=false;v.ghost=!v.player;by.cool=(v.player?30:28)+(G.imps.length>1?10:0);sfx('frz');const b={id:v.id,ci:v.ci,hat:v.hat,x:v.x,y:v.y,room:roomOf(v.x,v.y),t:G.t,by:by.id,reported:false};G.bodies.push(b);G.lastEvent=b;
-  if(v.player){v.ghost=true;const g0=G;setTimeout(()=>{if(G!==g0||G.over)return;openModal(`<h2>❄️ Du wurdest eingefroren!</h2><p>Der Verräter hat dich erwischt. Als Geist 👻 schwebst du jetzt durch die Wände.</p><p><b>Du kannst trotzdem helfen:</b> Löse weiter deine Aufgaben, dann gewinnt die Crew vielleicht doch noch!</p><button class="btn go" data-act="close">Weiter</button>`)},300)}
+  if(v.player){v.ghost=true;const g0=G;setTimeout(()=>{if(G!==g0||G.over)return;openModal(`<h2>❄️ Du wurdest eingefroren!</h2><p>Der Verräter hat dich erwischt. Als Geist 👻 schwebst du jetzt durch die Wände.</p><p><b>Du kannst trotzdem helfen:</b> Löse weiter deine Aufgaben. An jeder Station kannst du als Geist rechnen. Nach 3 richtigen Antworten darfst du der Crew einen Hinweis zuflüstern 👻.</p><button class="btn go" data-act="close">Weiter</button>`)},300)}
   if(by.player){const wit=G.chars.filter(o=>o.alive&&!o.player&&dist(o,by)<(G.lights?3:VIEW)&&roomOf(o.x,o.y)===roomOf(by.x,by.y));if(wit.length){b.witness=wit[0].id;b.reported=true;setTimeout(()=>startMeeting(wit[0],b),700)}}}
 ACT.close=()=>closeModal();
 
@@ -819,6 +823,7 @@ function doUse(){if(!G||G.meeting||G.over||Q)return;const p=G.player,s=nearSt();
   if(s.special==='lights'){if(!G.lights)return toast('Das Licht funktioniert. Alles in Ordnung.');if(p.imp)return toast('Als Verräter lässt du das Licht lieber aus. 😉');lightsTask(0);return}
   if(s.special==='cams'){camsTask(0);return}
   if(p.imp)return toast('Du tust so, als würdest du arbeiten … 😉');
+  if(p.ghost&&s.topic&&!myTask(s.id)){ghostPractice(s);return}
   const t=myTask(s.id);if(!t)return toast(p.tasks.find(t=>t.id===s.id)?'Diese Aufgabe hast du schon erledigt.':'Das ist nicht deine Aufgabe. Schau in deine Liste!');doTask(s,t)}
 function doTask(s,t){ask(nextQ(s.topic),{title:`${s.ic} ${s.n}`,steps:[t.prog,3],onOk:()=>{t.prog++;if(t.prog>=3){t.done=true;G.doneTasks++;S.tasks++;S.stars+=2;save();sfx('task');toast(`✅ ${s.n} erledigt! +2 ⭐`);if(G.target===s.id)G.target=nearestTask();flashTasks();checkEnd()}else setTimeout(()=>{if(G&&!G.meeting&&!G.over&&nearSt()===s)doTask(s,t)},350)},onFail:()=>setTimeout(()=>{if(G&&!G.meeting&&!G.over)doTask(s,t)},200)})}
 function lightsTask(n){ask(nextQ('add'),{title:'⚡ Stromkasten reparieren',steps:[n,2],onOk:()=>{if(n+1>=2){G.lights=false;toast('💡 Licht repariert!');sfx('task')}else setTimeout(()=>lightsTask(n+1),300)},onFail:()=>setTimeout(()=>lightsTask(n),200)})}
@@ -830,6 +835,23 @@ function doFreeze(){if(!G||G.meeting||G.over||Q)return;const p=G.player;if(!p.im
   ask(nextQ('mix'),{title:`❄️ Frostkanone auf ${v.name} laden`,onOk:fast=>{if(!v.alive)return;if(dist(v,p)>FRZ_R+1.2)return toast(`${v.name} ist zu weit weg.`);freeze(p,v);toast(`❄️ ${v.name} ist eingefroren!`);checkEnd()},onFail:()=>{p.cool=8;toast('Die Frostkanone klemmt! Warte kurz.')}})}
 function doSabotage(){if(!G||!G.player.imp||G.meeting||G.over||Q)return;if(G.lights)return toast('Das Licht ist schon aus.');if(G.sabCool>0)return toast(`Sabotage lädt noch (${Math.ceil(G.sabCool)} s).`);
   ask(nextQ('mix'),{title:'💡 Licht ausschalten',onOk:()=>{G.lights=true;G.lightsT=0;G.sabCool=60;sfx('alarm');toast('Licht aus! Die Crew sieht jetzt fast nichts.')}})}
+/* ---------- Geister-Flüstern ----------
+   Eingefrorene Crew-Mitglieder rechnen als Geist weiter. Nach 3 richtigen Antworten dürfen sie
+   der Crew einen Hinweis zuflüstern. Er erscheint in der nächsten Besprechung (höchstens 1 pro Besprechung). */
+const WSP_NEED=3;
+const canWhisper=()=>G&&G.player.ghost&&!G.player.imp&&!G.player.ejected;
+function ghostCharge(){if(!canWhisper()||G.pendingWhisper||G.wp>=WSP_NEED)return;G.wp=(G.wp||0)+1;if(G.wp>=WSP_NEED)setTimeout(()=>{if(canWhisper()){sfx('task');toast('👻 Du kannst jetzt der Crew etwas zuflüstern!')}},700)}
+function ghostPractice(s){if(G.pendingWhisper)return toast('👻 Dein Hinweis ist bereit. Er kommt in der nächsten Besprechung an.');
+  ask(nextQ(s.topic),{title:`👻 ${s.n} (Geister-Training)`,steps:[Math.min(G.wp||0,WSP_NEED),WSP_NEED],onOk:()=>{if((G.wp||0)<WSP_NEED)setTimeout(()=>{if(G&&!G.meeting&&!G.over&&nearSt()===s)ghostPractice(s)},350)}})}
+function roomHint(){const imps=G.chars.filter(c=>c.alive&&c.imp),two=G.imps.length>1;
+  for(let i=G.hist.length-1;i>=0&&G.t-G.hist[i].t<=30;i--){const h=G.hist[i];const im=P(imps.filter(c=>h.r[c.id]&&h.r[c.id]!=='gang'));
+    if(im){const room=h.r[im.id],ago=Math.max(1,Math.round(G.t-h.t));return {t:`${two?'Ein Verräter':'Der Verräter'} war vor ${ago===1?'1 Sekunde':ago+' Sekunden'} im Raum «${rName(room)}».`,room,at:h.t}}}
+  return {t:`${two?'Ein Verräter':'Der Verräter'} schleicht gerade durch die Gänge.`}}
+function clearHint(){G.cleared=G.cleared||[];const c=P(G.chars.filter(o=>o.alive&&!o.imp&&!o.player&&!G.cleared.includes(o.id)));if(!c)return null;G.cleared.push(c.id);return {t:`${c.name} ist sicher kein Verräter.`,clear:c.id}}
+ACT.whisper=()=>{if(!canWhisper()||(G.wp||0)<WSP_NEED||G.pendingWhisper)return;
+  openModal(`<h2>👻 Geister-Flüstern</h2><p>Du hast als Geist genug gerechnet. Welchen Hinweis flüsterst du der Crew zu?</p><p class="fine">Er erscheint in der nächsten Besprechung. Die Crew achtet bei der Abstimmung darauf.</p>
+  <div class="whc"><button class="btn blue" data-act="whisperGo" data-arg="room">🔎 Wo war der Verräter zuletzt?</button><button class="btn" data-act="whisperGo" data-arg="clear">✅ Wer ist sicher unschuldig?</button><button class="btn" data-act="close">Später</button></div>`)};
+ACT.whisperGo=k=>{if(!canWhisper())return closeModal();const h=k==='clear'?(clearHint()||roomHint()):roomHint();G.pendingWhisper=h;G.wp=0;closeModal();sfx('vote');toast('👻 Geflüstert! Der Hinweis kommt in der nächsten Besprechung an.')};
 ACT.use=doUse;ACT.report=doReport;ACT.freeze=doFreeze;ACT.sab=doSabotage;
 
 /* ---------- Besprechung ---------- */
@@ -844,6 +866,7 @@ function startMeeting(caller,body){if(!G||G.meeting||G.over)return;if(caller&&!G
   buildStatements()}
 ACT.claim=id=>{G.meet.claims[0]=id;G.meet.lines.push({c:G.player,t:`Ich war im Raum «${rName(id)}».`});buildStatements()};
 function buildStatements(){const M=G.meet,tm=M.tm,body=M.body,lines=M.lines,nm=c=>c.player?`${c.name} (du)`:c.name;
+
   const bots=shuffle(G.chars.filter(c=>c.alive&&!c.player));
   for(const b of bots){if(b.imp){let claim;const real=roomAt(b.id,tm-4);if(body&&Math.random()<.85){claim=P(ROOMS.filter(r=>r.id!==body.room).map(r=>r.id))}else claim=real&&real!=='gang'?real:P(ROOMS).id;M.claims[b.id]=claim;lines.push({c:b,t:`Ich war im Raum «${rName(claim)}». Ich habe nichts gesehen.`});
       if(Math.random()<.35){const s=P(G.chars.filter(o=>o.alive&&o!==b&&!o.imp));lines.push({c:b,t:`Ich finde, ${nm(s)} benimmt sich komisch.`,acc:s.id})}continue}
@@ -851,8 +874,11 @@ function buildStatements(){const M=G.meet,tm=M.tm,body=M.body,lines=M.lines,nm=c
     if(body){let seen=null;for(let k=-10;k<=3&&!seen;k++){if(roomAt(b.id,body.t+k)!==body.room)continue;for(const o of G.chars){if(o===b||o.id===body.id)continue;if(roomAt(o.id,body.t+k)===body.room&&(o.alive||o.player)){seen=o;break}}}
       if(seen)lines.push({c:b,t:`Ich habe ${nm(seen)} im Raum «${rName(body.room)}» gesehen, kurz bevor es passiert ist!`,acc:seen.id})}}
   for(const id in M.claims){const claimer=G.chars[id],C=M.claims[id];for(const b of G.chars){if(!b.alive||b.player||b.imp||b===claimer)continue;if(roomAt(b.id,tm-4)===C&&roomAt(+id,tm-4)!==C){lines.push({c:b,t:`Das stimmt nicht! Ich war selbst im Raum «${rName(C)}», und ${nm(claimer)} war nicht dort.`,acc:+id,strong:1});break}}}
+  /* Geister-Flüstern kommt als letzte Aussage, direkt vor der Abstimmung */
+  if(G.pendingWhisper){const w=G.pendingWhisper;G.pendingWhisper=null;const accs=w.room?G.chars.filter(c=>c.alive&&roomAt(c.id,w.at)===w.room).map(c=>c.id):[];
+    lines.push({c:G.player,gh:1,t:`👻 Ein Flüstern aus dem Jenseits: ${w.t}`,accs,clear:w.clear})}
   showChat(0)}
-function chatHTML(lines){return `<div class="chat" id="chat">${lines.map(l=>`<div class="msg ${l.sys?'sys':''}">${avatarHTML(l.c.ci,l.c.hat)}<div class="b"><b style="color:${txtCol(l.c.ci)}">${esc(l.c.player?l.c.name+' (du)':l.c.name)}</b><br>${esc(l.t)}</div></div>`).join('')}</div>`}
+function chatHTML(lines){return `<div class="chat" id="chat">${lines.map(l=>`<div class="msg ${l.sys?'sys':''} ${l.gh?'gh':''}">${avatarHTML(l.c.ci,l.c.hat)}<div class="b"><b style="color:${txtCol(l.c.ci)}">${esc(l.gh?l.c.name+' (Geist)':l.c.player?l.c.name+' (du)':l.c.name)}</b><br>${esc(l.t)}</div></div>`).join('')}</div>`}
 function showChat(n){const M=G.meet;const lines=M.lines.slice(0,n+1);const all=n>=M.lines.length-1;
   openScreen(`<div class="wrap"><div class="panel"><h2>🚨 ${M.body?'Eingefrorene Person gefunden!':'Notfall-Besprechung'}</h2>${chatHTML(lines)}
   ${all?voteHTML():'<button class="btn" data-act="chatNext">Weiter ▶</button>'}</div></div>`);const ch=$('#chat');if(ch)ch.scrollTop=ch.scrollHeight;
@@ -862,7 +888,7 @@ function voteHTML(){const p=G.player;return `<h3>${p.alive?'Wer ist der Verräte
   <div class="row2"><button class="btn" data-act="vote" data-arg="skip" ${p.alive?'':'disabled'}>Überspringen</button><button class="btn red" data-act="doVote" ${p.alive&&G.meet.myVote==null?'disabled':''}>${p.alive?'Abstimmen':'Ergebnis ansehen'}</button></div>`}
 ACT.vote=id=>{G.meet.myVote=id==='skip'?'skip':+id;sfx('vote');showChat(G.meet.lines.length-1)};
 ACT.doVote=()=>{const M=G.meet;M.voted=true;const sc={},alive=G.chars.filter(c=>c.alive);for(const c of alive)sc[c.id]=0;
-  for(const l of M.lines)if(l.acc!=null&&sc[l.acc]!=null)sc[l.acc]+=l.strong?5:3;
+  for(const l of M.lines){if(l.acc!=null&&sc[l.acc]!=null)sc[l.acc]+=l.strong?5:3;if(l.accs)for(const id of l.accs)if(sc[id]!=null)sc[id]+=l.accs.length<=2?4:2;if(l.clear!=null&&sc[l.clear]!=null)sc[l.clear]-=99}
   const votes={};const add=(k)=>{votes[k]=(votes[k]||0)+1};if(G.player.alive)add(M.myVote==null?'skip':M.myVote);
   for(const b of alive){if(b.player)continue;let best='skip',bs=2;for(const c of alive){if(c===b)continue;const s=sc[c.id]+(b.imp?0:0);if(s>bs){bs=s;best=c.id}}
     if(b.imp){if(best===b.id||best==='skip'){best=Math.random()<.5?'skip':P(alive.filter(c=>c!==b)).id}else if(G.chars[best]&&G.chars[best].imp)best='skip'}add(best)}
@@ -929,7 +955,7 @@ ACT.ttoggle=()=>{if(!G||$('#tasks').hidden)return;S.settings.tasksOpen=!tasksOpe
 ACT.tsel=id=>{if(!G||G.player.imp)return;G.target=G.target===id?null:id;G.gpath=null;sfx('tap');const st=stById(id);if(G.target)toast(`🧭 Der Pfeil zeigt dir den Weg: ${st.n}`)};
 let tHead='',tBody='';
 function hud(){if(!G)return;const p=G.player,pct=Math.min(100,Math.round(G.doneTasks/G.totalTasks*100));
-  const h=`<div class="hrow"><span class="role ${p.imp?'imp':'crew'}">${p.imp?'❄️ VERRÄTER':'🧑‍🚀 CREW'}${p.ghost?' 👻':''}</span><div class="tbar"><i style="width:${pct}%"></i><span>Aufgaben der Crew: ${pct} %</span></div><span class="pill">⭐ ${S.stars}</span></div>
+  const h=`<div class="hrow"><span class="role ${p.imp?'imp':'crew'}">${p.imp?'❄️ VERRÄTER':'🧑‍🚀 CREW'}${p.ghost?' 👻':''}</span><div class="tbar"><i style="width:${pct}%"></i><span>Aufgaben der Crew: ${pct} %</span></div><span class="pill">⭐ ${S.stars}</span>${canWhisper()?`<span class="pill gh">👻 ${G.pendingWhisper?'Hinweis bereit':`${Math.min(G.wp||0,WSP_NEED)}/${WSP_NEED}`}</span>`:''}</div>
   ${G.lights?'<div class="banner">⚠️ Licht aus! Stromkasten ⚡ im Reaktor reparieren</div>':''}`;
   if(h!==hudC){hudC=h;$('#hudTop').innerHTML=h}
   let head,body;
@@ -946,6 +972,7 @@ function hud(){if(!G)return;const p=G.player,pct=Math.min(100,Math.round(G.doneT
   if(body!==tBody){tBody=body;el.querySelector('.tb>div').innerHTML=body}
   let a='';if(!G.meeting&&!G.over){const s=nearSt(),b=nearBody();
     if(b&&!p.ghost)a+=`<button class="ab rep" data-act="report"><span>📢</span>Melden</button>`;
+    if(canWhisper()&&(G.wp||0)>=WSP_NEED&&!G.pendingWhisper)a+=`<button class="ab wsp" data-act="whisper"><span>👻</span>Flüstern</button>`;
     if(p.imp&&p.alive){const v=nearVictim();a+=`<button class="ab sab" data-act="sab" ${G.sabCool>0||G.lights?'disabled':''}><span>💡</span>Licht aus${G.sabCool>0?`<small>${Math.ceil(G.sabCool)} s</small>`:''}</button>`;a+=`<button class="ab frz" data-act="freeze" ${!v||p.cool>0?'disabled':''}><span>❄️</span>Einfrieren${p.cool>0?`<small>${Math.ceil(p.cool)} s</small>`:''}</button>`}
     if(s)a+=`<button class="ab ${s.special==='emergency'?'emg':'use'}" data-act="use"><span>${s.ic}</span>${s.special==='emergency'?'Notfall':'Benutzen'}</button>`}
   if(a!==actC){actC=a;$('#acts').innerHTML=a}}
@@ -984,6 +1011,7 @@ ACT.howto=()=>openScreen(`<div class="wrap"><div class="panel"><h2>❓ So geht's
   <p>👥 <b>Mitspieler:</b> Im Menü stellst du 4 bis 12 Figuren und 1 oder 2 Verräter ein.</p>
   <p>📚 <b>Rechnen:</b> Die Aufgaben passen zu deiner Klasse (1. bis 6. Klasse, Lehrplan 21).</p>
   <p>❄️ <b>Verräter:</b> Er friert Leute ein. Findest du jemanden im Eis, tippe auf «Melden». In der Besprechung erzählt jeder, wo er war. Achte darauf, wer schwindelt! Dann stimmt ihr ab.</p>
+  <p>👻 <b>Geister-Flüstern:</b> Wirst du eingefroren, rechnest du als Geist weiter. Nach 3 richtigen Antworten flüsterst du der Crew einen Hinweis zu: wo der Verräter zuletzt war oder wer sicher unschuldig ist.</p>
   <p>📹 <b>Tipp:</b> In der Überwachung kannst du nach 2 Rechnungen sehen, wer in den letzten 30 Sekunden wo war.</p>
   <p>😈 <b>Bist du der Verräter:</b> Stell dich neben jemanden, der allein ist, und tippe auf «Einfrieren». Die Frostkanone braucht eine richtige Rechnung. Lass dich nicht erwischen!</p>
   <button class="btn go" data-act="home">Zurück</button></div></div>`);

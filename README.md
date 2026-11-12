@@ -29,6 +29,7 @@ Neu: **Zahlongus**, ein Rätsel-Spiel auf einem Raumschiff: https://acortese-wq.
 - **Verräter:** Er friert Figuren mit der Frostkanone ❄️ ein (kindgerecht, niemand wird verletzt). Jeder Schuss braucht eine richtige Rechnung. Mit «Licht aus» sieht die Crew fast nichts mehr.
 - **Besprechung:** Wer eine eingefrorene Figur findet, meldet sie. Alle sagen, wo sie waren. Wer schwindelt, kann ertappt werden. Danach wird abgestimmt, und die gewählte Figur fliegt mit der Rettungskapsel zur Erde. So üben die Kinder logisches Denken.
 - **Aufgabenfeld:** Mit einem Tipp (oder Taste T) ein- und ausklappen. Eingeklappt zeigt es nur den Fortschritt und die nächste Aufgabe. Die Einstellung bleibt gespeichert. Tippt man auf eine Aufgabe, zeigt ein gelber Pfeil den Weg dorthin.
+- **Geister-Flüstern 👻:** Wer eingefroren wird, rechnet als Geist an jeder Station weiter. Nach 3 richtigen Antworten darf er der Crew einen Hinweis zuflüstern: wo der Verräter zuletzt war oder wer sicher unschuldig ist. Der Hinweis erscheint in der nächsten Besprechung (höchstens einer pro Besprechung), und die Crew berücksichtigt ihn bei der Abstimmung.
 - **Überwachung:** Nach 2 Rechnungen sieht man, wer in den letzten 30 Sekunden in welchem Raum war.
 - **Sterne ⭐** gibt es für richtige Rechnungen, Aufgaben und Siege. Die Garderobe hat 28 Farben (gratis) und 70 Kopfbedeckungen zum Kaufen (Klassiker, Tiere, Essen, Pflanzen, Natur, Sport, Weltall, Legendär).
 - Die Rechenminuten zählen auch für das Tagesziel in Zahlcraft. Ein eigener Elternbereich zeigt Statistik und Stufen.
